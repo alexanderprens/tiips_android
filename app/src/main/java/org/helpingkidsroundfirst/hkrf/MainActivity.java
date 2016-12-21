@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -80,17 +80,20 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        // TODO: make stuff happen - maybe different fragment for each id
+        if (id == R.id.nav_inventory) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_receive) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_ship) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_reports) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_locate) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_add) {
+
+        } else if (id == R.id.nav_messages) {
 
         }
 

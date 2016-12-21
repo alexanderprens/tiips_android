@@ -5,4 +5,17 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <!--Navigation menu strings -->
+    <string name="nav_header_main_text">TIIPS Menu</string>
+    <string name="nav_header_sub_text">Inventory and Indoor Positioning System</string>
+    <string name="nav_group_inventory">Inventory</string>
+    <string name="nav_group_indoor">IPS</string>
+    <string name="nav_option_inventory">View Inventory</string>
+    <string name="nav_option_reports">View Reports</string>
+    <string name="nav_option_receive">Receive Inventory</string>
+    <string name="nav_options_ship">Ship Inventory</string>
+    <string name="nav_option_locate">Locate Item</string>
+    <string name="nav_option_add">Add/Remove Tags</string>
+    <string name="nav_option_messages">Tag Messages</string>
 </resources>
