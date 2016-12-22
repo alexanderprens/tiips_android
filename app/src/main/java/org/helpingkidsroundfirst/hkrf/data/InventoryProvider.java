@@ -6,7 +6,6 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
 /**
@@ -17,11 +16,13 @@ import android.net.Uri;
 public class InventoryProvider extends ContentProvider {
 
     //The URI matcher used by this content provider
-    private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+    private static final UriMatcher sUriMatcher = buildUriMatcher();
     private InventoryDbHelper mOpenHelper;
 
+    // Identifies constants for database commands
     // TODO: 12/20/2016 make ints for different database commands
-    static final int INVENTORY = 100;
+    static final int CURRENT_INVENTORY = 100;
+    static final int PAST_INVENTORY = 101;
 
     // TODO: 12/20/2016 make cursors for different tables and queries
 
@@ -31,7 +32,7 @@ public class InventoryProvider extends ContentProvider {
         final String authority = InventoryContract.CONTENT_AUTHORITY;
 
         //create code for every type of URI
-        matcher.addURI(authority, InventoryContract.PATH_CURRENT_INVENTORY, INVENTORY);
+        matcher.addURI(authority, InventoryContract.PATH_CURRENT_INVENTORY, CURRENT_INVENTORY);
 
         return matcher;
     }
@@ -53,7 +54,7 @@ public class InventoryProvider extends ContentProvider {
 
         switch (match) {
             //make case for each uri type
-            case INVENTORY:
+            case CURRENT_INVENTORY:
                 return InventoryContract.CurrentInventoryEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -68,7 +69,7 @@ public class InventoryProvider extends ContentProvider {
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
             //"inventory"
-            case INVENTORY: {
+            case CURRENT_INVENTORY: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         InventoryContract.CurrentInventoryEntry.TABLE_NAME,
                         projection,
@@ -96,7 +97,7 @@ public class InventoryProvider extends ContentProvider {
         Uri returnUri;
 
         switch(match){
-            case INVENTORY: {
+            case CURRENT_INVENTORY: {
                 long _id = db.insert(InventoryContract.CurrentInventoryEntry.TABLE_NAME, null,
                         values);
                 if (_id > 0) {
@@ -122,7 +123,7 @@ public class InventoryProvider extends ContentProvider {
         //delete all rows in selection, return #rows deleted
         if ( null == selection ) selection = "1";
         switch (match) {
-            case INVENTORY:
+            case CURRENT_INVENTORY:
                 rowsDeleted = db.delete(InventoryContract.CurrentInventoryEntry.TABLE_NAME,
                         selection, selectionArgs);
                 break;
@@ -144,7 +145,7 @@ public class InventoryProvider extends ContentProvider {
         int rowsUpdated;
 
         switch (match) {
-            case INVENTORY:
+            case CURRENT_INVENTORY:
                 rowsUpdated = db.update(InventoryContract.CurrentInventoryEntry.TABLE_NAME, values,
                         selection, selectionArgs);
                 break;
