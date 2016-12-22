@@ -42,6 +42,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
                 ItemEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                 ItemEntry.COLUMN_DESCRIPTION + " TEXT, " +
                 ItemEntry.COLUMN_CATEGORY_KEY + " INTEGER NOT NULL, " +
+                ItemEntry.COLUMN_VALUE + " REAL NOT NULL, " +
 
                 // set up foreign key for category
                 "FOREIGN KEY (" + ItemEntry.COLUMN_CATEGORY_KEY + ") REFERENCES " +

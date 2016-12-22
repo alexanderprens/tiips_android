@@ -15,14 +15,23 @@ import android.net.Uri;
 
 public class InventoryProvider extends ContentProvider {
 
-    //The URI matcher used by this content provider
+    // The URI matcher used by this content provider
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private InventoryDbHelper mOpenHelper;
 
     // Identifies constants for database commands
-    // TODO: 12/20/2016 make ints for different database commands
     static final int CURRENT_INVENTORY = 100;
-    static final int PAST_INVENTORY = 101;
+    static final int CURRENT_INVENTORY_WITH_ITEM = 101;
+    static final int CURRENT_INVENTORY_WITH_DONOR = 102;
+    static final int CURRENT_INVENTORY_WITH_DATE = 103;
+    static final int CURRENT_INVENTORY_WITH_WAREHOUSE = 104;
+    static final int PAST_INVENTORY = 200;
+    static final int PAST_INVENTORY_WITH_ITEM = 201;
+    static final int PAST_INVENTORY_WITH_DONOR = 202;
+    static final int PAST_INVENTORY_WITH_DATE = 203;
+    static final int ITEM = 300;
+    static final int ITEM_WITH_CATEGORY = 301;
+    static final int CATEGORY = 400;
 
     // TODO: 12/20/2016 make cursors for different tables and queries
 
@@ -31,7 +40,7 @@ public class InventoryProvider extends ContentProvider {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = InventoryContract.CONTENT_AUTHORITY;
 
-        //create code for every type of URI
+        // create code for every type of URI
         matcher.addURI(authority, InventoryContract.PATH_CURRENT_INVENTORY, CURRENT_INVENTORY);
 
         return matcher;
@@ -46,6 +55,7 @@ public class InventoryProvider extends ContentProvider {
     }
 
     // get uri type
+    // TODO: 12/21/2016 fill in switch
     @Override
     public String getType(Uri uri) {
 
@@ -61,7 +71,8 @@ public class InventoryProvider extends ContentProvider {
         }
     }
 
-    //actually query database
+    // actually query database
+    // TODO: 12/21/2016 fill in switch
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
@@ -90,6 +101,7 @@ public class InventoryProvider extends ContentProvider {
     }
 
     // Handle database insertions
+    // TODO: 12/21/2016 fill in switch
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
@@ -115,6 +127,7 @@ public class InventoryProvider extends ContentProvider {
     }
 
     // Handle database deletions
+    // TODO: 12/21/2016 fill in switch
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
@@ -138,6 +151,7 @@ public class InventoryProvider extends ContentProvider {
     }
 
     // Handle database updates
+    // TODO: 12/21/2016 fill in switch
     @Override
     public int update( Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
