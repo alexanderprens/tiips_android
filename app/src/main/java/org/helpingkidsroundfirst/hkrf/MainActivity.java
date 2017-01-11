@@ -27,7 +27,13 @@ import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.ips_fragments.TagMessage
 // TODO: 12/22/2016 implement interfaces for fragments that need it
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        ViewInventoryFragment.OnFragmentInteractionListener {
+        ViewInventoryFragment.OnFragmentInteractionListener,
+        ReceiveInventoryFragment.OnFragmentInteractionListener,
+        ShipInventoryFragment.OnFragmentInteractionListener,
+        ViewReportsFragment.OnFragmentInteractionListener,
+        LocateItemFragment.OnFragmentInteractionListener,
+        ModifyTagsFragment.OnFragmentInteractionListener,
+        TagMessagesFragment.OnFragmentInteractionListener{
 
     private static final String[] fragmentTitles = {"View Inventory", "Receive Inventory",
             "Ship Inventory", "View Reports", "Locate Items", "Modify Tags", "View Tag Messages"};
@@ -156,7 +162,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onFragmentInteraction(Uri uri) {
-
         // TODO: 12/22/2016 something
     }
+
 }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/inventory_list_item">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="Name"
+            android:layout_height="wrap_content"
+            android:id="@+id/inv_list_name_textview"
+            android:layout_weight="5"
+            android:layout_width="wrap_content" />
+
+        <TextView
+            android:text="Qty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/inv_list_qty_textview"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="Desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/inv_list_desc_textview"
+            android:layout_weight="3" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/inv_list_cat_textview"
+            android:layout_weight="1" />
+    </LinearLayout>
+</LinearLayout>

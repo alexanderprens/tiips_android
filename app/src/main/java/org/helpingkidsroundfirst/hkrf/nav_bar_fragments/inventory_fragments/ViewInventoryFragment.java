@@ -35,6 +35,10 @@ public class ViewInventoryFragment extends android.support.v4.app.Fragment {
         // Required empty public constructor
     }
 
+    //Column numbers of inventory items
+    public static final int COL_ITEM_ID = 0;
+    public static final int COL_QTY = 1;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
