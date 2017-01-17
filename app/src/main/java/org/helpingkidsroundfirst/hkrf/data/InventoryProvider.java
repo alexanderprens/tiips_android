@@ -120,7 +120,7 @@ public class InventoryProvider extends ContentProvider {
                 break;
             }
             default:
-                throw new UnsupportedOperationException("Unkown uri: " + uri);
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
         getContext().getContentResolver().notifyChange(uri, null);
         return returnUri;

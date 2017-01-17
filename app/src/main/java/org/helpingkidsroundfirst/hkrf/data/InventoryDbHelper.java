@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.CurrentInventoryEntry;
-import org.helpingkidsroundfirst.hkrf.data.InventoryContract.CategoryEntry;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.ItemEntry;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.PastInventoryEntry;
 
@@ -27,12 +26,6 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        
-        // create category table
-        final String SQL_CREATE_CATEGORY_TABLE = "CREATE TABLE " +
-                CategoryEntry.TABLE_NAME + " (" +
-                CategoryEntry._ID + " INTEGER PRIMARY KEY" +
-                CategoryEntry.COLUMN_NAME + " TEXT NOT NULL);";
 
         // create item table
         final String SQL_CREATE_ITEM_TABLE = "CREATE TABLE " +
@@ -41,12 +34,8 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
                 ItemEntry.COLUMN_BARCODE_ID + "TEXT UNIQUE NOT NULL, " +
                 ItemEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                 ItemEntry.COLUMN_DESCRIPTION + " TEXT, " +
-                ItemEntry.COLUMN_CATEGORY_KEY + " INTEGER NOT NULL, " +
-                ItemEntry.COLUMN_VALUE + " REAL NOT NULL, " +
-
-                // set up foreign key for category
-                "FOREIGN KEY (" + ItemEntry.COLUMN_CATEGORY_KEY + ") REFERENCES " +
-                CategoryEntry.TABLE_NAME + " (" + CategoryEntry._ID + "));";
+                ItemEntry.COLUMN_CATEGORY + " TEXT " +
+                ItemEntry.COLUMN_VALUE + " REAL NOT NULL, " + ");";
 
         // create current inventory table
         final String SQL_CREATE_CURRENT_INVENTORY_TABLE = "CREATE TABLE " + 
@@ -76,7 +65,6 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
                 ItemEntry.TABLE_NAME + " (" + ItemEntry._ID + "));";
 
         // execute SQL commands
-        sqLiteDatabase.execSQL(SQL_CREATE_CATEGORY_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_ITEM_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_CURRENT_INVENTORY_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PAST_INVENTORY_TABLE);

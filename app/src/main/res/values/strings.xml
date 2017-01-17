@@ -25,4 +25,14 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="view_inventory_text">View Inventory</string>
+
+    <!-- Add inventory dialog box -->
+    <string name="add_inventory_item_title">New Inventory Item</string>
+    <string name="add_inv_name">Item Name</string>
+    <string name="add_inv_barcode">Barcode #</string>
+    <string name="add_inv_desc">Description</string>
+    <string name="add_inv_category">Category</string>
+    <string name="add_inv_value">Value</string>
+    <string name="add_inv_cancel">Cancel</string>
+    <string name="add_inv_ok">OK</string>
 </resources>

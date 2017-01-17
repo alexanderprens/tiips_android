@@ -19,29 +19,9 @@ public class InventoryContract {
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     // Table names
-    public static final String PATH_CATEGORY = "category";
     public static final String PATH_ITEM = "items";
     public static final String PATH_CURRENT_INVENTORY = "current_inventory";
     public static final String PATH_PAST_INVENTORY = "past_inventory";
-
-    /* Define Category Table */
-    public static final class CategoryEntry implements BaseColumns {
-
-        public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_CATEGORY).build();
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/"
-                + CONTENT_AUTHORITY + "/" + PATH_CATEGORY;
-
-        // Table name
-        public static final String TABLE_NAME = "category";
-
-        // Table columns
-        public static final String COLUMN_NAME = "name";
-
-        public static Uri buildCurrentInventoryUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
-        }
-    }
 
     /* Define Item Table */
     public static final class ItemEntry implements BaseColumns {
@@ -58,7 +38,7 @@ public class InventoryContract {
         public static final String COLUMN_BARCODE_ID = "barcode_id";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DESCRIPTION = "description";
-        public static final String COLUMN_CATEGORY_KEY = "category_id";
+        public static final String COLUMN_CATEGORY = "category";
         public static final String COLUMN_VALUE = "value";
 
         public static Uri buildCurrentInventoryUri(long id) {
