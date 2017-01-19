@@ -13,9 +13,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ChooseInventoryFragment;
 import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ReceiveInventoryFragment;
 import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ShipInventoryFragment;
-import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ViewInventoryFragment;
 import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ViewReportsFragment;
 import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.ips_fragments.LocateItemFragment;
 import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.ips_fragments.ModifyTagsFragment;
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity
 
         // Call fragments based on menu options
         if (id == R.id.nav_inventory) {
-            fragment = new ViewInventoryFragment();
+            fragment = new ChooseInventoryFragment();
             fragmentManager.beginTransaction()
                     .replace(R.id.content_main, fragment)
                     .commit();

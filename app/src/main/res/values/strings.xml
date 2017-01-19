@@ -35,4 +35,10 @@
     <string name="add_inv_value">Value</string>
     <string name="add_inv_cancel">Cancel</string>
     <string name="add_inv_ok">OK</string>
+
+    <!-- Choose inventory strings -->
+    <string name="choose_inventory_header">Select Inventory to View</string>
+    <string name="choose_inv_current_button">Current Inventory</string>
+    <string name="choose_inv_past_button">Past Inventory</string>
+    <string name="choose_inv_item_button">Inventory Items</string>
 </resources>
