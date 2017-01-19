@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.dummy.DummyContent;
+import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.inventory_adapters.MyInventoryItemRecyclerViewAdapter;
 
 /**
  * A fragment representing a list of Items.

@@ -1,4 +1,4 @@
-package org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments;
+package org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.inventory_adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

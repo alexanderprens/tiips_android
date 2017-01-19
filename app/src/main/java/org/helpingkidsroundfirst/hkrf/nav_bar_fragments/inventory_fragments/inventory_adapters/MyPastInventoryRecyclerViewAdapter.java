@@ -1,4 +1,4 @@
-package org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments;
+package org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.inventory_adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.helpingkidsroundfirst.hkrf.R;
-import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ViewCurrentInventoryFragment.OnListFragmentInteractionListener;
+import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ViewPastInventoryFragment.OnListFragmentInteractionListener;
 import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.dummy.DummyContent.DummyItem;
 
 import java.util.List;
@@ -17,12 +17,12 @@ import java.util.List;
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyCurrentInventoryRecyclerViewAdapter extends RecyclerView.Adapter<MyCurrentInventoryRecyclerViewAdapter.ViewHolder> {
+public class MyPastInventoryRecyclerViewAdapter extends RecyclerView.Adapter<MyPastInventoryRecyclerViewAdapter.ViewHolder> {
 
     private final List<DummyItem> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyCurrentInventoryRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyPastInventoryRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -30,7 +30,7 @@ public class MyCurrentInventoryRecyclerViewAdapter extends RecyclerView.Adapter<
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_currentinventory_list, parent, false);
+                .inflate(R.layout.fragment_pastinventory_list, parent, false);
         return new ViewHolder(view);
     }
 
