@@ -90,7 +90,12 @@ public class ViewInventoryFragment extends android.support.v4.app.Fragment
     }
 
     @Override
-    public void onFinishAddItemDialog(String inputText) {
+    public void onButtonOK() {
         // TODO: 1/16/2017 do stuff
+    }
+
+    @Override
+    public void onButtonCancel(){
+
     }
 }
