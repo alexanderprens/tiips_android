@@ -16,20 +16,21 @@ import android.view.MenuItem;
 import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ChooseInventoryFragment;
 import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ReceiveInventoryFragment;
 import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ShipInventoryFragment;
+import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ViewCurrentInventoryFragment;
+import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ViewInventoryItemFragment;
+import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ViewPastInventoryFragment;
 import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ViewReportsFragment;
+import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.dummy.DummyContent;
 import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.ips_fragments.LocateItemFragment;
 import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.ips_fragments.ModifyTagsFragment;
 import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.ips_fragments.TagMessagesFragment;
 
 // TODO: 12/22/2016 implement interfaces for fragments that need it
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
-        ReceiveInventoryFragment.OnFragmentInteractionListener,
-        ShipInventoryFragment.OnFragmentInteractionListener,
-        ViewReportsFragment.OnFragmentInteractionListener,
-        LocateItemFragment.OnFragmentInteractionListener,
-        ModifyTagsFragment.OnFragmentInteractionListener,
-        TagMessagesFragment.OnFragmentInteractionListener{
+    implements NavigationView.OnNavigationItemSelectedListener,
+    ViewCurrentInventoryFragment.OnListFragmentInteractionListener,
+        ViewInventoryItemFragment.OnListFragmentInteractionListener,
+        ViewPastInventoryFragment.OnListFragmentInteractionListener{
 
     private static final String[] fragmentTitles = {"View Inventory", "Receive Inventory",
             "Ship Inventory", "View Reports", "Locate Items", "Modify Tags", "View Tag Messages"};
@@ -148,8 +149,8 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void onFragmentInteraction(Uri uri) {
-        // TODO: 12/22/2016 something
-    }
+    @Override
+    public void onListFragmentInteraction(DummyContent.DummyItem item) {
 
+    }
 }

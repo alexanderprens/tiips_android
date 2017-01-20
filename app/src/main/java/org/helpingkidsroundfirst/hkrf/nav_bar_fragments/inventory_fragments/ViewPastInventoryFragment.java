@@ -20,7 +20,7 @@ import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.inve
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ViewPastInventoryFragment extends Fragment {
+public class ViewPastInventoryFragment extends android.support.v4.app.Fragment {
 
     // TODO: Customize parameters
     private int mColumnCount = 1;

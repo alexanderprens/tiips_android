@@ -3,9 +3,12 @@ package org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments;
 
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import org.helpingkidsroundfirst.hkrf.R;
 
@@ -15,6 +18,7 @@ import org.helpingkidsroundfirst.hkrf.R;
  * create an instance of this fragment.
  */
 public class ChooseInventoryFragment extends android.support.v4.app.Fragment {
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -24,7 +28,10 @@ public class ChooseInventoryFragment extends android.support.v4.app.Fragment {
     private String mParam1;
     private String mParam2;
 
+    //fragment tag strings
+    private final String inventoryItem = "InventoryItems";
 
+    //set click listeners on buttons
     public ChooseInventoryFragment() {
         // Required empty public constructor
     }
@@ -60,7 +67,44 @@ public class ChooseInventoryFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_choose_inventory, container, false);
+        View view = inflater.inflate(R.layout.fragment_choose_inventory, null);
+
+        //add click listeners
+        Button invButton = (Button) view.findViewById(R.id.choose_inv_item_button);
+        invButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.support.v4.app.Fragment newFragment = ViewInventoryItemFragment.newInstance(1);
+                replaceFragment(newFragment, "ViewInventoryItems");
+            }
+        });
+
+        Button currInvButton = (Button) view.findViewById(R.id.choose_inv_butt_current);
+        currInvButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.support.v4.app.Fragment newFragment = ViewCurrentInventoryFragment.newInstance(1);
+                replaceFragment(newFragment, "ViewCurrentInventory");
+            }
+        });
+
+        Button pastInvButton = (Button) view.findViewById(R.id.choose_inv_past_button);
+        pastInvButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                android.support.v4.app.Fragment newFragment = ViewPastInventoryFragment.newInstance(1);
+                replaceFragment(newFragment, "ViewPastInventory");
+            }
+        });
+
+        return view;
     }
 
+    public void replaceFragment(android.support.v4.app.Fragment newFragment, String tag) {
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.choose_inv_layout, newFragment, tag);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
 }
