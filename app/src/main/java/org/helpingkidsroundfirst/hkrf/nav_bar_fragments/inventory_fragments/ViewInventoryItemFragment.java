@@ -61,7 +61,7 @@ public class ViewInventoryItemFragment extends android.support.v4.app.Fragment
         View view = inflater.inflate(R.layout.fragment_inventoryitem_list, container, false);
 
         // add floating action button
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
+        /*FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.floatingActionButton);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,7 +70,7 @@ public class ViewInventoryItemFragment extends android.support.v4.app.Fragment
                 addItemDialogFragment.setTargetFragment(ViewInventoryItemFragment.this, 300);
                 addItemDialogFragment.show(fragmentManager, "open item dialog");
             }
-        });
+        });*/
 
         // Set the adapter
         if (view instanceof RecyclerView) {
