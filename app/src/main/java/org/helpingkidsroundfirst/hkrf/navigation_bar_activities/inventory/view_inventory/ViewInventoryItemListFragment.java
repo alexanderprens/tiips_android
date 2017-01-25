@@ -1,31 +1,29 @@
-package org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments;
-
+package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory;
 
 
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.app.Fragment;
 
 import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
-import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.inventory_adapters.ViewInventoryItemAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ViewInventoryItemList extends Fragment
+public class ViewInventoryItemListFragment extends Fragment
     implements LoaderManager.LoaderCallbacks<Cursor>,
-        AddItemDialogFragment.AddItemDialogListener{
+        AddItemDialogFragment.AddItemDialogListener {
 
     private ViewInventoryItemAdapter mViewInventorItemAdapter;
     private ListView mListView;
@@ -53,7 +51,7 @@ public class ViewInventoryItemList extends Fragment
         void onItemSelected(Uri invItemURI);
     }
 
-    public ViewInventoryItemList() {
+    public ViewInventoryItemListFragment() {
         // Required empty public constructor
     }
 
@@ -64,7 +62,7 @@ public class ViewInventoryItemList extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // use adapter to take data from a source and populate list
-        mViewInventorItemAdapter = new ViewInventoryItemAdapter(getContext(), null, 0);
+        mViewInventorItemAdapter = new ViewInventoryItemAdapter(getActivity(), null, 0);
 
         View rootView = inflater.inflate(R.layout.fragment_view_inventory_item_list, container, false);
 
@@ -75,7 +73,7 @@ public class ViewInventoryItemList extends Fragment
             public void onClick(View view) {
                 FragmentManager fragmentManager = getFragmentManager();
                 AddItemDialogFragment addItemDialogFragment = new AddItemDialogFragment();
-                addItemDialogFragment.setTargetFragment(ViewInventoryItemList.this, 300);
+                addItemDialogFragment.setTargetFragment(ViewInventoryItemListFragment.this, 300);
                 addItemDialogFragment.show(fragmentManager, "open item dialog");
             }
         });
@@ -128,7 +126,7 @@ public class ViewInventoryItemList extends Fragment
 
         Uri itemUri = InventoryContract.ItemEntry.buildInventoryItemList();
 
-        return new android.support.v4.content.CursorLoader(getContext(),
+        return new android.support.v4.content.CursorLoader(getActivity(),
                 itemUri,
                 INVENTORY_ITEM_COLUMNS,
                 null,

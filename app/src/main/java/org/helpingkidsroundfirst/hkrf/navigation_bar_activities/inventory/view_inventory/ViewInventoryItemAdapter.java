@@ -1,4 +1,4 @@
-package org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.inventory_adapters;
+package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.helpingkidsroundfirst.hkrf.R;
-import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ViewInventoryItemList;
 
 /**
  * Created by alexa on 1/24/2017.
@@ -51,10 +50,10 @@ public class ViewInventoryItemAdapter extends CursorAdapter {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
         // get data from cursor
-        String name = cursor.getString(ViewInventoryItemList.COL_ITEM_NAME);
-        String description = cursor.getString(ViewInventoryItemList.COL_ITEM_DESC);
-        String category = cursor.getString(ViewInventoryItemList.COL_ITEM_CAT);
-        String barcode = cursor.getString(ViewInventoryItemList.COL_ITEM_BARCODE);
+        String name = cursor.getString(ViewInventoryItemListFragment.COL_ITEM_NAME);
+        String description = cursor.getString(ViewInventoryItemListFragment.COL_ITEM_DESC);
+        String category = cursor.getString(ViewInventoryItemListFragment.COL_ITEM_CAT);
+        String barcode = cursor.getString(ViewInventoryItemListFragment.COL_ITEM_BARCODE);
 
         // place cursor data into view
         viewHolder.nameView.setText(name);

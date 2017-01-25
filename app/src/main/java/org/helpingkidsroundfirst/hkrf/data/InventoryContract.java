@@ -48,10 +48,6 @@ public class InventoryContract {
         public static Uri buildInventoryItemList(){
             return CONTENT_URI;
         }
-
-        public static String getCategoryFromUri(Uri uri) {
-            return uri.getPathSegments().get(4);
-        }
     }
 
     /* Define Current Inventory Table */
