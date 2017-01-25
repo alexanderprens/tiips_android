@@ -16,7 +16,6 @@ import android.view.MenuItem;
 
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.ViewInventoryActivity;
 
-// TODO: 12/22/2016 implement interfaces for fragments that need it
 public class MainActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener {
 
