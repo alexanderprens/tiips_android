@@ -13,35 +13,5 @@
     tools:context=".navigation_bar_activities.inventory.view_inventory.ViewInventoryActivity"
     tools:showIn="@layout/activity_view_inventory">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <TextView
-            android:text="@string/choose_inventory_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView2"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textAlignment="center" />
-
-        <Button
-            android:text="@string/choose_inv_current_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/choose_inv_butt_current" />
-
-        <Button
-            android:text="@string/choose_inv_past_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/choose_inv_past_button" />
-
-        <Button
-            android:text="@string/choose_inv_item_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/choose_inv_item_button" />
-    </LinearLayout>
 </RelativeLayout>

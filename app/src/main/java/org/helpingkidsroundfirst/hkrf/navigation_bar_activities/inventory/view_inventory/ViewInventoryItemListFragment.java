@@ -25,7 +25,7 @@ public class ViewInventoryItemListFragment extends Fragment
     implements LoaderManager.LoaderCallbacks<Cursor>,
         AddItemDialogFragment.AddItemDialogListener {
 
-    private ViewInventoryItemAdapter mViewInventorItemAdapter;
+    private ViewInventoryItemAdapter mViewInventoryItemAdapter;
     private ListView mListView;
     private int mPosition = ListView.INVALID_POSITION;
     private static final String SELECTED_KEY = "selected_position";
@@ -62,7 +62,7 @@ public class ViewInventoryItemListFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // use adapter to take data from a source and populate list
-        mViewInventorItemAdapter = new ViewInventoryItemAdapter(getActivity(), null, 0);
+        mViewInventoryItemAdapter = new ViewInventoryItemAdapter(getActivity(), null, 0);
 
         View rootView = inflater.inflate(R.layout.fragment_view_inventory_item_list, container, false);
 
@@ -80,7 +80,7 @@ public class ViewInventoryItemListFragment extends Fragment
 
         // get list view
         mListView = (ListView) rootView.findViewById(R.id.inventory_item_list);
-        mListView.setAdapter(mViewInventorItemAdapter);
+        mListView.setAdapter(mViewInventoryItemAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -136,7 +136,7 @@ public class ViewInventoryItemListFragment extends Fragment
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data){
-        mViewInventorItemAdapter.swapCursor(data);
+        mViewInventoryItemAdapter.swapCursor(data);
         if(mPosition != ListView.INVALID_POSITION){
             mListView.smoothScrollToPosition(mPosition);
         }
@@ -144,7 +144,7 @@ public class ViewInventoryItemListFragment extends Fragment
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader){
-        mViewInventorItemAdapter.swapCursor(null);
+        mViewInventoryItemAdapter.swapCursor(null);
     }
 
     // Dialog click listeners

@@ -110,62 +110,6 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
 
-        /*
-        Fragment fragment;
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        // Call fragments based on menu options
-        if (id == R.id.nav_inventory) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_main, fragment)
-                    .commit();
-
-            getSupportActionBar().setTitle(fragmentTitles[0]);
-        } else if (id == R.id.nav_receive) {
-            fragment = new ReceiveInventoryFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_main, fragment)
-                    .commit();
-
-            getSupportActionBar().setTitle(fragmentTitles[1]);
-        } else if (id == R.id.nav_ship) {
-            fragment = new ShipInventoryFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_main, fragment)
-                    .commit();
-
-            getSupportActionBar().setTitle(fragmentTitles[2]);
-        } else if (id == R.id.nav_reports) {
-            fragment = new ViewReportsFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_main, fragment)
-                    .commit();
-
-            getSupportActionBar().setTitle(fragmentTitles[3]);
-        } else if (id == R.id.nav_locate) {
-            fragment = new LocateItemFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_main, fragment)
-                    .commit();
-
-            getSupportActionBar().setTitle(fragmentTitles[4]);
-        } else if (id == R.id.nav_add) {
-            fragment = new ModifyTagsFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_main, fragment)
-                    .commit();
-
-            getSupportActionBar().setTitle(fragmentTitles[5]);
-        } else if (id == R.id.nav_messages) {
-            fragment = new TagMessagesFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_main, fragment)
-                    .commit();
-
-            getSupportActionBar().setTitle(fragmentTitles[6]);
-
-        }*/
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

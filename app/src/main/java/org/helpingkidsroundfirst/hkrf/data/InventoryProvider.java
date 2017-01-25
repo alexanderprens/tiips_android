@@ -95,19 +95,59 @@ public class InventoryProvider extends ContentProvider {
                 );
                 break;
             case CURRENT_INVENTORY_ID:
-
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        InventoryContract.CurrentInventoryEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
                 break;
             case PAST_INVENTORY_ID:
-
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        InventoryContract.PastInventoryEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
                 break;
             case PAST_INVENTORY_LIST:
-
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        InventoryContract.PastInventoryEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
                 break;
             case INVENTORY_ITEM_ID:
-
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        InventoryContract.ItemEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
                 break;
             case INVENTORY_ITEM_LIST:
-
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        InventoryContract.ItemEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
                 break;
             default:
                 throw new UnsupportedOperationException("Unkown uri: " + uri);

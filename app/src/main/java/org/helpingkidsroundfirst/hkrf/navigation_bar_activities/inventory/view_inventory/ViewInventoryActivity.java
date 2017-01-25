@@ -6,12 +6,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 
 import org.helpingkidsroundfirst.hkrf.R;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.ViewInventoryFragment.onViewInventoryButtonListener;
 
 public class ViewInventoryActivity extends AppCompatActivity
-    implements View.OnClickListener{
+    implements onViewInventoryButtonListener{
 
     private static final String TAG = "ViewInventoryActivity";
 
@@ -26,30 +26,31 @@ public class ViewInventoryActivity extends AppCompatActivity
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("View Inventory");
+
+        // start initial fragment
+        Fragment fragment = new ViewInventoryFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_view_inventory, fragment)
+                .commit();
     }
 
-    @Override
-    public void onClick(View v) {
-
-        Fragment fragment;
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        switch (v.getId()){
-            case R.id.choose_inv_butt_current:
-                fragment = new ViewInventoryItemListFragment();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.content_view_inventory, fragment)
-                        .commit();
-                break;
-
-            // TODO: 1/25/2017 implement the other buttons
-            case R.id.choose_inv_past_button:
-
-                break;
-
-            case R.id.choose_inv_item_button:
-
+    // View inventory button listener
+    public void onViewInventoryButtonClicked(int button){
+        switch (button){
+            case ViewInventoryFragment.BUTTON_ITEM:
+                Fragment fragment = new ViewInventoryItemListFragment();
+                startFragment(fragment, "ViewInventoryItemListFragment");
+                getSupportActionBar().setTitle("Inventory Items");
                 break;
         }
+    }
+
+    private void startFragment(Fragment fragment, String fragmentTag){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_view_inventory, fragment)
+                .addToBackStack(fragmentTag)
+                .commit();
     }
 }
