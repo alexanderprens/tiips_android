@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/HKRF.iml" filepath="$PROJECT_DIR$/HKRF.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TIIPS.iml" filepath="$PROJECT_DIR$/TIIPS.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

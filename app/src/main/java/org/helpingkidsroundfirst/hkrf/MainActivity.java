@@ -1,39 +1,26 @@
 package org.helpingkidsroundfirst.hkrf;
 
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ChooseInventoryFragment;
-import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ReceiveInventoryFragment;
-import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ShipInventoryFragment;
-import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ViewCurrentInventoryFragment;
-import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ViewInventoryItemFragment;
-import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ViewPastInventoryFragment;
-import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ViewReportsFragment;
-import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.dummy.DummyContent;
-import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.ips_fragments.LocateItemFragment;
-import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.ips_fragments.ModifyTagsFragment;
-import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.ips_fragments.TagMessagesFragment;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.ViewInventoryActivity;
 
 // TODO: 12/22/2016 implement interfaces for fragments that need it
 public class MainActivity extends AppCompatActivity
-    implements NavigationView.OnNavigationItemSelectedListener,
-    ViewCurrentInventoryFragment.OnListFragmentInteractionListener,
-        ViewInventoryItemFragment.OnListFragmentInteractionListener,
-        ViewPastInventoryFragment.OnListFragmentInteractionListener{
+    implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String[] fragmentTitles = {"View Inventory", "Receive Inventory",
             "Ship Inventory", "View Reports", "Locate Items", "Modify Tags", "View Tag Messages"};
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,12 +76,46 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+
+        switch (id){
+            case R.id.nav_inventory:
+                Intent intent = new Intent(MainActivity.this, ViewInventoryActivity.class);
+                startActivity(intent);
+                Log.i(TAG, "Start View Inventory Activity");
+                break;
+
+            // TODO: 1/25/2017 add actions for rest of nav drawer
+            case R.id.nav_ship:
+
+                break;
+
+            case R.id.nav_receive:
+
+                break;
+
+            case R.id.nav_reports:
+
+                break;
+
+            case R.id.nav_locate:
+
+                break;
+
+            case R.id.nav_add:
+
+                break;
+
+            case R.id.nav_messages:
+
+                break;
+        }
+
+        /*
         Fragment fragment;
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         // Call fragments based on menu options
         if (id == R.id.nav_inventory) {
-            fragment = new ChooseInventoryFragment();
             fragmentManager.beginTransaction()
                     .replace(R.id.content_main, fragment)
                     .commit();
@@ -142,15 +163,11 @@ public class MainActivity extends AppCompatActivity
                     .commit();
 
             getSupportActionBar().setTitle(fragmentTitles[6]);
-        }
+
+        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
-
     }
 }

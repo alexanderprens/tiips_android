@@ -41,12 +41,12 @@ public class InventoryContract {
         public static final String COLUMN_CATEGORY = "category";
         public static final String COLUMN_VALUE = "value";
 
-        public static Uri buildCurrentInventoryUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
+        public static Uri buildInventoryItemWithID(String id) {
+            return CONTENT_URI.buildUpon().appendPath(id).build();
         }
 
-        public static String getCategoryFromUri(Uri uri) {
-            return uri.getPathSegments().get(4);
+        public static Uri buildInventoryItemList(){
+            return CONTENT_URI;
         }
     }
 

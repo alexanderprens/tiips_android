@@ -1,7 +1,7 @@
 package org.helpingkidsroundfirst.hkrf.data;
 
-import android.content.ContentProvider;
 import android.annotation.TargetApi;
+import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -20,18 +20,12 @@ public class InventoryProvider extends ContentProvider {
     private InventoryDbHelper mOpenHelper;
 
     // Identifies constants for database commands
-    static final int CURRENT_INVENTORY = 100;
-    static final int CURRENT_INVENTORY_WITH_ITEM = 101;
-    static final int CURRENT_INVENTORY_WITH_DONOR = 102;
-    static final int CURRENT_INVENTORY_WITH_DATE = 103;
-    static final int CURRENT_INVENTORY_WITH_WAREHOUSE = 104;
-    static final int PAST_INVENTORY = 200;
-    static final int PAST_INVENTORY_WITH_ITEM = 201;
-    static final int PAST_INVENTORY_WITH_DONOR = 202;
-    static final int PAST_INVENTORY_WITH_DATE = 203;
-    static final int ITEM = 300;
-    static final int ITEM_WITH_CATEGORY = 301;
-    static final int CATEGORY = 400;
+    static final int CURRENT_INVENTORY_LIST = 100;
+    static final int CURRENT_INVENTORY_ID = 101;
+    static final int PAST_INVENTORY_LIST = 200;
+    static final int PAST_INVENTORY_ID = 201;
+    static final int INVENTORY_ITEM_LIST = 300;
+    static final int INVENTORY_ITEM_ID = 301;
 
     // TODO: 12/20/2016 make cursors for different tables and queries
 
@@ -41,7 +35,7 @@ public class InventoryProvider extends ContentProvider {
         final String authority = InventoryContract.CONTENT_AUTHORITY;
 
         // create code for every type of URI
-        matcher.addURI(authority, InventoryContract.PATH_CURRENT_INVENTORY, CURRENT_INVENTORY);
+        matcher.addURI(authority, InventoryContract.PATH_CURRENT_INVENTORY, CURRENT_INVENTORY_LIST);
 
         return matcher;
     }
@@ -55,7 +49,7 @@ public class InventoryProvider extends ContentProvider {
     }
 
     // get uri type
-    // TODO: 12/21/2016 fill in switch
+    // TODO: 12/21/2016 check if correct implementation
     @Override
     public String getType(Uri uri) {
 
@@ -64,8 +58,18 @@ public class InventoryProvider extends ContentProvider {
 
         switch (match) {
             //make case for each uri type
-            case CURRENT_INVENTORY:
+            case CURRENT_INVENTORY_LIST:
                 return InventoryContract.CurrentInventoryEntry.CONTENT_TYPE;
+            case CURRENT_INVENTORY_ID:
+                return InventoryContract.CurrentInventoryEntry.CONTENT_TYPE;
+            case PAST_INVENTORY_ID:
+                return InventoryContract.PastInventoryEntry.CONTENT_TYPE;
+            case PAST_INVENTORY_LIST:
+                return InventoryContract.PastInventoryEntry.CONTENT_TYPE;
+            case INVENTORY_ITEM_ID:
+                return InventoryContract.ItemEntry.CONTENT_TYPE;
+            case INVENTORY_ITEM_LIST:
+                return InventoryContract.ItemEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -79,8 +83,7 @@ public class InventoryProvider extends ContentProvider {
         // Determine what type of request a uri is and query database
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
-            //"inventory"
-            case CURRENT_INVENTORY: {
+            case CURRENT_INVENTORY_LIST:
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         InventoryContract.CurrentInventoryEntry.TABLE_NAME,
                         projection,
@@ -91,8 +94,21 @@ public class InventoryProvider extends ContentProvider {
                         sortOrder
                 );
                 break;
-            }
+            case CURRENT_INVENTORY_ID:
 
+                break;
+            case PAST_INVENTORY_ID:
+
+                break;
+            case PAST_INVENTORY_LIST:
+
+                break;
+            case INVENTORY_ITEM_ID:
+
+                break;
+            case INVENTORY_ITEM_LIST:
+
+                break;
             default:
                 throw new UnsupportedOperationException("Unkown uri: " + uri);
         }
@@ -109,7 +125,7 @@ public class InventoryProvider extends ContentProvider {
         Uri returnUri;
 
         switch(match){
-            case CURRENT_INVENTORY: {
+            case CURRENT_INVENTORY_LIST: {
                 long _id = db.insert(InventoryContract.CurrentInventoryEntry.TABLE_NAME, null,
                         values);
                 if (_id > 0) {
@@ -136,7 +152,7 @@ public class InventoryProvider extends ContentProvider {
         //delete all rows in selection, return #rows deleted
         if ( null == selection ) selection = "1";
         switch (match) {
-            case CURRENT_INVENTORY:
+            case CURRENT_INVENTORY_LIST:
                 rowsDeleted = db.delete(InventoryContract.CurrentInventoryEntry.TABLE_NAME,
                         selection, selectionArgs);
                 break;
@@ -159,7 +175,7 @@ public class InventoryProvider extends ContentProvider {
         int rowsUpdated;
 
         switch (match) {
-            case CURRENT_INVENTORY:
+            case CURRENT_INVENTORY_LIST:
                 rowsUpdated = db.update(InventoryContract.CurrentInventoryEntry.TABLE_NAME, values,
                         selection, selectionArgs);
                 break;
