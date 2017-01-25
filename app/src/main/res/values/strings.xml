@@ -42,4 +42,7 @@
     <string name="choose_inv_past_button">Past Inventory</string>
     <string name="choose_inv_item_button">Inventory Items</string>
     <string name="title_activity_view_inventory">ViewInventoryActivity</string>
+
+    <!-- content_main_home strings -->
+    <string name="home_header">Welcome to TIIPS!</string>
 </resources>
