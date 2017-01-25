@@ -1,6 +1,7 @@
 package org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments;
 
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,7 +18,8 @@ import org.helpingkidsroundfirst.hkrf.R;
  * Use the {@link ChooseInventoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChooseInventoryFragment extends android.support.v4.app.Fragment {
+public class ChooseInventoryFragment extends android.support.v4.app.Fragment
+    implements ViewInventoryItemList.Callback{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -67,14 +69,14 @@ public class ChooseInventoryFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_choose_inventory, null);
+        View view = inflater.inflate(R.layout.fragment_choose_inv, null);
 
         //add click listeners
         Button invButton = (Button) view.findViewById(R.id.choose_inv_item_button);
         invButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                android.support.v4.app.Fragment newFragment = ViewInventoryItemFragment.newInstance(1);
+                android.support.v4.app.Fragment newFragment = new ViewInventoryItemList();
                 replaceFragment(newFragment, "ViewInventoryItems");
             }
         });
@@ -103,8 +105,13 @@ public class ChooseInventoryFragment extends android.support.v4.app.Fragment {
     public void replaceFragment(android.support.v4.app.Fragment newFragment, String tag) {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.choose_inv_layout, newFragment, tag);
+        ft.replace(R.id.content_main, newFragment, tag);
         ft.addToBackStack(null);
         ft.commit();
+    }
+
+    @Override
+    public void onItemSelected(Uri contentUri){
+        // TODO: 1/24/2017 implement item selected
     }
 }

@@ -30,7 +30,7 @@ public class MyPastInventoryRecyclerViewAdapter extends RecyclerView.Adapter<MyP
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_pastinventory_list, parent, false);
+                .inflate(R.layout.fragment_pastinventory, parent, false);
         return new ViewHolder(view);
     }
 

@@ -17,7 +17,6 @@ import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.Choo
 import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ReceiveInventoryFragment;
 import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ShipInventoryFragment;
 import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ViewCurrentInventoryFragment;
-import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ViewInventoryItemFragment;
 import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ViewPastInventoryFragment;
 import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.ViewReportsFragment;
 import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.inventory_fragments.dummy.DummyContent;
@@ -29,7 +28,6 @@ import org.helpingkidsroundfirst.hkrf.nav_bar_fragments.ips_fragments.TagMessage
 public class MainActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener,
     ViewCurrentInventoryFragment.OnListFragmentInteractionListener,
-        ViewInventoryItemFragment.OnListFragmentInteractionListener,
         ViewPastInventoryFragment.OnListFragmentInteractionListener{
 
     private static final String[] fragmentTitles = {"View Inventory", "Receive Inventory",
