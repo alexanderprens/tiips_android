@@ -23,6 +23,7 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
     private String nameInput;
     private String descInput;
     private String categoryInput;
+    private String valueInString;
     private int valueInput;
     private String barcodeInput;
 
@@ -61,6 +62,7 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
         descInput = "";
         categoryInput = "";
         valueInput = 0;
+        valueInString = "";
         barcodeInput = "";
 
         // listen to name input
@@ -68,17 +70,18 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
         nameText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                nameInput = s.toString();
+                // required stub
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // required stub
+                nameInput = s.toString();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                // required stub
+
             }
         });
 
@@ -88,6 +91,23 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
         // listen to category input
 
         // listen to value input
+        EditText valueText = (EditText) view.findViewById(R.id.new_item_value);
+        valueText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                valueInString = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         // listen to barcode input
 
@@ -120,8 +140,35 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
 
         if(nameInput.isEmpty()){
             check = false;
-            Toast.makeText(getActivity(), "Name cannot be empty", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Name cannot be empty", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), nameInput, Toast.LENGTH_SHORT).show();
         }
+
+        if(!valueInString.isEmpty()) {
+            valueInput = Integer.parseInt(valueInString);
+
+            if(valueInput < 1) {
+                check = false;
+                Toast.makeText(getActivity(), "Value must be greater than zero",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), Integer.toString(valueInput), Toast.LENGTH_SHORT).show();
+            }
+
+        } else {
+            check = false;
+            Toast.makeText(getActivity(), "Value must be greater than zero",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        /*valueInput = Integer.valueOf(valueInString);
+
+        if(valueInput < 1){
+            check = false;
+            Toast.makeText(getActivity(), "Value must be greater than zero",
+                    Toast.LENGTH_SHORT).show();
+        }*/
 
         return check;
     }
