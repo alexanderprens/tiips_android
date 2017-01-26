@@ -1,8 +1,8 @@
 package org.helpingkidsroundfirst.hkrf.data;
 
-import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.CurrentInventoryEntry;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.ItemEntry;
@@ -30,12 +30,12 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
         // create item table
         final String SQL_CREATE_ITEM_TABLE = "CREATE TABLE " +
                 ItemEntry.TABLE_NAME + " (" +
-                ItemEntry._ID + " INTEGER PRIMARY KEY" +
-                ItemEntry.COLUMN_BARCODE_ID + "TEXT UNIQUE NOT NULL, " +
+                ItemEntry._ID + " INTEGER PRIMARY KEY, " +
+                ItemEntry.COLUMN_BARCODE_ID + " TEXT UNIQUE NOT NULL, " +
                 ItemEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                 ItemEntry.COLUMN_DESCRIPTION + " TEXT, " +
-                ItemEntry.COLUMN_CATEGORY + " TEXT " +
-                ItemEntry.COLUMN_VALUE + " REAL NOT NULL, " + ");";
+                ItemEntry.COLUMN_CATEGORY + " TEXT, " +
+                ItemEntry.COLUMN_VALUE + " REAL NOT NULL " + ");";
 
         // create current inventory table
         final String SQL_CREATE_CURRENT_INVENTORY_TABLE = "CREATE TABLE " + 

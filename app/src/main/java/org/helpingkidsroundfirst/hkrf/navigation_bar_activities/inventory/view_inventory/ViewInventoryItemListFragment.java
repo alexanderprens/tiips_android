@@ -37,7 +37,8 @@ public class ViewInventoryItemListFragment extends Fragment
             InventoryContract.ItemEntry.COLUMN_BARCODE_ID,
             InventoryContract.ItemEntry.COLUMN_NAME,
             InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
-            InventoryContract.ItemEntry.COLUMN_CATEGORY
+            InventoryContract.ItemEntry.COLUMN_CATEGORY,
+            InventoryContract.ItemEntry.COLUMN_VALUE
     };
 
     // Inventory item column indices
@@ -45,6 +46,7 @@ public class ViewInventoryItemListFragment extends Fragment
     public static final int COL_ITEM_NAME = 2;
     public static final int COL_ITEM_DESC = 3;
     public static final int COL_ITEM_CAT = 4;
+    public static final int COL_ITEM_VALUE = 5;
 
     // Callback for when item is selected
     public interface Callback {
@@ -86,12 +88,12 @@ public class ViewInventoryItemListFragment extends Fragment
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 // Adapter returns a cursor at the correct position for
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
-                if(cursor != null){
+                /*if(cursor != null){
                     ((Callback) getParentFragment())
-                            .onItemSelected(InventoryContract.ItemEntry.buildInventoryItemWithID(
+                            .onItemSelected(InventoryContract.ItemEntry.buildInventoryItemWithIdUri(
                                     cursor.getString(COL_ITEM_BARCODE)
                             ));
-                }
+                }*/
                 mPosition = position;
             }
         });
@@ -124,7 +126,7 @@ public class ViewInventoryItemListFragment extends Fragment
 
         String sortOrder = InventoryContract.ItemEntry.COLUMN_NAME + " ASC";
 
-        Uri itemUri = InventoryContract.ItemEntry.buildInventoryItemList();
+        Uri itemUri = InventoryContract.ItemEntry.buildInventoryItemUri();
 
         return new android.support.v4.content.CursorLoader(getActivity(),
                 itemUri,
