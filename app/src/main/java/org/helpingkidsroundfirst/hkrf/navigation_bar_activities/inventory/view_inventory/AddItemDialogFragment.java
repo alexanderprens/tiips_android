@@ -3,8 +3,12 @@ package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import org.helpingkidsroundfirst.hkrf.R;
 
@@ -14,6 +18,13 @@ import org.helpingkidsroundfirst.hkrf.R;
 
 public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
     implements View.OnClickListener {
+
+    // dialog inputs
+    private String nameInput;
+    private String descInput;
+    private String categoryInput;
+    private int valueInput;
+    private String barcodeInput;
 
     public interface AddItemDialogListener {
         void onButtonOK();
@@ -45,6 +56,42 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
         view.findViewById(R.id.new_item_ok).setOnClickListener(this);
         view.findViewById(R.id.new_item_cancel).setOnClickListener(this);
 
+        //init inputs
+        nameInput = "";
+        descInput = "";
+        categoryInput = "";
+        valueInput = 0;
+        barcodeInput = "";
+
+        // listen to name input
+        final EditText nameText = (EditText) view.findViewById(R.id.new_item_name);
+        nameText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                nameInput = s.toString();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // required stub
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // required stub
+            }
+        });
+
+        //listen to description input
+
+
+        // listen to category input
+
+        // listen to value input
+
+        // listen to barcode input
+
+
         builder.setView(view);
         return builder.create();
     }
@@ -54,8 +101,10 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
 
         switch (view.getId()){
             case R.id.new_item_ok:
-                caller.onButtonOK();
-                this.dismiss();
+                if(dialogValidation()){
+                    caller.onButtonOK();
+                    this.dismiss();
+                }
                 break;
             case R.id.new_item_cancel:
                 caller.onButtonCancel();
@@ -64,5 +113,16 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
             default:
                 break;
         }
+    }
+
+    private boolean dialogValidation(){
+        boolean check = true;
+
+        if(nameInput.isEmpty()){
+            check = false;
+            Toast.makeText(getActivity(), "Name cannot be empty", Toast.LENGTH_LONG).show();
+        }
+
+        return check;
     }
 }
