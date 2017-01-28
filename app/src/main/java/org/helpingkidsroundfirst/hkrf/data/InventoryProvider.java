@@ -199,7 +199,6 @@ public class InventoryProvider extends ContentProvider {
     }
 
     // Handle database insertions
-    // TODO: 12/21/2016 fill in switch
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
@@ -212,7 +211,7 @@ public class InventoryProvider extends ContentProvider {
                         values);
                 if (_id > 0) {
                     returnUri =
-                            InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri(_id);
+                            InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri();
                 } else{
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
@@ -232,7 +231,7 @@ public class InventoryProvider extends ContentProvider {
             case PAST_INVENTORY: {
                 long _id = db.insert(InventoryContract.PastInventoryEntry.TABLE_NAME, null, values);
                 if (_id > 0) {
-                    returnUri = InventoryContract.PastInventoryEntry.buildPastInventoryUri(_id);
+                    returnUri = InventoryContract.PastInventoryEntry.buildPastInventoryUri();
                 } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
@@ -261,6 +260,17 @@ public class InventoryProvider extends ContentProvider {
                 rowsDeleted = db.delete(InventoryContract.CurrentInventoryEntry.TABLE_NAME,
                         selection, selectionArgs);
                 break;
+
+            case INVENTORY_ITEM:
+                rowsDeleted = db.delete(InventoryContract.ItemEntry.TABLE_NAME,
+                        selection, selectionArgs);
+                break;
+
+            case PAST_INVENTORY:
+                rowsDeleted = db.delete(InventoryContract.PastInventoryEntry.TABLE_NAME,
+                        selection, selectionArgs);
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unkown uri: " + uri);
         }

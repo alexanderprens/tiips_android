@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -120,6 +121,8 @@ public class ViewInventoryItemListFragment extends Fragment
         super.onSaveInstanceState(outState);
     }
 
+
+
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle){
         // called when a new loader is created
@@ -128,7 +131,7 @@ public class ViewInventoryItemListFragment extends Fragment
 
         Uri itemUri = InventoryContract.ItemEntry.buildInventoryItemUri();
 
-        return new android.support.v4.content.CursorLoader(getActivity(),
+        return new CursorLoader(getActivity(),
                 itemUri,
                 INVENTORY_ITEM_COLUMNS,
                 null,

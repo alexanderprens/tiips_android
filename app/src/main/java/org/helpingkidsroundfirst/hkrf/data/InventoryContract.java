@@ -74,8 +74,8 @@ public class InventoryContract {
         public static final String COLUMN_DONOR = "donor";
         public static final String COLUMN_WAREHOUSE = "warehouse";
 
-        public static Uri buildCurrentInventoryUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
+        public static Uri buildCurrentInventoryUri() {
+            return CONTENT_URI;
         }
 
         public static String getItemNumberFromUri(Uri uri) {
@@ -104,8 +104,8 @@ public class InventoryContract {
         public static final String COLUMN_DATE_SHIPPED = "date_shipped";
         public static final String COLUMN_DONOR = "donor";
 
-        public static Uri buildPastInventoryUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
+        public static Uri buildPastInventoryUri() {
+            return CONTENT_URI;
         }
 
         public static String getItemNumberFromUri(Uri uri) {

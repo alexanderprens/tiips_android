@@ -71,7 +71,6 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 // required stub
-
             }
 
             @Override
@@ -81,21 +80,54 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                // required stub
             }
         });
 
         //listen to description input
+        final EditText descText = (EditText) view.findViewById(R.id.new_item_desc);
+        descText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // required stub
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                descInput = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // required stub
+            }
+        });
 
         // listen to category input
+        final EditText catText = (EditText) view.findViewById(R.id.new_item_category);
+        catText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // required stub
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                categoryInput = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // required stub
+            }
+        });
 
         // listen to value input
-        EditText valueText = (EditText) view.findViewById(R.id.new_item_value);
+        final EditText valueText = (EditText) view.findViewById(R.id.new_item_value);
         valueText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                // required stub
             }
 
             @Override
@@ -105,12 +137,28 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                // required stub
             }
         });
 
         // listen to barcode input
+        final EditText barcodeText = (EditText) view.findViewById(R.id.new_item_barcode);
+        barcodeText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // required stub
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                barcodeInput = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // required stub
+            }
+        });
 
         builder.setView(view);
         return builder.create();
@@ -118,21 +166,61 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
 
     @Override
     public void onClick(View view) {
+        String error = "";
 
         switch (view.getId()){
+
             case R.id.new_item_ok:
-                if(dialogValidation()){
+
+                if(addInventoryItem(error)){
+
                     caller.onButtonOK();
                     this.dismiss();
+                } else {
+                    Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.new_item_cancel:
+
                 caller.onButtonCancel();
                 this.dismiss();
                 break;
             default:
+
                 break;
         }
+    }
+
+    // function to add item to list from dialog
+    private boolean addInventoryItem(String error) {
+
+        boolean added;
+        FetchInventoryTask fetchInventoryTask = new FetchInventoryTask(getActivity());
+
+        // validate inputs
+        if(dialogValidation()) {
+
+            // check if item already exists
+            if (fetchInventoryTask.checkIfItemExists(barcodeInput) && !barcodeInput.isEmpty()) {
+
+                // attempt to add item
+                if(fetchInventoryTask.addInventoryItem(nameInput, descInput, categoryInput,
+                        barcodeInput, valueInput) > 0) {
+                    added = true;
+                } else {
+                    error = "Error adding item to database";
+                    added = false;
+                }
+            } else {
+                error = "Barcode already exists";
+                added = false;
+            }
+        } else {
+            error = "Validation error";
+            added = false;
+        }
+
+        return added;
     }
 
     private boolean dialogValidation(){
@@ -161,14 +249,6 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
             Toast.makeText(getActivity(), "Value must be greater than zero",
                     Toast.LENGTH_SHORT).show();
         }
-
-        /*valueInput = Integer.valueOf(valueInString);
-
-        if(valueInput < 1){
-            check = false;
-            Toast.makeText(getActivity(), "Value must be greater than zero",
-                    Toast.LENGTH_SHORT).show();
-        }*/
 
         return check;
     }
