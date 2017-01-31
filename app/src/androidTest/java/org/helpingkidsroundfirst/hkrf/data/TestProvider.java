@@ -1,10 +1,15 @@
 package org.helpingkidsroundfirst.hkrf.data;
 
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
+
+import static org.helpingkidsroundfirst.hkrf.data.TestUtilities.createItemValues;
+import static org.helpingkidsroundfirst.hkrf.data.TestUtilities.validateCursor;
 
 /**
  * Created by Alex on 1/28/2017.
@@ -18,6 +23,12 @@ public class TestProvider extends AndroidTestCase {
     public void deleteAllRecordsFromProvider() {
 
         mContext.getContentResolver().delete(
+                InventoryContract.ItemEntry.CONTENT_URI,
+                null,
+                null
+        );
+
+        mContext.getContentResolver().delete(
                 InventoryContract.CurrentInventoryEntry.CONTENT_URI,
                 null,
                 null
@@ -25,12 +36,6 @@ public class TestProvider extends AndroidTestCase {
 
         mContext.getContentResolver().delete(
                 InventoryContract.PastInventoryEntry.CONTENT_URI,
-                null,
-                null
-        );
-
-        mContext.getContentResolver().delete(
-                InventoryContract.ItemEntry.CONTENT_URI,
                 null,
                 null
         );
@@ -124,5 +129,31 @@ public class TestProvider extends AndroidTestCase {
         type = mContext.getContentResolver().getType(InventoryContract.CurrentInventoryEntry.CONTENT_URI);
         assertEquals("Error: the PastInvEntry CONTENT_URI should return ItemEntry.CONTENT_TYPE",
                 InventoryContract.CurrentInventoryEntry.CONTENT_TYPE, type);
+    }
+
+    public void testBasicItemQuery() {
+        // insert test records into database
+        InventoryDbHelper dbHelper = new InventoryDbHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        long itemRowId;
+        ContentValues itemValues =  createItemValues();
+
+        itemRowId = db.insert(InventoryContract.ItemEntry.TABLE_NAME, null, itemValues);
+
+        //test if inserted
+        assertTrue("Unable to insert ItemEntry into database", itemRowId != -1);
+        db.close();
+
+        //test content provider query
+        Cursor itemCursor = mContext.getContentResolver().query(
+                InventoryContract.ItemEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+
+        validateCursor("testBasicItemQuery", itemCursor, itemValues);
     }
 }

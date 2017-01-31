@@ -27,6 +27,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.helpingkidsroundfirst.hkrf.MainActivity" />
         </activity>
+        <provider
+            android:authorities="org.helpingkidsroundfirst.hkrf"
+            android:name="org.helpingkidsroundfirst.hkrf.data.InventoryProvider"></provider>
     </application>
 
 </manifest>

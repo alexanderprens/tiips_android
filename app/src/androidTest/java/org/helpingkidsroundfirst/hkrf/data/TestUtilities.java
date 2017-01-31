@@ -2,6 +2,7 @@ package org.helpingkidsroundfirst.hkrf.data;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 
 import java.util.Map;
@@ -24,5 +25,38 @@ public class TestUtilities extends AndroidTestCase {
                     "' did not match the expected value '" +
                     expectedValue + "'. " + error, expectedValue, valueCursor.getString(idx));
         }
+    }
+
+    static long insertTestItem(SQLiteDatabase db) {
+        //make values to put into database
+        ContentValues itemValues = new ContentValues();
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_BARCODE_ID, "00000001");
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_NAME, "Bat");
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_DESCRIPTION, "Wooden");
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_CATEGORY, "Baseball");
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_VALUE, 10);
+
+        // insert into database
+        long itemRowId;
+        itemRowId = db.insert(InventoryContract.ItemEntry.TABLE_NAME, null, itemValues);
+        return itemRowId;
+    }
+
+    static ContentValues createItemValues() {
+        //make values to put into database
+        ContentValues itemValues = new ContentValues();
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_BARCODE_ID, "00000001");
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_NAME, "Bat");
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_DESCRIPTION, "Wooden");
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_CATEGORY, "Baseball");
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_VALUE, 10);
+
+        return itemValues;
+    }
+
+    static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
+        assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());
+        validateCurrentRecord(error, valueCursor, expectedValues);
+        valueCursor.close();
     }
 }
