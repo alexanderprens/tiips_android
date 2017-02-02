@@ -33,7 +33,6 @@ public class ViewInventoryFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -56,12 +55,22 @@ public class ViewInventoryFragment extends Fragment {
             }
         });
 
-        // TODO: 1/25/2017 implement other buttons
+        currentInventoryButton = (Button) view.findViewById(R.id.choose_inv_butt_current);
+        currentInventoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onViewInventoryButtonClicked(BUTTON_CURRENT);
+            }
+        });
 
-
+        pastInventoryButton = (Button) view.findViewById(R.id.choose_inv_past_button);
+        pastInventoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onViewInventoryButtonClicked(BUTTON_PAST);
+            }
+        });
 
         return view;
-
     }
-
 }

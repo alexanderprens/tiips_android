@@ -9,6 +9,9 @@ import android.util.Log;
 
 import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.ViewInventoryFragment.onViewInventoryButtonListener;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.current_inventory.ViewCurrentInventoryListFragment;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.inventory_items.ViewInventoryItemListFragment;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.past_inventory.ViewPastInventoryListFragment;
 
 public class ViewInventoryActivity extends AppCompatActivity
     implements onViewInventoryButtonListener{
@@ -37,11 +40,25 @@ public class ViewInventoryActivity extends AppCompatActivity
 
     // View inventory button listener
     public void onViewInventoryButtonClicked(int button){
+        Fragment fragment;
+
         switch (button){
             case ViewInventoryFragment.BUTTON_ITEM:
-                Fragment fragment = new ViewInventoryItemListFragment();
+                fragment = new ViewInventoryItemListFragment();
                 startFragment(fragment, "ViewInventoryItemListFragment");
                 getSupportActionBar().setTitle("Inventory Items");
+                break;
+
+            case ViewInventoryFragment.BUTTON_CURRENT:
+                fragment = new ViewCurrentInventoryListFragment();
+                startFragment(fragment, "ViewCurrentInventoryListFragment");
+                getSupportActionBar().setTitle("View Current Inventory");
+                break;
+
+            case ViewInventoryFragment.BUTTON_PAST:
+                fragment = new ViewPastInventoryListFragment();
+                startFragment(fragment, "ViewPastInventoryListFragment");
+                getSupportActionBar().setTitle("View Past Inventory");
                 break;
         }
     }

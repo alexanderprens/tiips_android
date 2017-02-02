@@ -19,8 +19,6 @@ import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_i
 public class MainActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String[] fragmentTitles = {"View Inventory", "Receive Inventory",
-            "Ship Inventory", "View Reports", "Locate Items", "Modify Tags", "View Tag Messages"};
     private static final String TAG = "MainActivity";
 
     @Override

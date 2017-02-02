@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".navigation_bar_activities.inventory.view_inventory.ViewInventoryItemListFragment">
+    tools:context=".navigation_bar_activities.inventory.view_inventory.inventory_items.ViewInventoryItemListFragment">
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"

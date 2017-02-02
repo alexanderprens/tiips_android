@@ -246,7 +246,6 @@ public class InventoryProvider extends ContentProvider {
     }
 
     // Handle database deletions
-    // TODO: 12/21/2016 fill in switch
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();

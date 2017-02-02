@@ -1,4 +1,4 @@
-package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory;
+package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.inventory_items;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

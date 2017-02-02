@@ -1,4 +1,4 @@
-package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory;
+package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.inventory_items;
 
 
 import android.database.Cursor;
@@ -90,6 +90,8 @@ public class ViewInventoryItemListFragment extends Fragment
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 // Adapter returns a cursor at the correct position for
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+
+                // TODO: 2/1/2017 implement item click
                 /*if(cursor != null){
                     ((Callback) getParentFragment())
                             .onItemSelected(InventoryContract.ItemEntry.buildInventoryItemWithIdUri(
@@ -108,12 +110,14 @@ public class ViewInventoryItemListFragment extends Fragment
         return rootView;
     }
 
+    // get saved instance on create
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         getLoaderManager().initLoader(INVENTORY_ITEM_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
+    // save state on close
     @Override
     public void onSaveInstanceState(Bundle outState){
         if(mPosition != ListView.INVALID_POSITION){
@@ -155,12 +159,12 @@ public class ViewInventoryItemListFragment extends Fragment
     // Dialog click listeners
     @Override
     public void onButtonOK() {
-        // TODO: 1/24/2017 implement method
+        // restart loader to include new item
         getLoaderManager().restartLoader(INVENTORY_ITEM_LOADER, null, this);
     }
 
     @Override
     public void onButtonCancel() {
-        // TODO: 1/24/2017 implement method
+        // do nothing on cancel
     }
 }
