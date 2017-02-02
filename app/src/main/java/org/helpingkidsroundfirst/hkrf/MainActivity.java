@@ -3,6 +3,8 @@ package org.helpingkidsroundfirst.hkrf;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,12 +16,9 @@ import android.view.MenuItem;
 
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.ViewInventoryActivity;
 
-// TODO: 12/22/2016 implement interfaces for fragments that need it
 public class MainActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String[] fragmentTitles = {"View Inventory", "Receive Inventory",
-            "Ship Inventory", "View Reports", "Locate Items", "Modify Tags", "View Tag Messages"};
     private static final String TAG = "MainActivity";
 
     @Override
@@ -37,6 +36,12 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Fragment fragment = new HomeFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_main, fragment)
+                .commit();
     }
 
     @Override
@@ -109,62 +114,6 @@ public class MainActivity extends AppCompatActivity
 
                 break;
         }
-
-        /*
-        Fragment fragment;
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        // Call fragments based on menu options
-        if (id == R.id.nav_inventory) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_main, fragment)
-                    .commit();
-
-            getSupportActionBar().setTitle(fragmentTitles[0]);
-        } else if (id == R.id.nav_receive) {
-            fragment = new ReceiveInventoryFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_main, fragment)
-                    .commit();
-
-            getSupportActionBar().setTitle(fragmentTitles[1]);
-        } else if (id == R.id.nav_ship) {
-            fragment = new ShipInventoryFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_main, fragment)
-                    .commit();
-
-            getSupportActionBar().setTitle(fragmentTitles[2]);
-        } else if (id == R.id.nav_reports) {
-            fragment = new ViewReportsFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_main, fragment)
-                    .commit();
-
-            getSupportActionBar().setTitle(fragmentTitles[3]);
-        } else if (id == R.id.nav_locate) {
-            fragment = new LocateItemFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_main, fragment)
-                    .commit();
-
-            getSupportActionBar().setTitle(fragmentTitles[4]);
-        } else if (id == R.id.nav_add) {
-            fragment = new ModifyTagsFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_main, fragment)
-                    .commit();
-
-            getSupportActionBar().setTitle(fragmentTitles[5]);
-        } else if (id == R.id.nav_messages) {
-            fragment = new TagMessagesFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_main, fragment)
-                    .commit();
-
-            getSupportActionBar().setTitle(fragmentTitles[6]);
-
-        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

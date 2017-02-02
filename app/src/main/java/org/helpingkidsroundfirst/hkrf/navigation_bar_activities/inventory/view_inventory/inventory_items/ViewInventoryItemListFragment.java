@@ -1,4 +1,4 @@
-package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory;
+package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.inventory_items;
 
 
 import android.database.Cursor;
@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +26,7 @@ public class ViewInventoryItemListFragment extends Fragment
     implements LoaderManager.LoaderCallbacks<Cursor>,
         AddItemDialogFragment.AddItemDialogListener {
 
-    private ViewInventoryItemAdapter mViewInventorItemAdapter;
+    private ViewInventoryItemAdapter mViewInventoryItemAdapter;
     private ListView mListView;
     private int mPosition = ListView.INVALID_POSITION;
     private static final String SELECTED_KEY = "selected_position";
@@ -33,18 +34,21 @@ public class ViewInventoryItemListFragment extends Fragment
 
     // Inventory item columns
     private static final String[] INVENTORY_ITEM_COLUMNS = {
-            InventoryContract.ItemEntry.TABLE_NAME,
+            InventoryContract.ItemEntry.TABLE_NAME + "." + InventoryContract.ItemEntry._ID,
             InventoryContract.ItemEntry.COLUMN_BARCODE_ID,
             InventoryContract.ItemEntry.COLUMN_NAME,
             InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
-            InventoryContract.ItemEntry.COLUMN_CATEGORY
+            InventoryContract.ItemEntry.COLUMN_CATEGORY,
+            InventoryContract.ItemEntry.COLUMN_VALUE
     };
 
     // Inventory item column indices
+    public static final int COL_ITEM_ID = 0;
     public static final int COL_ITEM_BARCODE = 1;
     public static final int COL_ITEM_NAME = 2;
     public static final int COL_ITEM_DESC = 3;
     public static final int COL_ITEM_CAT = 4;
+    public static final int COL_ITEM_VALUE = 5;
 
     // Callback for when item is selected
     public interface Callback {
@@ -62,7 +66,7 @@ public class ViewInventoryItemListFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // use adapter to take data from a source and populate list
-        mViewInventorItemAdapter = new ViewInventoryItemAdapter(getActivity(), null, 0);
+        mViewInventoryItemAdapter = new ViewInventoryItemAdapter(getActivity(), null, 0);
 
         View rootView = inflater.inflate(R.layout.fragment_view_inventory_item_list, container, false);
 
@@ -80,18 +84,20 @@ public class ViewInventoryItemListFragment extends Fragment
 
         // get list view
         mListView = (ListView) rootView.findViewById(R.id.inventory_item_list);
-        mListView.setAdapter(mViewInventorItemAdapter);
+        mListView.setAdapter(mViewInventoryItemAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 // Adapter returns a cursor at the correct position for
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
-                if(cursor != null){
+
+                // TODO: 2/1/2017 implement item click
+                /*if(cursor != null){
                     ((Callback) getParentFragment())
-                            .onItemSelected(InventoryContract.ItemEntry.buildInventoryItemWithID(
+                            .onItemSelected(InventoryContract.ItemEntry.buildInventoryItemWithIdUri(
                                     cursor.getString(COL_ITEM_BARCODE)
                             ));
-                }
+                }*/
                 mPosition = position;
             }
         });
@@ -104,12 +110,14 @@ public class ViewInventoryItemListFragment extends Fragment
         return rootView;
     }
 
+    // get saved instance on create
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         getLoaderManager().initLoader(INVENTORY_ITEM_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
+    // save state on close
     @Override
     public void onSaveInstanceState(Bundle outState){
         if(mPosition != ListView.INVALID_POSITION){
@@ -124,19 +132,20 @@ public class ViewInventoryItemListFragment extends Fragment
 
         String sortOrder = InventoryContract.ItemEntry.COLUMN_NAME + " ASC";
 
-        Uri itemUri = InventoryContract.ItemEntry.buildInventoryItemList();
+        Uri itemUri = InventoryContract.ItemEntry.buildInventoryItemUri();
 
-        return new android.support.v4.content.CursorLoader(getActivity(),
+        return new CursorLoader(getActivity(),
                 itemUri,
                 INVENTORY_ITEM_COLUMNS,
                 null,
                 null,
-                sortOrder);
+                sortOrder
+        );
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data){
-        mViewInventorItemAdapter.swapCursor(data);
+        mViewInventoryItemAdapter.swapCursor(data);
         if(mPosition != ListView.INVALID_POSITION){
             mListView.smoothScrollToPosition(mPosition);
         }
@@ -144,17 +153,18 @@ public class ViewInventoryItemListFragment extends Fragment
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader){
-        mViewInventorItemAdapter.swapCursor(null);
+        mViewInventoryItemAdapter.swapCursor(null);
     }
 
     // Dialog click listeners
     @Override
     public void onButtonOK() {
-        // TODO: 1/24/2017 implement method
+        // restart loader to include new item
+        getLoaderManager().restartLoader(INVENTORY_ITEM_LOADER, null, this);
     }
 
     @Override
     public void onButtonCancel() {
-        // TODO: 1/24/2017 implement method
+        // do nothing on cancel
     }
 }

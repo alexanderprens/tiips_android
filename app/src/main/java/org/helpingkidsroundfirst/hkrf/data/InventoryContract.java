@@ -28,8 +28,10 @@ public class InventoryContract {
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_ITEM).build();
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/"
-                + CONTENT_AUTHORITY + "/" + PATH_ITEM;
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_ITEM;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_ITEM;
 
         // Table name
         public static final String TABLE_NAME = "item";
@@ -41,12 +43,12 @@ public class InventoryContract {
         public static final String COLUMN_CATEGORY = "category";
         public static final String COLUMN_VALUE = "value";
 
-        public static Uri buildInventoryItemWithID(String id) {
-            return CONTENT_URI.buildUpon().appendPath(id).build();
+        public static Uri buildInventoryItemUri() {
+            return CONTENT_URI;
         }
 
-        public static Uri buildInventoryItemList(){
-            return CONTENT_URI;
+        public static Uri buildInventoryItemWithIdUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
         }
     }
 
@@ -55,8 +57,12 @@ public class InventoryContract {
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_CURRENT_INVENTORY).build();
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/"
-                + CONTENT_AUTHORITY + "/" + PATH_CURRENT_INVENTORY;
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY +
+                        "/" + PATH_CURRENT_INVENTORY;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY +
+                        "/" + PATH_CURRENT_INVENTORY;
 
         // Table name
         public static final String TABLE_NAME = "current_inventory";
@@ -68,8 +74,8 @@ public class InventoryContract {
         public static final String COLUMN_DONOR = "donor";
         public static final String COLUMN_WAREHOUSE = "warehouse";
 
-        public static Uri buildCurrentInventoryUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
+        public static Uri buildCurrentInventoryUri() {
+            return CONTENT_URI;
         }
 
         public static String getItemNumberFromUri(Uri uri) {
@@ -82,8 +88,12 @@ public class InventoryContract {
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_PAST_INVENTORY).build();
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/"
-                + CONTENT_AUTHORITY + "/" + PATH_PAST_INVENTORY;
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" +
+                        PATH_PAST_INVENTORY;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE +  "/" + CONTENT_AUTHORITY + "/" +
+                        PATH_PAST_INVENTORY;
 
         // Table name
         public static final String TABLE_NAME = "past_inventory";
@@ -94,8 +104,8 @@ public class InventoryContract {
         public static final String COLUMN_DATE_SHIPPED = "date_shipped";
         public static final String COLUMN_DONOR = "donor";
 
-        public static Uri buildCurrentInventoryUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
+        public static Uri buildPastInventoryUri() {
+            return CONTENT_URI;
         }
 
         public static String getItemNumberFromUri(Uri uri) {

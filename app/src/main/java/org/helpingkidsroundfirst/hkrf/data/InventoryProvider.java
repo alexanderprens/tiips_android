@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
 /**
@@ -20,22 +21,67 @@ public class InventoryProvider extends ContentProvider {
     private InventoryDbHelper mOpenHelper;
 
     // Identifies constants for database commands
-    static final int CURRENT_INVENTORY_LIST = 100;
-    static final int CURRENT_INVENTORY_ID = 101;
-    static final int PAST_INVENTORY_LIST = 200;
-    static final int PAST_INVENTORY_ID = 201;
-    static final int INVENTORY_ITEM_LIST = 300;
-    static final int INVENTORY_ITEM_ID = 301;
+    static final int CURRENT_INVENTORY = 100;
+    static final int CURRENT_INVENTORY_WITH_ID = 101;
+    static final int PAST_INVENTORY = 200;
+    static final int PAST_INVENTORY_WITH_ID = 201;
+    static final int INVENTORY_ITEM = 300;
+    static final int INVENTORY_ITEM_WITH_ID = 301;
 
-    // TODO: 12/20/2016 make cursors for different tables and queries
+    // Make Query builders for past and current inventory
+    // Current Inventory
+    private static final SQLiteQueryBuilder sCurrentInventoryQueryBuilder;
+    static {
+        sCurrentInventoryQueryBuilder = new SQLiteQueryBuilder();
 
+        // Inner join item on current inventory
+        sCurrentInventoryQueryBuilder.setTables(
+                InventoryContract.CurrentInventoryEntry.TABLE_NAME + " INNER JOIN " +
+                        InventoryContract.ItemEntry.TABLE_NAME +
+                        " ON " + InventoryContract.CurrentInventoryEntry.TABLE_NAME +
+                        "." + InventoryContract.CurrentInventoryEntry.COLUMN_ITEM_KEY +
+                        " = " + InventoryContract.ItemEntry.TABLE_NAME +
+                        "." + InventoryContract.ItemEntry._ID
+        );
+    }
+
+    // Past Inventory
+    private static final SQLiteQueryBuilder sPastInventoryQueryBuilder;
+    static {
+        sPastInventoryQueryBuilder = new SQLiteQueryBuilder();
+
+        // Inner join item on past inventory
+        sPastInventoryQueryBuilder.setTables(
+                InventoryContract.PastInventoryEntry.TABLE_NAME + " INNER JOIN " +
+                        InventoryContract.ItemEntry.TABLE_NAME +
+                        " ON " + InventoryContract.PastInventoryEntry.TABLE_NAME +
+                        "." + InventoryContract.PastInventoryEntry.COLUMN_ITEM_KEY +
+                        " = " + InventoryContract.ItemEntry.TABLE_NAME +
+                        "." + InventoryContract.ItemEntry._ID
+        );
+    }
+
+    // Make cursors
+
+    // uri matcher to match incoming uris
     static UriMatcher buildUriMatcher() {
 
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = InventoryContract.CONTENT_AUTHORITY;
 
-        // create code for every type of URI
-        matcher.addURI(authority, InventoryContract.PATH_CURRENT_INVENTORY, CURRENT_INVENTORY_LIST);
+        // current inventory codes
+        matcher.addURI(authority, InventoryContract.PATH_CURRENT_INVENTORY, CURRENT_INVENTORY);
+        matcher.addURI(authority, InventoryContract.PATH_CURRENT_INVENTORY + "/#",
+                CURRENT_INVENTORY_WITH_ID);
+
+        // inventory item codes
+        matcher.addURI(authority, InventoryContract.PATH_ITEM, INVENTORY_ITEM);
+        matcher.addURI(authority, InventoryContract.PATH_ITEM + "/#", INVENTORY_ITEM_WITH_ID);
+
+        // past inventory codes
+        matcher.addURI(authority, InventoryContract.PATH_PAST_INVENTORY, PAST_INVENTORY);
+        matcher.addURI(authority, InventoryContract.PATH_PAST_INVENTORY + "/#",
+                PAST_INVENTORY_WITH_ID);
 
         return matcher;
     }
@@ -49,7 +95,6 @@ public class InventoryProvider extends ContentProvider {
     }
 
     // get uri type
-    // TODO: 12/21/2016 check if correct implementation
     @Override
     public String getType(Uri uri) {
 
@@ -58,17 +103,17 @@ public class InventoryProvider extends ContentProvider {
 
         switch (match) {
             //make case for each uri type
-            case CURRENT_INVENTORY_LIST:
+            case CURRENT_INVENTORY:
                 return InventoryContract.CurrentInventoryEntry.CONTENT_TYPE;
-            case CURRENT_INVENTORY_ID:
-                return InventoryContract.CurrentInventoryEntry.CONTENT_TYPE;
-            case PAST_INVENTORY_ID:
+            case CURRENT_INVENTORY_WITH_ID:
+                return InventoryContract.CurrentInventoryEntry.CONTENT_ITEM_TYPE;
+            case PAST_INVENTORY_WITH_ID:
+                return InventoryContract.PastInventoryEntry.CONTENT_ITEM_TYPE;
+            case PAST_INVENTORY:
                 return InventoryContract.PastInventoryEntry.CONTENT_TYPE;
-            case PAST_INVENTORY_LIST:
-                return InventoryContract.PastInventoryEntry.CONTENT_TYPE;
-            case INVENTORY_ITEM_ID:
-                return InventoryContract.ItemEntry.CONTENT_TYPE;
-            case INVENTORY_ITEM_LIST:
+            case INVENTORY_ITEM_WITH_ID:
+                return InventoryContract.ItemEntry.CONTENT_ITEM_TYPE;
+            case INVENTORY_ITEM:
                 return InventoryContract.ItemEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -76,14 +121,23 @@ public class InventoryProvider extends ContentProvider {
     }
 
     // actually query database
-    // TODO: 12/21/2016 fill in switch
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
         // Determine what type of request a uri is and query database
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
-            case CURRENT_INVENTORY_LIST:
+            case CURRENT_INVENTORY:
+                retCursor = sCurrentInventoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            case CURRENT_INVENTORY_WITH_ID:
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         InventoryContract.CurrentInventoryEntry.TABLE_NAME,
                         projection,
@@ -94,30 +148,57 @@ public class InventoryProvider extends ContentProvider {
                         sortOrder
                 );
                 break;
-            case CURRENT_INVENTORY_ID:
-
+            case PAST_INVENTORY_WITH_ID:
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        InventoryContract.PastInventoryEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
                 break;
-            case PAST_INVENTORY_ID:
-
+            case PAST_INVENTORY:
+                retCursor = sPastInventoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
                 break;
-            case PAST_INVENTORY_LIST:
-
+            case INVENTORY_ITEM_WITH_ID:
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        InventoryContract.ItemEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
                 break;
-            case INVENTORY_ITEM_ID:
-
-                break;
-            case INVENTORY_ITEM_LIST:
-
+            case INVENTORY_ITEM:
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        InventoryContract.ItemEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
                 break;
             default:
-                throw new UnsupportedOperationException("Unkown uri: " + uri);
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
         retCursor.setNotificationUri(getContext().getContentResolver(),uri);
         return retCursor;
     }
 
     // Handle database insertions
-    // TODO: 12/21/2016 fill in switch
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
@@ -125,16 +206,38 @@ public class InventoryProvider extends ContentProvider {
         Uri returnUri;
 
         switch(match){
-            case CURRENT_INVENTORY_LIST: {
+            case CURRENT_INVENTORY: {
                 long _id = db.insert(InventoryContract.CurrentInventoryEntry.TABLE_NAME, null,
                         values);
                 if (_id > 0) {
-                    returnUri = InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri(_id);
+                    returnUri =
+                            InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri();
                 } else{
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
                 break;
             }
+
+            case INVENTORY_ITEM: {
+                long _id = db.insert(InventoryContract.ItemEntry.TABLE_NAME, null, values);
+                if (_id > 0) {
+                    returnUri = InventoryContract.ItemEntry.buildInventoryItemWithIdUri(_id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
+            }
+
+            case PAST_INVENTORY: {
+                long _id = db.insert(InventoryContract.PastInventoryEntry.TABLE_NAME, null, values);
+                if (_id > 0) {
+                    returnUri = InventoryContract.PastInventoryEntry.buildPastInventoryUri();
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
+            }
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -143,23 +246,35 @@ public class InventoryProvider extends ContentProvider {
     }
 
     // Handle database deletions
-    // TODO: 12/21/2016 fill in switch
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         int rowsDeleted;
+
         //delete all rows in selection, return #rows deleted
         if ( null == selection ) selection = "1";
         switch (match) {
-            case CURRENT_INVENTORY_LIST:
+            case CURRENT_INVENTORY:
                 rowsDeleted = db.delete(InventoryContract.CurrentInventoryEntry.TABLE_NAME,
                         selection, selectionArgs);
                 break;
+
+            case INVENTORY_ITEM:
+                rowsDeleted = db.delete(InventoryContract.ItemEntry.TABLE_NAME,
+                        selection, selectionArgs);
+                break;
+
+            case PAST_INVENTORY:
+                rowsDeleted = db.delete(InventoryContract.PastInventoryEntry.TABLE_NAME,
+                        selection, selectionArgs);
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unkown uri: " + uri);
         }
-        //if rowsdeleted = 0 all rows have been deleted
+
+        //if rows deleted = 0 all rows have been deleted
         if(rowsDeleted !=0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
@@ -175,7 +290,7 @@ public class InventoryProvider extends ContentProvider {
         int rowsUpdated;
 
         switch (match) {
-            case CURRENT_INVENTORY_LIST:
+            case CURRENT_INVENTORY:
                 rowsUpdated = db.update(InventoryContract.CurrentInventoryEntry.TABLE_NAME, values,
                         selection, selectionArgs);
                 break;
