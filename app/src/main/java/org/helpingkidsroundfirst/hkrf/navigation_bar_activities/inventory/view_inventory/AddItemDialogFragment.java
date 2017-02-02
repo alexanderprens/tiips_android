@@ -2,6 +2,10 @@ package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.helpingkidsroundfirst.hkrf.R;
+import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
 
 /**
  * Created by Alex on 1/16/2017.
@@ -26,6 +31,7 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
     private String valueInString;
     private int valueInput;
     private String barcodeInput;
+    private String error;
 
     public interface AddItemDialogListener {
         void onButtonOK();
@@ -166,14 +172,12 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
 
     @Override
     public void onClick(View view) {
-        String error = "";
 
         switch (view.getId()){
 
             case R.id.new_item_ok:
 
-                if(addInventoryItem(error)){
-
+                if(addInventoryItem()){
                     caller.onButtonOK();
                     this.dismiss();
                 } else {
@@ -186,26 +190,24 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
                 this.dismiss();
                 break;
             default:
-
+                // oops
                 break;
         }
     }
 
     // function to add item to list from dialog
-    private boolean addInventoryItem(String error) {
-
+    private boolean addInventoryItem() {
         boolean added;
-        FetchInventoryTask fetchInventoryTask = new FetchInventoryTask(getActivity());
 
         // validate inputs
         if(dialogValidation()) {
 
             // check if item already exists
-            if (fetchInventoryTask.checkIfItemExists(barcodeInput) && !barcodeInput.isEmpty()) {
+            if (!checkIfItemExists(barcodeInput)) {
 
                 // attempt to add item
-                if(fetchInventoryTask.addInventoryItem(nameInput, descInput, categoryInput,
-                        barcodeInput, valueInput) > 0) {
+                if(addInventoryItem(nameInput, descInput, categoryInput, barcodeInput, valueInput)
+                        != -1) {
                     added = true;
                 } else {
                     error = "Error adding item to database";
@@ -230,7 +232,7 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
             check = false;
             Toast.makeText(getActivity(), "Name cannot be empty", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getActivity(), nameInput, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), nameInput, Toast.LENGTH_SHORT).show();
         }
 
         if(!valueInString.isEmpty()) {
@@ -241,15 +243,60 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
                 Toast.makeText(getActivity(), "Value must be greater than zero",
                         Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getActivity(), Integer.toString(valueInput), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), Integer.toString(valueInput), Toast.LENGTH_SHORT).show();
             }
 
-        } else {
+        }
+
+        if(barcodeInput.isEmpty()) {
             check = false;
-            Toast.makeText(getActivity(), "Value must be greater than zero",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Barcode cannot be empty", Toast.LENGTH_SHORT).show();
         }
 
         return check;
+    }
+
+    // checks if item already exists by looking at the barcode string
+    public boolean checkIfItemExists(String barcode) {
+
+        boolean exists;
+
+        // Check if barcode id already exists in the db
+        Cursor itemCursor = getContext().getContentResolver().query(
+                InventoryContract.ItemEntry.CONTENT_URI,
+                new String[]{InventoryContract.ItemEntry._ID},
+                InventoryContract.ItemEntry.COLUMN_BARCODE_ID + " = ?",
+                new String[]{barcode},
+                null
+        );
+
+        // if barcode exists, return true
+        exists = itemCursor.moveToFirst();
+
+        itemCursor.close();
+        return exists;
+    }
+
+    public long addInventoryItem(String name, String desc, String cat, String barcode, int value) {
+        long itemId;
+
+        ContentValues itemValues = new ContentValues();
+
+        // make content values of inventory item data
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_NAME, name);
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_DESCRIPTION, desc);
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_CATEGORY, cat);
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_BARCODE_ID, barcode);
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_VALUE, value);
+
+        // insert item into database
+        Uri insertedUri = getContext().getContentResolver().insert(
+                InventoryContract.ItemEntry.CONTENT_URI,
+                itemValues
+        );
+
+        itemId = ContentUris.parseId(insertedUri);
+
+        return itemId;
     }
 }

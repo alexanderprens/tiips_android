@@ -34,7 +34,7 @@ public class ViewInventoryItemListFragment extends Fragment
 
     // Inventory item columns
     private static final String[] INVENTORY_ITEM_COLUMNS = {
-            InventoryContract.ItemEntry.TABLE_NAME,
+            InventoryContract.ItemEntry.TABLE_NAME + "." + InventoryContract.ItemEntry._ID,
             InventoryContract.ItemEntry.COLUMN_BARCODE_ID,
             InventoryContract.ItemEntry.COLUMN_NAME,
             InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
@@ -43,6 +43,7 @@ public class ViewInventoryItemListFragment extends Fragment
     };
 
     // Inventory item column indices
+    public static final int COL_ITEM_ID = 0;
     public static final int COL_ITEM_BARCODE = 1;
     public static final int COL_ITEM_NAME = 2;
     public static final int COL_ITEM_DESC = 3;
@@ -121,8 +122,6 @@ public class ViewInventoryItemListFragment extends Fragment
         super.onSaveInstanceState(outState);
     }
 
-
-
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle){
         // called when a new loader is created
@@ -136,7 +135,8 @@ public class ViewInventoryItemListFragment extends Fragment
                 INVENTORY_ITEM_COLUMNS,
                 null,
                 null,
-                sortOrder);
+                sortOrder
+        );
     }
 
     @Override
@@ -156,6 +156,7 @@ public class ViewInventoryItemListFragment extends Fragment
     @Override
     public void onButtonOK() {
         // TODO: 1/24/2017 implement method
+        getLoaderManager().restartLoader(INVENTORY_ITEM_LOADER, null, this);
     }
 
     @Override

@@ -29,7 +29,7 @@
         </activity>
         <provider
             android:authorities="org.helpingkidsroundfirst.hkrf"
-            android:name="org.helpingkidsroundfirst.hkrf.data.InventoryProvider"></provider>
+            android:name="org.helpingkidsroundfirst.hkrf.data.InventoryProvider" />
     </application>
 
 </manifest>

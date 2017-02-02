@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 
 import static org.helpingkidsroundfirst.hkrf.data.TestUtilities.createItemValues;
+import static org.helpingkidsroundfirst.hkrf.data.TestUtilities.insertTestItem;
 import static org.helpingkidsroundfirst.hkrf.data.TestUtilities.validateCursor;
 
 /**
@@ -155,5 +156,78 @@ public class TestProvider extends AndroidTestCase {
         );
 
         validateCursor("testBasicItemQuery", itemCursor, itemValues);
+    }
+
+    public void testBasicCurrentInventoryQuery() {
+        InventoryDbHelper dbHelper = new InventoryDbHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // insert item into database
+        long itemRowId;
+        itemRowId = insertTestItem(db);
+
+        //test if inserted
+        assertTrue("Unable to insert ItemEntry into database", itemRowId != -1);
+
+        // create current inventory values
+        ContentValues currentInventoryValues = new ContentValues();
+        currentInventoryValues.put(InventoryContract.CurrentInventoryEntry.COLUMN_ITEM_KEY, itemRowId);
+        currentInventoryValues.put(InventoryContract.CurrentInventoryEntry.COLUMN_DATE_RECEIVED, "170126");
+        currentInventoryValues.put(InventoryContract.CurrentInventoryEntry.COLUMN_DONOR, "Brookings Health");
+        currentInventoryValues.put(InventoryContract.CurrentInventoryEntry.COLUMN_QTY, 10);
+        currentInventoryValues.put(InventoryContract.CurrentInventoryEntry.COLUMN_WAREHOUSE, "One");
+
+        long currentInvRowId;
+        currentInvRowId = db.insert(InventoryContract.CurrentInventoryEntry.TABLE_NAME, null,
+                currentInventoryValues);
+
+        assertTrue("Unable to insert CurrentInventoryEntry into database", currentInvRowId != -1);
+        db.close();
+
+        Cursor currentInventoryCursor = mContext.getContentResolver().query(
+                InventoryContract.CurrentInventoryEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+
+        validateCursor("testBasicCurrentInventoryQuery", currentInventoryCursor,
+                currentInventoryValues);
+    }
+
+    public void testBasicPastInventoryQuery() {
+        InventoryDbHelper dbHelper = new InventoryDbHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // insert item into database
+        long itemRowId;
+        itemRowId = insertTestItem(db);
+
+        //test if inserted
+        assertTrue("Unable to insert ItemEntry into database", itemRowId != -1);
+
+        // create current inventory values
+        ContentValues pastInventoryValues = new ContentValues();
+        pastInventoryValues.put(InventoryContract.PastInventoryEntry.COLUMN_ITEM_KEY,itemRowId);
+        pastInventoryValues.put(InventoryContract.PastInventoryEntry.COLUMN_DATE_SHIPPED, "170126");
+        pastInventoryValues.put(InventoryContract.PastInventoryEntry.COLUMN_DONOR, "Brookings Health");
+        pastInventoryValues.put(InventoryContract.PastInventoryEntry.COLUMN_QTY, 10);
+
+        long pastInventoryId;
+        pastInventoryId = db.insert(InventoryContract.PastInventoryEntry.TABLE_NAME, null,
+                pastInventoryValues);
+
+        assertTrue("Unable to insert PastInventoryEntry into database", pastInventoryId != -1);
+
+        Cursor pastInventoryCursor = mContext.getContentResolver().query(
+                InventoryContract.PastInventoryEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+
+        validateCursor("testBasicPastInventoryQuery", pastInventoryCursor, pastInventoryValues);
     }
 }
