@@ -50,6 +50,10 @@ public class InventoryContract {
         public static Uri buildInventoryItemWithIdUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
+
+        public static long getItemIdFromUri(Uri uri) {
+            return Long.parseLong(uri.getPathSegments().get(1));
+        }
     }
 
     /* Define Current Inventory Table */

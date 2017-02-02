@@ -92,12 +92,14 @@ public class ViewInventoryItemListFragment extends Fragment
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
 
                 // TODO: 2/1/2017 implement item click
-                /*if(cursor != null){
-                    ((Callback) getParentFragment())
-                            .onItemSelected(InventoryContract.ItemEntry.buildInventoryItemWithIdUri(
-                                    cursor.getString(COL_ITEM_BARCODE)
-                            ));
-                }*/
+                if(cursor != null){
+                    ((Callback) getActivity())
+                            .onItemSelected(InventoryContract.ItemEntry
+                                    .buildInventoryItemWithIdUri(
+                                            cursor.getLong(COL_ITEM_ID)
+                                    )
+                            );
+                }
                 mPosition = position;
             }
         });

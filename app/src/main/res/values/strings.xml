@@ -1,11 +1,13 @@
 <resources>
+    <!-- app name -->
     <string name="app_name">HKRF</string>
 
+    <!-- MainActivity -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
 
-    <!--Navigation menu strings -->
+    <!--activity_name_drawer -->
     <string name="nav_header_main_text">TIIPS Menu</string>
     <string name="nav_header_sub_text">Inventory and Indoor Positioning System</string>
     <string name="nav_group_inventory">Inventory</string>
@@ -18,14 +20,10 @@
     <string name="nav_option_add">Add/Remove Tags</string>
     <string name="nav_option_messages">Tag Messages</string>
 
-    <!-- Content Layout-->
+    <!-- content_main -->
     <string name="content_text">Helping Kids Round First Application</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="view_inventory_text">View Inventory</string>
-
-    <!-- Add inventory dialog box -->
+    <!-- dialog_add_inventory_item -->
     <string name="add_inventory_item_title">New Inventory Item</string>
     <string name="add_inv_name">Item Name</string>
     <string name="add_inv_barcode">Barcode #</string>
@@ -35,13 +33,20 @@
     <string name="add_inv_cancel">Cancel</string>
     <string name="add_inv_ok">OK</string>
 
-    <!-- Choose inventory strings -->
+    <!-- fragment_view_inventory -->
     <string name="choose_inventory_header">Select Inventory to View</string>
     <string name="choose_inv_current_button">View Current Inventory</string>
     <string name="choose_inv_past_button">View Past Inventory</string>
     <string name="choose_inv_item_button">View/Edit Inventory Items</string>
     <string name="title_activity_view_inventory">ViewInventoryActivity</string>
 
-    <!-- content_main_home strings -->
+    <!-- content_main_home -->
     <string name="home_header">Welcome to TIIPS!</string>
+
+    <!-- fragment_view_inventory_item_detail -->
+    <string name="view_inventory_item_detail_name">Name: </string>
+    <string name="view_inventory_item_detail_description">Description: </string>
+    <string name="view_inventory_item_detail_category">Category: </string>
+    <string name="view_inventory_item_detail_barcode">Barcode: </string>
+    <string name="view_inventory_item_detail_value">Value: </string>
 </resources>
