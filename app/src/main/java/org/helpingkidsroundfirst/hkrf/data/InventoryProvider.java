@@ -61,7 +61,69 @@ public class InventoryProvider extends ContentProvider {
         );
     }
 
-    // Make cursors
+    // strings for cursors
+    // inventory item with id
+    private static final String sItemIdSelection =
+            InventoryContract.ItemEntry.TABLE_NAME + "." +
+                    InventoryContract.ItemEntry._ID + " = ? ";
+
+    // current inventory with id
+    private static final String sCurrentInventoryIdSelection =
+            InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
+                    InventoryContract.CurrentInventoryEntry._ID + " = ? ";
+
+    // past inventory with id
+    private static final String sPastInventoryIdSelection =
+            InventoryContract.PastInventoryEntry.TABLE_NAME + "." +
+                    InventoryContract.PastInventoryEntry._ID + " = ? ";
+
+    // Cursors
+    // inventory with id cursor
+    private Cursor getItemById(Uri uri, String[] projection, String sortOrder) {
+        long itemId = InventoryContract.ItemEntry.getItemIdFromUri(uri);
+
+        return mOpenHelper.getReadableDatabase().query(
+                InventoryContract.ItemEntry.TABLE_NAME,
+                projection,
+                sItemIdSelection,
+                new String[] {Long.toString(itemId)},
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    // current inventory with id cursor
+    private Cursor getCurrentInventoryById(Uri uri, String[] projection, String sortOrder) {
+        long currentInventoryId = InventoryContract.CurrentInventoryEntry.getCurrentIdFromUri(uri);
+
+        return mOpenHelper.getReadableDatabase().query(
+                InventoryContract.ItemEntry.TABLE_NAME,
+                projection,
+                sCurrentInventoryIdSelection,
+                new String[] {Long.toString(currentInventoryId)},
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    // past inventory with id cursor
+    private Cursor getPastInventoryById(Uri uri, String[] projection, String sortOrder) {
+        long pastInventoryId = InventoryContract.PastInventoryEntry.getPastIdFromUri(uri);
+
+        return mOpenHelper.getReadableDatabase().query(
+                InventoryContract.ItemEntry.TABLE_NAME,
+                projection,
+                sPastInventoryIdSelection,
+                new String[] {Long.toString(pastInventoryId)},
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    // TODO: 2/2/2017 implement past and current cursors
 
     // uri matcher to match incoming uris
     static UriMatcher buildUriMatcher() {
@@ -138,26 +200,10 @@ public class InventoryProvider extends ContentProvider {
                 );
                 break;
             case CURRENT_INVENTORY_WITH_ID:
-                retCursor = mOpenHelper.getReadableDatabase().query(
-                        InventoryContract.CurrentInventoryEntry.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder
-                );
+                retCursor = getCurrentInventoryById(uri, projection, sortOrder);
                 break;
             case PAST_INVENTORY_WITH_ID:
-                retCursor = mOpenHelper.getReadableDatabase().query(
-                        InventoryContract.PastInventoryEntry.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder
-                );
+                retCursor = getPastInventoryById(uri, projection, sortOrder);
                 break;
             case PAST_INVENTORY:
                 retCursor = sPastInventoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
@@ -170,15 +216,7 @@ public class InventoryProvider extends ContentProvider {
                 );
                 break;
             case INVENTORY_ITEM_WITH_ID:
-                retCursor = mOpenHelper.getReadableDatabase().query(
-                        InventoryContract.ItemEntry.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder
-                );
+                retCursor = getItemById(uri, projection, sortOrder);
                 break;
             case INVENTORY_ITEM:
                 retCursor = mOpenHelper.getReadableDatabase().query(

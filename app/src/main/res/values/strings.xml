@@ -49,4 +49,16 @@
     <string name="view_inventory_item_detail_category">Category: </string>
     <string name="view_inventory_item_detail_barcode">Barcode: </string>
     <string name="view_inventory_item_detail_value">Value: </string>
+
+    <!-- fragment_view_current_inventory_detail -->
+    <string name="view_current_inventory_detail_name">Name: </string>
+    <string name="view_current_inventory_detail_description">Description: </string>
+    <string name="view_current_inventory_detail_category">Category: </string>
+    <string name="view_current_inventory_detail_barcode">Barcode: </string>
+    <string name="view_current_inventory_detail_value">Value: </string>
+    <string name="view_current_inventory_detail_qty">Quantity: </string>
+    <string name="view_current_inventory_detail_date">Date Received:</string>
+    <string name="view_current_inventory_detail_donor">Donor: </string>
+    <string name="view_current_inventory_detail_warehouse">Warehouse: </string>
+
 </resources>

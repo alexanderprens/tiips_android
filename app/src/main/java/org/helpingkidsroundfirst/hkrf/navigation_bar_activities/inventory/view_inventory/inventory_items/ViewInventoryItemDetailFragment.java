@@ -46,7 +46,7 @@ public class ViewInventoryItemDetailFragment extends Fragment
     public static final int COL_ITEM_CAT = 4;
     public static final int COL_ITEM_VALUE = 5;
 
-    public static final String DETAILED_ITEM_KEY = "URI";
+    public static final String DETAILED_ITEM_KEY = "ITEM_URI";
     public static final int ITEM_DETAIL_LOADER = 4;
 
     public ViewInventoryItemDetailFragment() {
@@ -58,7 +58,8 @@ public class ViewInventoryItemDetailFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_view_inventory_item_detail, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_view_inventory_item_detail, container,
+                false);
 
         // get item uri from bundle
         Bundle bundle = this.getArguments();
@@ -66,9 +67,10 @@ public class ViewInventoryItemDetailFragment extends Fragment
             inventoryItemDetailUri = bundle.getParcelable(DETAILED_ITEM_KEY);
         }
 
-        // assign textviews
+        // assign text views
         nameView = (TextView) rootView.findViewById(R.id.inventory_item_detail_text_name);
-        descriptionView = (TextView) rootView.findViewById(R.id.inventory_item_detail_text_description);
+        descriptionView = (TextView) rootView.findViewById(
+                R.id.inventory_item_detail_text_description);
         categoryView = (TextView) rootView.findViewById(R.id.inventory_item_detail_text_category);
         valueView = (TextView) rootView.findViewById(R.id.inventory_item_detail_text_value);
         barcodeView = (TextView) rootView.findViewById(R.id.inventory_item_detail_text_barcode);
@@ -111,7 +113,7 @@ public class ViewInventoryItemDetailFragment extends Fragment
             String valueString = "" + value;
             String barcode = data.getString(COL_ITEM_BARCODE);
 
-            //place data into textviews
+            //place data into text views
             nameView.setText(name);
             descriptionView.setText(description);
             categoryView.setText(category);

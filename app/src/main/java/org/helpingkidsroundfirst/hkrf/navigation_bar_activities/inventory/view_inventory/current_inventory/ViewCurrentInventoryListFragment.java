@@ -61,7 +61,7 @@ public class ViewCurrentInventoryListFragment extends Fragment
     public static final int COL_ITEM_VALUE = 11;
 
     public interface Callback {
-        void onItemSelected(Uri currentItemURI);
+        void onCurrentInventoryUri(Uri currentItemURI);
     }
 
     public ViewCurrentInventoryListFragment() {
@@ -84,7 +84,11 @@ public class ViewCurrentInventoryListFragment extends Fragment
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
 
-                // TODO: 2/1/2017 implement on item click
+                if(cursor != null) {
+                    ((Callback) getActivity())
+                            .onCurrentInventoryUri(CurrentInventoryEntry
+                            .buildCurrentInventoryWithIdUri(cursor.getLong(COL_CURRENT_ID)));
+                }
             }
         });
 
