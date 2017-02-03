@@ -58,7 +58,7 @@ public class ViewPastInventoryListFragment extends Fragment
     public static final int COL_ITEM_VALUE = 10;
 
     public interface Callback {
-        void onItemSelected(Uri pastItemURI);
+        void onPastInventorySelected(Uri pastItemURI);
     }
 
     public ViewPastInventoryListFragment() {
@@ -79,7 +79,11 @@ public class ViewPastInventoryListFragment extends Fragment
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
 
-                // TODO: 2/1/2017 implement on item click
+                if(cursor != null) {
+                    ((Callback) getActivity())
+                            .onPastInventorySelected(PastInventoryEntry
+                                    .buildPastInventoryWithIdUri(cursor.getLong(COL_PAST_ID)));
+                }
             }
         });
 

@@ -16,6 +16,8 @@ import android.view.MenuItem;
 
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.ViewInventoryActivity;
 
+// TODO: 2/3/2017 add context to layouts
+
 public class MainActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener {
 

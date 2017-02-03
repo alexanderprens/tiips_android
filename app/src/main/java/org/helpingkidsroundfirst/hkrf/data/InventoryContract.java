@@ -116,6 +116,10 @@ public class InventoryContract {
             return CONTENT_URI;
         }
 
+        public static Uri buildPastInventoryWithIdUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
         public static long getPastIdFromUri(Uri uri) {
             return Long.parseLong(uri.getPathSegments().get(1));
         }

@@ -1,6 +1,6 @@
 <resources>
     <!-- app name -->
-    <string name="app_name">HKRF</string>
+    <string name="app_name">TIIPS</string>
 
     <!-- MainActivity -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -60,5 +60,15 @@
     <string name="view_current_inventory_detail_date">Date Received:</string>
     <string name="view_current_inventory_detail_donor">Donor: </string>
     <string name="view_current_inventory_detail_warehouse">Warehouse: </string>
+
+    <!-- fragment_view_past_inventory_detail -->
+    <string name="view_past_inventory_detail_name">Name: </string>
+    <string name="view_past_inventory_detail_description">Description: </string>
+    <string name="view_past_inventory_detail_category">Category: </string>
+    <string name="view_past_inventory_detail_barcode">Barcode: </string>
+    <string name="view_past_inventory_detail_value">Value: </string>
+    <string name="view_past_inventory_detail_qty">Quantity: </string>
+    <string name="view_past_inventory_detail_date">Date Shipped:</string>
+    <string name="view_past_inventory_detail_donor">Donor: </string>
 
 </resources>

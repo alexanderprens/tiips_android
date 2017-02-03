@@ -34,7 +34,8 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
     private Uri mUri;
 
     private static final String[] CURRENT_DETAIL_COLUMNS = {
-            InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." + InventoryContract.CurrentInventoryEntry._ID,
+            InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
+                    InventoryContract.CurrentInventoryEntry._ID,
             InventoryContract.CurrentInventoryEntry.COLUMN_ITEM_KEY,
             InventoryContract.CurrentInventoryEntry.COLUMN_QTY,
             InventoryContract.CurrentInventoryEntry.COLUMN_DONOR,

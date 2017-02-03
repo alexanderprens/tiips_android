@@ -14,12 +14,14 @@ import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_i
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.current_inventory.ViewCurrentInventoryListFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.inventory_items.ViewInventoryItemDetailFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.inventory_items.ViewInventoryItemListFragment;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.past_inventory.ViewPastInventoryDetailFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.past_inventory.ViewPastInventoryListFragment;
 
 public class ViewInventoryActivity extends AppCompatActivity
     implements onViewInventoryButtonListener,
         ViewInventoryItemListFragment.Callback,
-        ViewCurrentInventoryListFragment.Callback {
+        ViewCurrentInventoryListFragment.Callback,
+        ViewPastInventoryListFragment.Callback {
 
     private static final String TAG = "ViewInventoryActivity";
 
@@ -94,6 +96,20 @@ public class ViewInventoryActivity extends AppCompatActivity
 
         //replace fragment
         startFragment(fragment, "ViewCurrentInventoryDetailFragment");
+    }
+
+    @Override
+    public void onPastInventorySelected(Uri uri) {
+        //create fragment
+        Fragment fragment = new ViewPastInventoryDetailFragment();
+
+        //create bundle for fragment
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(ViewPastInventoryDetailFragment.DETAILED_PAST_KEY, uri);
+        fragment.setArguments(bundle);
+
+        //replace fragment
+        startFragment(fragment, "ViewPastInventoryDetailFragment");
     }
 
     private void startFragment(Fragment fragment, String fragmentTag) {
