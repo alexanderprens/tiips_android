@@ -67,7 +67,7 @@ public class ViewInventoryItemListFragment extends Fragment
         View rootView = inflater.inflate(R.layout.fragment_view_inventory_item_list, container, false);
 
         // add floating action button
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.floatingActionButton);
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.inventory_item_list_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

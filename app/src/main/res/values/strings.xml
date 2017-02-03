@@ -71,4 +71,7 @@
     <string name="view_past_inventory_detail_date">Date Shipped:</string>
     <string name="view_past_inventory_detail_donor">Donor: </string>
 
+    <!-- activity_receive_inventory -->
+    <string name="title_activity_receive_inventory">ReceiveInventoryActivity</string>
+
 </resources>

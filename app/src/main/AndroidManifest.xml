@@ -27,9 +27,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.helpingkidsroundfirst.hkrf.MainActivity" />
         </activity>
+
         <provider
-            android:authorities="org.helpingkidsroundfirst.hkrf"
-            android:name="org.helpingkidsroundfirst.hkrf.data.InventoryProvider" />
+            android:name=".data.InventoryProvider"
+            android:authorities="org.helpingkidsroundfirst.hkrf" />
+
+        <activity
+            android:name=".navigation_bar_activities.inventory.receive_inventory.ReceiveInventoryActivity"
+            android:label="@string/title_activity_receive_inventory"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.helpingkidsroundfirst.hkrf.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
