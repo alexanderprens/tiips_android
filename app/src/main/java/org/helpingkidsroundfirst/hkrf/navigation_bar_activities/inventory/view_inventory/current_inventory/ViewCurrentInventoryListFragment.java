@@ -61,7 +61,7 @@ public class ViewCurrentInventoryListFragment extends Fragment
     public static final int COL_ITEM_VALUE = 11;
 
     public interface Callback {
-        void onCurrentInventoryUri(Uri currentItemURI);
+        void onCurrentInventorySelected(Uri currentItemURI);
     }
 
     public ViewCurrentInventoryListFragment() {
@@ -86,7 +86,7 @@ public class ViewCurrentInventoryListFragment extends Fragment
 
                 if(cursor != null) {
                     ((Callback) getActivity())
-                            .onCurrentInventoryUri(CurrentInventoryEntry
+                            .onCurrentInventorySelected(CurrentInventoryEntry
                             .buildCurrentInventoryWithIdUri(cursor.getLong(COL_CURRENT_ID)));
                 }
             }
