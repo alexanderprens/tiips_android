@@ -1,5 +1,6 @@
 package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,11 +11,13 @@ import android.util.Log;
 import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.ViewInventoryFragment.onViewInventoryButtonListener;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.current_inventory.ViewCurrentInventoryListFragment;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.inventory_items.ViewInventoryItemDetailFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.inventory_items.ViewInventoryItemListFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.past_inventory.ViewPastInventoryListFragment;
 
 public class ViewInventoryActivity extends AppCompatActivity
-    implements onViewInventoryButtonListener{
+    implements onViewInventoryButtonListener,
+        ViewInventoryItemListFragment.Callback {
 
     private static final String TAG = "ViewInventoryActivity";
 
@@ -63,7 +66,21 @@ public class ViewInventoryActivity extends AppCompatActivity
         }
     }
 
-    private void startFragment(Fragment fragment, String fragmentTag){
+    @Override
+    public void onItemSelected(Uri invItemURI) {
+        //create fragment
+        Fragment fragment = new ViewInventoryItemDetailFragment();
+
+        //create bundle for fragment
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(ViewInventoryItemDetailFragment.DETAILED_ITEM_KEY, invItemURI);
+        fragment.setArguments(bundle);
+
+        //replace fragment
+        startFragment(fragment, "ViewInventoryItemDetailFragment");
+    }
+
+    private void startFragment(Fragment fragment, String fragmentTag) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_view_inventory, fragment)

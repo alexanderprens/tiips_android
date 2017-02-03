@@ -1,6 +1,5 @@
 package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.inventory_items;
 
-
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -59,9 +58,6 @@ public class ViewInventoryItemListFragment extends Fragment
         // Required empty public constructor
     }
 
-    // TODO: 1/24/2017 add menus
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -91,13 +87,15 @@ public class ViewInventoryItemListFragment extends Fragment
                 // Adapter returns a cursor at the correct position for
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
 
-                // TODO: 2/1/2017 implement item click
-                /*if(cursor != null){
-                    ((Callback) getParentFragment())
-                            .onItemSelected(InventoryContract.ItemEntry.buildInventoryItemWithIdUri(
-                                    cursor.getString(COL_ITEM_BARCODE)
-                            ));
-                }*/
+                // gets the item id from the selected item
+                if(cursor != null){
+                    ((Callback) getActivity())
+                            .onItemSelected(InventoryContract.ItemEntry
+                                    .buildInventoryItemWithIdUri(
+                                            cursor.getLong(COL_ITEM_ID)
+                                    )
+                            );
+                }
                 mPosition = position;
             }
         });

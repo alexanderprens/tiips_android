@@ -50,6 +50,10 @@ public class InventoryContract {
         public static Uri buildInventoryItemWithIdUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
+
+        public static long getItemIdFromUri(Uri uri) {
+            return Long.parseLong(uri.getPathSegments().get(1));
+        }
     }
 
     /* Define Current Inventory Table */
@@ -78,8 +82,12 @@ public class InventoryContract {
             return CONTENT_URI;
         }
 
-        public static String getItemNumberFromUri(Uri uri) {
-            return uri.getPathSegments().get(1);
+        public static Uri buildCurrentInventoryWithIdUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static long getCurrentIdFromUri(Uri uri) {
+            return Long.parseLong(uri.getPathSegments().get(1));
         }
     }
 
@@ -108,8 +116,8 @@ public class InventoryContract {
             return CONTENT_URI;
         }
 
-        public static String getItemNumberFromUri(Uri uri) {
-            return uri.getPathSegments().get(1);
+        public static long getPastIdFromUri(Uri uri) {
+            return Long.parseLong(uri.getPathSegments().get(1));
         }
     }
 }
