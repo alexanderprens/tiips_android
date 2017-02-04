@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -21,8 +22,8 @@ import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
  * Created by Alex on 1/16/2017.
  */
 
-public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
-    implements View.OnClickListener {
+public class AddItemDialogFragment extends DialogFragment implements
+        View.OnClickListener {
 
     // dialog inputs
     private String nameInput;
@@ -32,12 +33,6 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
     private int valueInput;
     private String barcodeInput;
     private String error;
-
-    public interface AddItemDialogListener {
-        void onButtonOK();
-        void onButtonCancel();
-    }
-
     private AddItemDialogListener caller;
 
     @Override
@@ -176,7 +171,6 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
         switch (view.getId()){
 
             case R.id.new_item_ok:
-
                 if(addInventoryItem()){
                     caller.onButtonOK();
                     this.dismiss();
@@ -184,8 +178,8 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
                     Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case R.id.new_item_cancel:
 
+            case R.id.new_item_cancel:
                 caller.onButtonCancel();
                 this.dismiss();
                 break;
@@ -197,7 +191,7 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
 
     // function to add item to list from dialog
     private boolean addInventoryItem() {
-        boolean added;
+        boolean added = false;
 
         // validate inputs
         if(dialogValidation()) {
@@ -206,20 +200,17 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
             if (!checkIfItemExists(barcodeInput)) {
 
                 // attempt to add item
-                if(addInventoryItem(nameInput, descInput, categoryInput, barcodeInput, valueInput)
-                        != -1) {
+                if (addInventoryItemToDB(nameInput, descInput, categoryInput, barcodeInput,
+                        valueInput) != -1) {
                     added = true;
                 } else {
                     error = "Error adding item to database";
-                    added = false;
                 }
             } else {
                 error = "Barcode already exists";
-                added = false;
             }
         } else {
             error = "Validation error";
-            added = false;
         }
 
         return added;
@@ -257,7 +248,7 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
     }
 
     // checks if item already exists by looking at the barcode string
-    public boolean checkIfItemExists(String barcode) {
+    private boolean checkIfItemExists(String barcode) {
 
         boolean exists;
 
@@ -277,7 +268,7 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
         return exists;
     }
 
-    public long addInventoryItem(String name, String desc, String cat, String barcode, int value) {
+    private long addInventoryItemToDB(String name, String desc, String cat, String barcode, int value) {
         long itemId;
 
         ContentValues itemValues = new ContentValues();
@@ -298,5 +289,11 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
         itemId = ContentUris.parseId(insertedUri);
 
         return itemId;
+    }
+
+    public interface AddItemDialogListener {
+        void onButtonOK();
+
+        void onButtonCancel();
     }
 }

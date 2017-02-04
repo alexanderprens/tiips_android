@@ -16,10 +16,6 @@ import android.net.Uri;
 
 public class InventoryProvider extends ContentProvider {
 
-    // The URI matcher used by this content provider
-    private static final UriMatcher sUriMatcher = buildUriMatcher();
-    private InventoryDbHelper mOpenHelper;
-
     // Identifies constants for database commands
     static final int CURRENT_INVENTORY = 100;
     static final int CURRENT_INVENTORY_WITH_ID = 101;
@@ -32,10 +28,29 @@ public class InventoryProvider extends ContentProvider {
     static final int INVENTORY_ITEM_WITH_CATEGORY = 302;
     static final int CATEGORY = 400;
     static final int CATEGORY_WITH_ID = 401;
-
+    // The URI matcher used by this content provider
+    private static final UriMatcher sUriMatcher = buildUriMatcher();
     // Make Query builders for joined tables
     // inventory items
     private static final SQLiteQueryBuilder sInventoryItemQueryBuilder;
+    // Current Inventory
+    private static final SQLiteQueryBuilder sCurrentInventoryQueryBuilder;
+    // Past Inventory
+    private static final SQLiteQueryBuilder sPastInventoryQueryBuilder;
+    // strings for cursors
+    // inventory item with id
+    private static final String sItemIdSelection =
+            InventoryContract.ItemEntry.TABLE_NAME + "." +
+                    InventoryContract.ItemEntry._ID + " = ? ";
+    // current inventory with id
+    private static final String sCurrentInventoryIdSelection =
+            InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
+                    InventoryContract.CurrentInventoryEntry._ID + " = ? ";
+    // past inventory with id
+    private static final String sPastInventoryIdSelection =
+            InventoryContract.PastInventoryEntry.TABLE_NAME + "." +
+                    InventoryContract.PastInventoryEntry._ID + " = ? ";
+
     static {
         sInventoryItemQueryBuilder = new SQLiteQueryBuilder();
 
@@ -49,8 +64,7 @@ public class InventoryProvider extends ContentProvider {
                         "." + InventoryContract.CategoryEntry._ID
         );
     }
-    // Current Inventory
-    private static final SQLiteQueryBuilder sCurrentInventoryQueryBuilder;
+
     static {
         sCurrentInventoryQueryBuilder = new SQLiteQueryBuilder();
 
@@ -71,8 +85,6 @@ public class InventoryProvider extends ContentProvider {
         );
     }
 
-    // Past Inventory
-    private static final SQLiteQueryBuilder sPastInventoryQueryBuilder;
     static {
         sPastInventoryQueryBuilder = new SQLiteQueryBuilder();
 
@@ -93,21 +105,39 @@ public class InventoryProvider extends ContentProvider {
         );
     }
 
-    // strings for cursors
-    // inventory item with id
-    private static final String sItemIdSelection =
-            InventoryContract.ItemEntry.TABLE_NAME + "." +
-                    InventoryContract.ItemEntry._ID + " = ? ";
+    private InventoryDbHelper mOpenHelper;
 
-    // current inventory with id
-    private static final String sCurrentInventoryIdSelection =
-            InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
-                    InventoryContract.CurrentInventoryEntry._ID + " = ? ";
+    // uri matcher to match incoming uris
+    static UriMatcher buildUriMatcher() {
 
-    // past inventory with id
-    private static final String sPastInventoryIdSelection =
-            InventoryContract.PastInventoryEntry.TABLE_NAME + "." +
-                    InventoryContract.PastInventoryEntry._ID + " = ? ";
+        final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
+        final String authority = InventoryContract.CONTENT_AUTHORITY;
+
+        // current inventory codes
+        matcher.addURI(authority, InventoryContract.PATH_CURRENT_INVENTORY, CURRENT_INVENTORY);
+        matcher.addURI(authority, InventoryContract.PATH_CURRENT_INVENTORY + "/#",
+                CURRENT_INVENTORY_WITH_ID);
+        matcher.addURI(authority, InventoryContract.PATH_CURRENT_INVENTORY + "/*",
+                CURRENT_INVENTORY_WITH_CATEGORY);
+
+        // past inventory codes
+        matcher.addURI(authority, InventoryContract.PATH_PAST_INVENTORY, PAST_INVENTORY);
+        matcher.addURI(authority, InventoryContract.PATH_PAST_INVENTORY + "/#",
+                PAST_INVENTORY_WITH_ID);
+        matcher.addURI(authority, InventoryContract.PATH_PAST_INVENTORY + "/*",
+                PAST_INVENTORY_WITH_CATEGORY);
+
+        // inventory item codes
+        matcher.addURI(authority, InventoryContract.PATH_ITEM, INVENTORY_ITEM);
+        matcher.addURI(authority, InventoryContract.PATH_ITEM + "/#", INVENTORY_ITEM_WITH_ID);
+        matcher.addURI(authority, InventoryContract.PATH_ITEM + "/*", INVENTORY_ITEM_WITH_CATEGORY);
+
+        // category codes
+        matcher.addURI(authority, InventoryContract.PATH_CATEGORY, CATEGORY);
+        matcher.addURI(authority, InventoryContract.PATH_CATEGORY + "/#", CATEGORY_WITH_ID);
+
+        return matcher;
+    }
 
     // Cursors
     // inventory with id cursor
@@ -150,38 +180,6 @@ public class InventoryProvider extends ContentProvider {
                 null,
                 sortOrder
         );
-    }
-
-    // uri matcher to match incoming uris
-    static UriMatcher buildUriMatcher() {
-
-        final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
-        final String authority = InventoryContract.CONTENT_AUTHORITY;
-
-        // current inventory codes
-        matcher.addURI(authority, InventoryContract.PATH_CURRENT_INVENTORY, CURRENT_INVENTORY);
-        matcher.addURI(authority, InventoryContract.PATH_CURRENT_INVENTORY + "/#",
-                CURRENT_INVENTORY_WITH_ID);
-        matcher.addURI(authority, InventoryContract.PATH_CURRENT_INVENTORY + "/*",
-                CURRENT_INVENTORY_WITH_CATEGORY);
-
-        // past inventory codes
-        matcher.addURI(authority, InventoryContract.PATH_PAST_INVENTORY, PAST_INVENTORY);
-        matcher.addURI(authority, InventoryContract.PATH_PAST_INVENTORY + "/#",
-                PAST_INVENTORY_WITH_ID);
-        matcher.addURI(authority, InventoryContract.PATH_PAST_INVENTORY + "/*",
-                PAST_INVENTORY_WITH_CATEGORY);
-
-        // inventory item codes
-        matcher.addURI(authority, InventoryContract.PATH_ITEM, INVENTORY_ITEM);
-        matcher.addURI(authority, InventoryContract.PATH_ITEM + "/#", INVENTORY_ITEM_WITH_ID);
-        matcher.addURI(authority, InventoryContract.PATH_ITEM + "/*", INVENTORY_ITEM_WITH_CATEGORY);
-
-        // category codes
-        matcher.addURI(authority, InventoryContract.PATH_CATEGORY, CATEGORY);
-        matcher.addURI(authority, InventoryContract.PATH_CATEGORY + "/#", CATEGORY_WITH_ID);
-
-        return matcher;
     }
 
     // create provider
@@ -365,6 +363,7 @@ public class InventoryProvider extends ContentProvider {
                 } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
+                break;
             }
 
             default:

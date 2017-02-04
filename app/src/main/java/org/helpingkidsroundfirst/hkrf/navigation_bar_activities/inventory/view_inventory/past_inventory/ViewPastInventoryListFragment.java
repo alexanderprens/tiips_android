@@ -25,12 +25,22 @@ import org.helpingkidsroundfirst.hkrf.data.InventoryContract.PastInventoryEntry;
 public class ViewPastInventoryListFragment extends Fragment
     implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private ViewPastInventoryAdapter mViewPastInventoryAdapter;
-    private ListView mListView;
-    private int mPosition = ListView.INVALID_POSITION;
-    private static final String SELECTEC_KEY = "selected_position";
+    public static final int COL_PAST_ID = 0;
+    public static final int COL_PAST_ITEM_KEY = 1;
+    public static final int COL_PAST_QTY = 2;
+    public static final int COL_PAST_DATE_SHIPPED = 3;
+    public static final int COL_PAST_DONOR = 4;
+    public static final int COL_ITEM_ID = 5;
+    public static final int COL_ITEM_BARCODE = 6;
+    public static final int COL_ITEM_NAME = 7;
+    public static final int COL_ITEM_DESCRIPTION = 8;
+    public static final int COL_ITEM_CATEGORY_KEY = 9;
+    public static final int COL_ITEM_VALUE = 10;
+    public static final int COL_CATEGORY_ID = 11;
+    public static final int COL_CATEGORY_NAME = 12;
+    public static final int COL_CATEGORY_BARCODE = 13;
+    private static final String SELECTED_KEY = "selected_position";
     private static final int PAST_INVENTORY_LOADER = 2;
-
     // Past inventory columns
     private static final String[] PAST_INVENTORY_COLUMNS = {
             PastInventoryEntry.TABLE_NAME + "." + PastInventoryEntry._ID,
@@ -48,25 +58,9 @@ public class ViewPastInventoryListFragment extends Fragment
             InventoryContract.CategoryEntry.COLUMN_CATEGORY,
             InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
     };
-
-    public static final int COL_PAST_ID = 0;
-    public static final int COL_PAST_ITEM_KEY = 1;
-    public static final int COL_PAST_QTY = 2;
-    public static final int COL_PAST_DATE_SHIPPED = 3;
-    public static final int COL_PAST_DONOR = 4;
-    public static final int COL_ITEM_ID = 5;
-    public static final int COL_ITEM_BARCODE = 6;
-    public static final int COL_ITEM_NAME = 7;
-    public static final int COL_ITEM_DESCRIPTION = 8;
-    public static final int COL_ITEM_CATEGORY_KEY = 9;
-    public static final int COL_ITEM_VALUE = 10;
-    public static final int COL_CATEGORY_ID = 11;
-    public static final int COL_CATEGORY_NAME = 12;
-    public static final int COL_CATEGORY_BARCODE = 13;
-
-    public interface Callback {
-        void onPastInventorySelected(Uri pastItemURI);
-    }
+    private ViewPastInventoryAdapter mViewPastInventoryAdapter;
+    private ListView mListView;
+    private int mPosition = ListView.INVALID_POSITION;
 
     public ViewPastInventoryListFragment() {
         // Required empty public constructor
@@ -94,8 +88,8 @@ public class ViewPastInventoryListFragment extends Fragment
             }
         });
 
-        if(savedInstanceState != null && savedInstanceState.containsKey(SELECTEC_KEY)) {
-            mPosition = savedInstanceState.getInt(SELECTEC_KEY);
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
+            mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
 
         return rootView;
@@ -110,7 +104,7 @@ public class ViewPastInventoryListFragment extends Fragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         if(mPosition != ListView.INVALID_POSITION) {
-            outState.putInt(SELECTEC_KEY, mPosition);
+            outState.putInt(SELECTED_KEY, mPosition);
         }
         super.onSaveInstanceState(outState);
     }
@@ -144,5 +138,9 @@ public class ViewPastInventoryListFragment extends Fragment
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mViewPastInventoryAdapter.swapCursor(null);
+    }
+
+    public interface Callback {
+        void onPastInventorySelected(Uri pastItemURI);
     }
 }

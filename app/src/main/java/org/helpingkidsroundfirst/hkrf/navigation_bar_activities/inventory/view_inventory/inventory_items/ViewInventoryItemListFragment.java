@@ -33,6 +33,7 @@ public class ViewInventoryItemListFragment extends Fragment
     public static final int COL_CATEGORY_NAME = 4;
     private static final String SELECTED_KEY = "selected_position";
     private static final int INVENTORY_ITEM_LOADER = 0;
+
     // Inventory item columns
     private static final String[] INVENTORY_ITEM_COLUMNS = {
             InventoryContract.ItemEntry.TABLE_NAME + "." + InventoryContract.ItemEntry._ID,

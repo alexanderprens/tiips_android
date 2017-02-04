@@ -17,10 +17,9 @@ import org.helpingkidsroundfirst.hkrf.data.InventoryContract.PastInventoryEntry;
 
 public class InventoryDbHelper extends SQLiteOpenHelper {
 
-    //change when database changes
-    private static final int DATABASE_VERSION = 3;
-
     static final String DATABASE_NAME = "inventory.db";
+    //change when database changes
+    private static final int DATABASE_VERSION = 6;
 
     public InventoryDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -85,7 +84,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
         // insert "Un-categorized" into category table
         ContentValues defaultCategory = new ContentValues();
-        defaultCategory.put(CategoryEntry.COLUMN_CATEGORY, "Un-categorized");
+        defaultCategory.put(CategoryEntry.COLUMN_CATEGORY, "Uncategorized");
         defaultCategory.put(CategoryEntry.COLUMN_BARCODE_PREFIX, "00");
         sqLiteDatabase.insert(CategoryEntry.TABLE_NAME, null, defaultCategory);
     }
@@ -93,7 +92,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         // If different version table, handle changes
-        // For this database revision (2 to 3) drop old tables
+        // For this database revision (4 to 5) drop old tables
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + CurrentInventoryEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + PastInventoryEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ItemEntry.TABLE_NAME);

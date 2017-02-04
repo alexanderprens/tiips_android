@@ -23,7 +23,8 @@ import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
  */
 
 public class ViewCategoryListFragment extends Fragment implements
-        LoaderManager.LoaderCallbacks<Cursor> {
+        LoaderManager.LoaderCallbacks<Cursor>,
+        AddCategoryDialogFragment.AddCategoryListener {
 
     // category column indices
     public static final int COL_CATEGORY_ID = 0;
@@ -31,7 +32,6 @@ public class ViewCategoryListFragment extends Fragment implements
     public static final int COL_CATEGORY_BARCODE = 2;
     private static final String SELECTED_KEY = "selected_position";
     private static final int CATEGORY_LOADER = 7;
-
     // category columns
     private static final String[] CATEGORY_COLUMNS = {
             InventoryContract.CategoryEntry.TABLE_NAME + "." + InventoryContract.CategoryEntry._ID,
@@ -41,6 +41,7 @@ public class ViewCategoryListFragment extends Fragment implements
     private ViewCategoryAdapter mViewCategoryAdapter;
     private ListView mListView;
     private int mPosition = ListView.INVALID_POSITION;
+
 
     public ViewCategoryListFragment() {
         // required empty public constructor
@@ -61,7 +62,9 @@ public class ViewCategoryListFragment extends Fragment implements
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getFragmentManager();
-                // TODO: 2/4/2017 add dialog call here
+                AddCategoryDialogFragment addCategoryDialogFragment = new AddCategoryDialogFragment();
+                addCategoryDialogFragment.setTargetFragment(ViewCategoryListFragment.this, 300);
+                addCategoryDialogFragment.show(fragmentManager, "open cateogory dialog");
             }
         });
 
@@ -128,6 +131,12 @@ public class ViewCategoryListFragment extends Fragment implements
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mViewCategoryAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void onButtonOK() {
+        // restart loader to include new item
+        getLoaderManager().restartLoader(CATEGORY_LOADER, null, this);
     }
 
     // callback for when item is selected
