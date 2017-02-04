@@ -37,7 +37,7 @@ public class InventoryContract {
         public static final String TABLE_NAME = "categories";
 
         // Table columns
-        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_CATEGORY = "category";
         public static final String COLUMN_BARCODE_PREFIX = "barcode_prefix";
 
         // Uri builders and handlers

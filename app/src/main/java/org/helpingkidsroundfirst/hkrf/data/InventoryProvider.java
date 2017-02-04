@@ -114,8 +114,7 @@ public class InventoryProvider extends ContentProvider {
     private Cursor getItemById(Uri uri, String[] projection, String sortOrder) {
         long itemId = InventoryContract.ItemEntry.getItemIdFromUri(uri);
 
-        return mOpenHelper.getReadableDatabase().query(
-                InventoryContract.ItemEntry.TABLE_NAME,
+        return sInventoryItemQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 sItemIdSelection,
                 new String[] {Long.toString(itemId)},
@@ -129,8 +128,7 @@ public class InventoryProvider extends ContentProvider {
     private Cursor getCurrentInventoryById(Uri uri, String[] projection, String sortOrder) {
         long currentInventoryId = InventoryContract.CurrentInventoryEntry.getCurrentIdFromUri(uri);
 
-        return mOpenHelper.getReadableDatabase().query(
-                InventoryContract.ItemEntry.TABLE_NAME,
+        return sCurrentInventoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 sCurrentInventoryIdSelection,
                 new String[] {Long.toString(currentInventoryId)},
@@ -144,8 +142,7 @@ public class InventoryProvider extends ContentProvider {
     private Cursor getPastInventoryById(Uri uri, String[] projection, String sortOrder) {
         long pastInventoryId = InventoryContract.PastInventoryEntry.getPastIdFromUri(uri);
 
-        return mOpenHelper.getReadableDatabase().query(
-                InventoryContract.ItemEntry.TABLE_NAME,
+        return sPastInventoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
                 sPastInventoryIdSelection,
                 new String[] {Long.toString(pastInventoryId)},

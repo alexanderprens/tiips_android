@@ -18,7 +18,7 @@ import org.helpingkidsroundfirst.hkrf.data.InventoryContract.PastInventoryEntry;
 public class InventoryDbHelper extends SQLiteOpenHelper {
 
     //change when database changes
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     static final String DATABASE_NAME = "inventory.db";
 
@@ -33,7 +33,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_CATEGORY_TABLE = "CREATE TABLE " +
                 CategoryEntry.TABLE_NAME + " (" +
                 CategoryEntry._ID + " INTEGER PRIMARY KEY, " +
-                CategoryEntry.COLUMN_NAME + " TEXT UNIQUE NOT NULL, " +
+                CategoryEntry.COLUMN_CATEGORY + " TEXT UNIQUE NOT NULL, " +
                 CategoryEntry.COLUMN_BARCODE_PREFIX + " TEXT);";
 
         // create item table
@@ -85,7 +85,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
         // insert "Un-categorized" into category table
         ContentValues defaultCategory = new ContentValues();
-        defaultCategory.put(CategoryEntry.COLUMN_NAME, "Un-categorized");
+        defaultCategory.put(CategoryEntry.COLUMN_CATEGORY, "Un-categorized");
         defaultCategory.put(CategoryEntry.COLUMN_BARCODE_PREFIX, "00");
         sqLiteDatabase.insert(CategoryEntry.TABLE_NAME, null, defaultCategory);
     }
@@ -93,7 +93,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         // If different version table, handle changes
-        // For this database revision (1 to 2) drop old tables
+        // For this database revision (2 to 3) drop old tables
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + CurrentInventoryEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + PastInventoryEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ItemEntry.TABLE_NAME);

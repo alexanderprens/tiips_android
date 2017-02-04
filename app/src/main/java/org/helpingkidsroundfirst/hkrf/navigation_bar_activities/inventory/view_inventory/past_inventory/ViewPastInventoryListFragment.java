@@ -45,7 +45,7 @@ public class ViewPastInventoryListFragment extends Fragment
             ItemEntry.COLUMN_CATEGORY_KEY,
             ItemEntry.COLUMN_VALUE,
             InventoryContract.CategoryEntry.TABLE_NAME + "." + InventoryContract.CategoryEntry._ID,
-            InventoryContract.CategoryEntry.COLUMN_NAME,
+            InventoryContract.CategoryEntry.COLUMN_CATEGORY,
             InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
     };
 
@@ -132,10 +132,12 @@ public class ViewPastInventoryListFragment extends Fragment
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mViewPastInventoryAdapter.swapCursor(data);
+        if(null != data && data.moveToFirst()) {
+            mViewPastInventoryAdapter.swapCursor(data);
 
-        if(mPosition != ListView.INVALID_POSITION) {
-            mListView.smoothScrollToPosition(mPosition);
+            if (mPosition != ListView.INVALID_POSITION) {
+                mListView.smoothScrollToPosition(mPosition);
+            }
         }
     }
 

@@ -59,7 +59,7 @@ public class TestDB extends AndroidTestCase {
         //build hash set of column names in category table
         final HashSet<String> categoryColumnHashSet = new HashSet<>();
         categoryColumnHashSet.add(InventoryContract.CategoryEntry._ID);
-        categoryColumnHashSet.add(InventoryContract.CategoryEntry.COLUMN_NAME);
+        categoryColumnHashSet.add(InventoryContract.CategoryEntry.COLUMN_CATEGORY);
         categoryColumnHashSet.add(InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX);
 
         int columnNameIndex = c.getColumnIndex("name");
@@ -297,7 +297,7 @@ public class TestDB extends AndroidTestCase {
 
         //make values to put into database
         ContentValues contentValues = new ContentValues();
-        contentValues.put(InventoryContract.CategoryEntry.COLUMN_NAME, "Baseball Equipment");
+        contentValues.put(InventoryContract.CategoryEntry.COLUMN_CATEGORY, "Baseball Equipment");
         contentValues.put(InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX, "BB");
 
         //insert into database

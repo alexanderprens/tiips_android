@@ -69,7 +69,7 @@ public class TestUtilities extends AndroidTestCase {
 
     static ContentValues createCategoryValues() {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(InventoryContract.CategoryEntry.COLUMN_NAME, "Baseball");
+        contentValues.put(InventoryContract.CategoryEntry.COLUMN_CATEGORY, "Baseball");
         contentValues.put(InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX, "BB");
 
         return contentValues;
