@@ -197,6 +197,10 @@ public class TestProvider extends AndroidTestCase {
 
         itemRowId = db.insert(InventoryContract.ItemEntry.TABLE_NAME, null, itemValues);
 
+        itemValues.put(InventoryContract.CategoryEntry._ID, catRowId);
+        itemValues.put(InventoryContract.CategoryEntry.COLUMN_NAME, "Baseball");
+        itemValues.put(InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX, "BB");
+
         //test if inserted
         assertTrue("Unable to insert ItemEntry into database", itemRowId != -1);
         db.close();

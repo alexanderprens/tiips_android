@@ -56,18 +56,18 @@ public class InventoryProvider extends ContentProvider {
 
         // Inner join item on current inventory
         sCurrentInventoryQueryBuilder.setTables(
-                InventoryContract.CurrentInventoryEntry.TABLE_NAME + " INNER JOIN " +
-                        InventoryContract.ItemEntry.TABLE_NAME +
-                        " ON " + InventoryContract.CurrentInventoryEntry.TABLE_NAME +
-                        "." + InventoryContract.CurrentInventoryEntry.COLUMN_ITEM_KEY +
-                        " = " + InventoryContract.ItemEntry.TABLE_NAME +
-                        "." + InventoryContract.ItemEntry._ID + ", " +
+                InventoryContract.CurrentInventoryEntry.TABLE_NAME + " INNER JOIN (" +
                         InventoryContract.ItemEntry.TABLE_NAME + " INNER JOIN " +
                         InventoryContract.CategoryEntry.TABLE_NAME +
                         " ON " + InventoryContract.ItemEntry.TABLE_NAME +
                         "." + InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY +
                         " = " + InventoryContract.CategoryEntry.TABLE_NAME +
-                        "." + InventoryContract.CategoryEntry._ID
+                        "." + InventoryContract.CategoryEntry._ID + ") " +
+                        InventoryContract.ItemEntry.TABLE_NAME +
+                        " ON " + InventoryContract.CurrentInventoryEntry.TABLE_NAME +
+                        "." + InventoryContract.CurrentInventoryEntry.COLUMN_ITEM_KEY +
+                        " = " + InventoryContract.ItemEntry.TABLE_NAME +
+                        "." + InventoryContract.ItemEntry._ID
         );
     }
 
@@ -78,18 +78,18 @@ public class InventoryProvider extends ContentProvider {
 
         // Inner join item on past inventory
         sPastInventoryQueryBuilder.setTables(
-                InventoryContract.PastInventoryEntry.TABLE_NAME + " INNER JOIN " +
-                        InventoryContract.ItemEntry.TABLE_NAME +
-                        " ON " + InventoryContract.PastInventoryEntry.TABLE_NAME +
-                        "." + InventoryContract.PastInventoryEntry.COLUMN_ITEM_KEY +
-                        " = " + InventoryContract.ItemEntry.TABLE_NAME +
-                        "." + InventoryContract.ItemEntry._ID + ", " +
+                InventoryContract.PastInventoryEntry.TABLE_NAME + " INNER JOIN (" +
                         InventoryContract.ItemEntry.TABLE_NAME + " INNER JOIN " +
                         InventoryContract.CategoryEntry.TABLE_NAME +
                         " ON " + InventoryContract.ItemEntry.TABLE_NAME +
                         "." + InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY +
                         " = " + InventoryContract.CategoryEntry.TABLE_NAME +
-                        "." + InventoryContract.CategoryEntry._ID
+                        "." + InventoryContract.CategoryEntry._ID + ") " +
+                        InventoryContract.ItemEntry.TABLE_NAME +
+                        " ON " + InventoryContract.PastInventoryEntry.TABLE_NAME +
+                        "." + InventoryContract.PastInventoryEntry.COLUMN_ITEM_KEY +
+                        " = " + InventoryContract.ItemEntry.TABLE_NAME +
+                        "." + InventoryContract.ItemEntry._ID
         );
     }
 

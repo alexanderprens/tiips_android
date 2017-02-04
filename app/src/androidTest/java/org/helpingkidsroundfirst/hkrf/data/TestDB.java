@@ -317,10 +317,8 @@ public class TestDB extends AndroidTestCase {
         );
 
         // if cursor count is greater than 1 inserted correctly
-        assertTrue("Error: category item not inserted", cursor.getCount() <= 1);
-
-        cursor.moveToFirst();
-        cursor.moveToNext();
+        assertTrue("Error: category item not initialized", cursor.moveToFirst());
+        assertTrue("Error: category item not inserted", cursor.moveToNext());
 
         //validate data
         TestUtilities.validateCurrentRecord("Error: category item inserted incorrectly", cursor,
