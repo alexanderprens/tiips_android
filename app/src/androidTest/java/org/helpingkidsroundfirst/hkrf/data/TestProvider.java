@@ -8,7 +8,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 
+import static org.helpingkidsroundfirst.hkrf.data.TestUtilities.createCategoryValues;
 import static org.helpingkidsroundfirst.hkrf.data.TestUtilities.createItemValues;
+import static org.helpingkidsroundfirst.hkrf.data.TestUtilities.insertTestCategory;
 import static org.helpingkidsroundfirst.hkrf.data.TestUtilities.insertTestItem;
 import static org.helpingkidsroundfirst.hkrf.data.TestUtilities.validateCursor;
 
@@ -22,6 +24,12 @@ public class TestProvider extends AndroidTestCase {
 
     // test provider delete functionality
     public void deleteAllRecordsFromProvider() {
+
+        mContext.getContentResolver().delete(
+                InventoryContract.CategoryEntry.CONTENT_URI,
+                null,
+                null
+        );
 
         mContext.getContentResolver().delete(
                 InventoryContract.ItemEntry.CONTENT_URI,
@@ -41,8 +49,21 @@ public class TestProvider extends AndroidTestCase {
                 null
         );
 
-        // check item deletions
+        // check category deletions
         Cursor cursor = mContext.getContentResolver().query(
+                InventoryContract.CategoryEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+
+        assertEquals("Error: records not deleted from category table during delete",
+                0, cursor.getCount());
+        cursor.close();
+
+        // check item deletions
+        cursor = mContext.getContentResolver().query(
                 InventoryContract.ItemEntry.CONTENT_URI,
                 null,
                 null,
@@ -116,8 +137,14 @@ public class TestProvider extends AndroidTestCase {
     }
 
     public void testGetType() {
+
         // content://org.helpingkidsroundfirst.hkrf/items/
-        String type = mContext.getContentResolver().getType(InventoryContract.ItemEntry.CONTENT_URI);
+        String type = mContext.getContentResolver().getType(InventoryContract.CategoryEntry.CONTENT_URI);
+        assertEquals("Error: the CategoryEntry CONTENT_URI should return CategoryEntry.CONTENT_TYPE",
+                InventoryContract.CategoryEntry.CONTENT_TYPE, type);
+
+        // content://org.helpingkidsroundfirst.hkrf/items/
+        type = mContext.getContentResolver().getType(InventoryContract.ItemEntry.CONTENT_URI);
         assertEquals("Error: the ItemEntry CONTENT_URI should return ItemEntry.CONTENT_TYPE",
                 InventoryContract.ItemEntry.CONTENT_TYPE, type);
 
@@ -132,13 +159,41 @@ public class TestProvider extends AndroidTestCase {
                 InventoryContract.CurrentInventoryEntry.CONTENT_TYPE, type);
     }
 
+    public void testBasicCategoryQuery() {
+        //insert test records into database
+        InventoryDbHelper dbHelper = new InventoryDbHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        long catRowId;
+        ContentValues categoryValues = createCategoryValues();
+
+        catRowId = db.insert(InventoryContract.CategoryEntry.TABLE_NAME, null, categoryValues);
+
+        //test if inserted
+        assertTrue("Unable to insert CategoryEntry into database", catRowId != -1);
+        db.close();
+
+        //test content provider query
+        Cursor itemCursor = mContext.getContentResolver().query(
+                InventoryContract.CategoryEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
+
+        validateCursor("testBasicCategoryQuery", itemCursor, categoryValues);
+    }
+
     public void testBasicItemQuery() {
         // insert test records into database
         InventoryDbHelper dbHelper = new InventoryDbHelper(mContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
+        long catRowId = insertTestCategory(db);
+
         long itemRowId;
-        ContentValues itemValues =  createItemValues();
+        ContentValues itemValues =  createItemValues(catRowId);
 
         itemRowId = db.insert(InventoryContract.ItemEntry.TABLE_NAME, null, itemValues);
 

@@ -26,7 +26,7 @@ public class ReceiveInventoryActivity extends AppCompatActivity implements
         Fragment fragment = new ReceiveInventoryFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.content_view_inventory, fragment)
+                .replace(R.id.content_recieve_inventory, fragment)
                 .commit();
     }
 

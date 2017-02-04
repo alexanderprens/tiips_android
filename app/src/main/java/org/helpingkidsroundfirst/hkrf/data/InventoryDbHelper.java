@@ -1,9 +1,11 @@
 package org.helpingkidsroundfirst.hkrf.data;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import org.helpingkidsroundfirst.hkrf.data.InventoryContract.CategoryEntry;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.CurrentInventoryEntry;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.ItemEntry;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.PastInventoryEntry;
@@ -16,7 +18,7 @@ import org.helpingkidsroundfirst.hkrf.data.InventoryContract.PastInventoryEntry;
 public class InventoryDbHelper extends SQLiteOpenHelper {
 
     //change when database changes
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     static final String DATABASE_NAME = "inventory.db";
 
@@ -27,6 +29,13 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
+        // create category table
+        final String SQL_CREATE_CATEGORY_TABLE = "CREATE TABLE " +
+                CategoryEntry.TABLE_NAME + " (" +
+                CategoryEntry._ID + " INTEGER PRIMARY KEY, " +
+                CategoryEntry.COLUMN_NAME + " TEXT UNIQUE NOT NULL, " +
+                CategoryEntry.COLUMN_BARCODE_PREFIX + " TEXT);";
+
         // create item table
         final String SQL_CREATE_ITEM_TABLE = "CREATE TABLE " +
                 ItemEntry.TABLE_NAME + " (" +
@@ -34,8 +43,12 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
                 ItemEntry.COLUMN_BARCODE_ID + " TEXT UNIQUE NOT NULL, " +
                 ItemEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                 ItemEntry.COLUMN_DESCRIPTION + " TEXT, " +
-                ItemEntry.COLUMN_CATEGORY + " TEXT, " +
-                ItemEntry.COLUMN_VALUE + " REAL NOT NULL " + ");";
+                ItemEntry.COLUMN_CATEGORY_KEY + " TEXT, " +
+                ItemEntry.COLUMN_VALUE + " REAL NOT NULL, " +
+
+                // set up foreign key for category
+                "FOREIGN KEY (" + ItemEntry.COLUMN_CATEGORY_KEY + ") REFERENCES " +
+                CategoryEntry.TABLE_NAME + " (" + CategoryEntry._ID + "));";
 
         // create current inventory table
         final String SQL_CREATE_CURRENT_INVENTORY_TABLE = "CREATE TABLE " + 
@@ -65,14 +78,26 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
                 ItemEntry.TABLE_NAME + " (" + ItemEntry._ID + "));";
 
         // execute SQL commands
+        sqLiteDatabase.execSQL(SQL_CREATE_CATEGORY_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_ITEM_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_CURRENT_INVENTORY_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PAST_INVENTORY_TABLE);
+
+        // insert "Un-categorized" into category table
+        ContentValues defaultCategory = new ContentValues();
+        defaultCategory.put(CategoryEntry.COLUMN_NAME, "Un-categorized");
+        defaultCategory.put(CategoryEntry.COLUMN_BARCODE_PREFIX, "00");
+        sqLiteDatabase.insert(CategoryEntry.TABLE_NAME, null, defaultCategory);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         // If different version table, handle changes
-        // TODO: 12/21/2016 do something on database update
+        // For this database revision (1 to 2) drop old tables
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + CurrentInventoryEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + PastInventoryEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ItemEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + CategoryEntry.TABLE_NAME);
+        onCreate(sqLiteDatabase);
     }
 }

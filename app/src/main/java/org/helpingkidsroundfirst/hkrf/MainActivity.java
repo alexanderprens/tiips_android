@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.receive_inventory.ReceiveInventoryActivity;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.ViewInventoryActivity;
 
 // TODO: 2/3/2017 add context to layouts
@@ -83,10 +84,11 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Intent intent;
 
         switch (id){
             case R.id.nav_inventory:
-                Intent intent = new Intent(MainActivity.this, ViewInventoryActivity.class);
+                intent = new Intent(MainActivity.this, ViewInventoryActivity.class);
                 startActivity(intent);
                 Log.i(TAG, "Start View Inventory Activity");
                 break;
@@ -97,7 +99,9 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_receive:
-
+                intent = new Intent(MainActivity.this, ReceiveInventoryActivity.class);
+                startActivity(intent);
+                Log.i(TAG, "Start Receive Inventory Activity");
                 break;
 
             case R.id.nav_reports:

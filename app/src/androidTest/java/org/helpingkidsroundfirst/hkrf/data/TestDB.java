@@ -26,6 +26,7 @@ public class TestDB extends AndroidTestCase {
     public void testCreateDb() throws Throwable {
         // build hash set of all table names
         final HashSet<String> tableNameHashSet = new HashSet<>();
+        tableNameHashSet.add(InventoryContract.CategoryEntry.TABLE_NAME);
         tableNameHashSet.add(InventoryContract.ItemEntry.TABLE_NAME);
         tableNameHashSet.add(InventoryContract.CurrentInventoryEntry.TABLE_NAME);
         tableNameHashSet.add(InventoryContract.PastInventoryEntry.TABLE_NAME);
@@ -51,6 +52,25 @@ public class TestDB extends AndroidTestCase {
                 tableNameHashSet.isEmpty());
 
         //check if tables contain correct columns
+        c = db.rawQuery("PRAGMA table_info(" + InventoryContract.CategoryEntry.TABLE_NAME
+            + ")", null);
+        assertTrue("Error: unable to query database for table info", c.moveToFirst());
+
+        //build hash set of column names in category table
+        final HashSet<String> categoryColumnHashSet = new HashSet<>();
+        categoryColumnHashSet.add(InventoryContract.CategoryEntry._ID);
+        categoryColumnHashSet.add(InventoryContract.CategoryEntry.COLUMN_NAME);
+        categoryColumnHashSet.add(InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX);
+
+        int columnNameIndex = c.getColumnIndex("name");
+        do{
+            String columnName = c.getString(columnNameIndex);
+            categoryColumnHashSet.remove(columnName);
+        }while (c.moveToNext());
+
+        //check category columns are still valid
+        assertTrue("Error: category table missing columns", categoryColumnHashSet.isEmpty());
+
         c = db.rawQuery("PRAGMA table_info(" + InventoryContract.ItemEntry.TABLE_NAME + ")",
                 null);
         assertTrue("Error: unable to query database for table info", c.moveToFirst());
@@ -61,10 +81,10 @@ public class TestDB extends AndroidTestCase {
         itemColumnHashSet.add(InventoryContract.ItemEntry.COLUMN_BARCODE_ID);
         itemColumnHashSet.add(InventoryContract.ItemEntry.COLUMN_NAME);
         itemColumnHashSet.add(InventoryContract.ItemEntry.COLUMN_DESCRIPTION);
-        itemColumnHashSet.add(InventoryContract.ItemEntry.COLUMN_CATEGORY);
+        itemColumnHashSet.add(InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY);
         itemColumnHashSet.add(InventoryContract.ItemEntry.COLUMN_VALUE);
 
-        int columnNameIndex = c.getColumnIndex("name");
+        columnNameIndex = c.getColumnIndex("name");
         do{
             String columnName = c.getString(columnNameIndex);
             itemColumnHashSet.remove(columnName);
@@ -228,12 +248,14 @@ public class TestDB extends AndroidTestCase {
         InventoryDbHelper dbHelper = new InventoryDbHelper(mContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
+        long catRowId = insertCategory();
+
         //make values to put into database
         ContentValues itemValues = new ContentValues();
         itemValues.put(InventoryContract.ItemEntry.COLUMN_BARCODE_ID, "00000001");
         itemValues.put(InventoryContract.ItemEntry.COLUMN_NAME, "Bat");
         itemValues.put(InventoryContract.ItemEntry.COLUMN_DESCRIPTION, "Wooden");
-        itemValues.put(InventoryContract.ItemEntry.COLUMN_CATEGORY, "Baseball");
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY, catRowId);
         itemValues.put(InventoryContract.ItemEntry.COLUMN_VALUE, 10);
 
         // insert into database
@@ -256,7 +278,7 @@ public class TestDB extends AndroidTestCase {
         assertTrue("Error: no records found in inventory query", cursor.moveToFirst());
 
         // validate data in cursor
-        TestUtilities.validateCurrentRecord("Error: Item Query Validation Failded", cursor,
+        TestUtilities.validateCurrentRecord("Error: Item Query Validation Failed", cursor,
                 itemValues);
 
         // verify only one record
@@ -266,5 +288,47 @@ public class TestDB extends AndroidTestCase {
         cursor.close();
         db.close();
         return itemRowId;
+    }
+
+    public long insertCategory(){
+        //get database
+        InventoryDbHelper dbHelper = new InventoryDbHelper(mContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        //make values to put into database
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(InventoryContract.CategoryEntry.COLUMN_NAME, "Baseball Equipment");
+        contentValues.put(InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX, "BB");
+
+        //insert into database
+        long catRowId;
+        catRowId = db.insert(InventoryContract.CategoryEntry.TABLE_NAME, null, contentValues);
+
+        assertTrue(catRowId != -1);
+
+        Cursor cursor = db.query(
+                InventoryContract.CategoryEntry.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        // if cursor count is greater than 1 inserted correctly
+        assertTrue("Error: category item not inserted", cursor.getCount() <= 1);
+
+        cursor.moveToFirst();
+        cursor.moveToNext();
+
+        //validate data
+        TestUtilities.validateCurrentRecord("Error: category item inserted incorrectly", cursor,
+                contentValues);
+
+        //close cursor and database
+        cursor.close();
+        db.close();
+        return catRowId;
     }
 }

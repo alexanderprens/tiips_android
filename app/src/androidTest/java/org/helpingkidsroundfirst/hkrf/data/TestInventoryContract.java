@@ -9,6 +9,14 @@ import android.test.AndroidTestCase;
 
 public class TestInventoryContract extends AndroidTestCase {
 
+    public void testBuildCategory(){
+        Uri catUri = InventoryContract.CategoryEntry.buildCategoryUri();
+        assertNotNull("Error: null uri returned", catUri);
+        assertEquals("Error: uri does not match expected result",
+                catUri.toString(),
+                "content://org.helpingkidsroundfirst.hkrf/categories");
+    }
+
     public void testBuildInventoryItem() {
 
         // test item uri

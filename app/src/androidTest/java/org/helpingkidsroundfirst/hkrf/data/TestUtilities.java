@@ -28,12 +28,15 @@ public class TestUtilities extends AndroidTestCase {
     }
 
     static long insertTestItem(SQLiteDatabase db) {
+
+        long catRowId = insertTestCategory(db);
+
         //make values to put into database
         ContentValues itemValues = new ContentValues();
         itemValues.put(InventoryContract.ItemEntry.COLUMN_BARCODE_ID, "00000001");
         itemValues.put(InventoryContract.ItemEntry.COLUMN_NAME, "Bat");
         itemValues.put(InventoryContract.ItemEntry.COLUMN_DESCRIPTION, "Wooden");
-        itemValues.put(InventoryContract.ItemEntry.COLUMN_CATEGORY, "Baseball");
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY, catRowId);
         itemValues.put(InventoryContract.ItemEntry.COLUMN_VALUE, 10);
 
         // insert into database
@@ -42,16 +45,34 @@ public class TestUtilities extends AndroidTestCase {
         return itemRowId;
     }
 
-    static ContentValues createItemValues() {
+    static ContentValues createItemValues(long categoryId) {
+
+
         //make values to put into database
         ContentValues itemValues = new ContentValues();
         itemValues.put(InventoryContract.ItemEntry.COLUMN_BARCODE_ID, "00000001");
         itemValues.put(InventoryContract.ItemEntry.COLUMN_NAME, "Bat");
         itemValues.put(InventoryContract.ItemEntry.COLUMN_DESCRIPTION, "Wooden");
-        itemValues.put(InventoryContract.ItemEntry.COLUMN_CATEGORY, "Baseball");
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY, categoryId);
         itemValues.put(InventoryContract.ItemEntry.COLUMN_VALUE, 10);
 
         return itemValues;
+    }
+
+    static long insertTestCategory(SQLiteDatabase db) {
+        ContentValues contentValues = createCategoryValues();
+
+        long catRowId;
+        catRowId = db.insert(InventoryContract.CategoryEntry.TABLE_NAME, null, contentValues);
+        return catRowId;
+    }
+
+    static ContentValues createCategoryValues() {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(InventoryContract.CategoryEntry.COLUMN_NAME, "Baseball");
+        contentValues.put(InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX, "BB");
+
+        return contentValues;
     }
 
     static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {

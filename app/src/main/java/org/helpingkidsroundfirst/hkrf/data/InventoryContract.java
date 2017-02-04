@@ -19,9 +19,40 @@ public class InventoryContract {
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     // Table names
+    public static final String PATH_CATEGORY = "categories";
     public static final String PATH_ITEM = "items";
     public static final String PATH_CURRENT_INVENTORY = "current_inventory";
     public static final String PATH_PAST_INVENTORY = "past_inventory";
+
+    /* Define Category Table */
+    public static final class CategoryEntry implements BaseColumns {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_CATEGORY).build();
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CATEGORY;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_CATEGORY;
+
+        // Table name
+        public static final String TABLE_NAME = "categories";
+
+        // Table columns
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_BARCODE_PREFIX = "barcode_prefix";
+
+        // Uri builders and handlers
+        public static Uri buildCategoryUri() {
+            return CONTENT_URI;
+        }
+
+        public static Uri buildCategoryWithIdUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static long getCategoryIdFromUri(Uri uri) {
+            return Long.parseLong(uri.getPathSegments().get(1));
+        }
+    }
 
     /* Define Item Table */
     public static final class ItemEntry implements BaseColumns {
@@ -40,7 +71,7 @@ public class InventoryContract {
         public static final String COLUMN_BARCODE_ID = "barcode_id";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DESCRIPTION = "description";
-        public static final String COLUMN_CATEGORY = "category";
+        public static final String COLUMN_CATEGORY_KEY = "category_id";
         public static final String COLUMN_VALUE = "value";
 
         public static Uri buildInventoryItemUri() {
@@ -51,8 +82,16 @@ public class InventoryContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
+        public static Uri buildInventoryItemWithCategoryUri(String category) {
+            return CONTENT_URI.buildUpon().appendPath(category).build();
+        }
+
         public static long getItemIdFromUri(Uri uri) {
             return Long.parseLong(uri.getPathSegments().get(1));
+        }
+
+        public static String getCategoryFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
         }
     }
 
@@ -86,8 +125,16 @@ public class InventoryContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
+        public static Uri buildCurrentInventoryWithCategoryUri(String category) {
+            return CONTENT_URI.buildUpon().appendPath(category).build();
+        }
+
         public static long getCurrentIdFromUri(Uri uri) {
             return Long.parseLong(uri.getPathSegments().get(1));
+        }
+
+        public static String getCategoryFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
         }
     }
 
@@ -120,8 +167,16 @@ public class InventoryContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
+        public static Uri buildPastInventoryWithCategoryUri(String category) {
+            return CONTENT_URI.buildUpon().appendPath(category).build();
+        }
+
         public static long getPastIdFromUri(Uri uri) {
             return Long.parseLong(uri.getPathSegments().get(1));
+        }
+
+        public static String getCategoryFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
         }
     }
 }
