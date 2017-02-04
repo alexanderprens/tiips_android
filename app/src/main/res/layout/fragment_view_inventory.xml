@@ -6,28 +6,34 @@
     tools:context="org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.ViewInventoryFragment">
 
         <TextView
-            android:text="@string/choose_inventory_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/textView2"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textAlignment="center" />
-
-        <Button
-            android:text="@string/choose_inv_current_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/choose_inv_butt_current" />
+            android:text="@string/choose_inventory_header"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
         <Button
-            android:text="@string/choose_inv_past_button"
+            android:id="@+id/choose_inv_butt_current"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/choose_inv_past_button" />
+            android:text="@string/choose_inv_current_button" />
 
         <Button
-            android:text="@string/choose_inv_item_button"
+            android:id="@+id/choose_inv_past_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/choose_inv_item_button" />
+            android:text="@string/choose_inv_past_button" />
+
+        <Button
+            android:id="@+id/choose_inv_item_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/choose_inv_item_button" />
+
+        <Button
+            android:id="@+id/choose_inv_category_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/choose_inv_category_button" />
 </LinearLayout>

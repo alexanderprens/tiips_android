@@ -25,40 +25,25 @@ public class ViewInventoryItemListFragment extends Fragment
     implements LoaderManager.LoaderCallbacks<Cursor>,
         AddItemDialogFragment.AddItemDialogListener {
 
-    private ViewInventoryItemAdapter mViewInventoryItemAdapter;
-    private ListView mListView;
-    private int mPosition = ListView.INVALID_POSITION;
+    // Inventory item column indices
+    public static final int COL_ITEM_ID = 0;
+    public static final int COL_ITEM_BARCODE = 1;
+    public static final int COL_ITEM_NAME = 2;
+    public static final int COL_ITEM_DESC = 3;
+    public static final int COL_CATEGORY_NAME = 4;
     private static final String SELECTED_KEY = "selected_position";
     private static final int INVENTORY_ITEM_LOADER = 0;
-
     // Inventory item columns
     private static final String[] INVENTORY_ITEM_COLUMNS = {
             InventoryContract.ItemEntry.TABLE_NAME + "." + InventoryContract.ItemEntry._ID,
             InventoryContract.ItemEntry.COLUMN_BARCODE_ID,
             InventoryContract.ItemEntry.COLUMN_NAME,
             InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
-            InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY,
-            InventoryContract.ItemEntry.COLUMN_VALUE,
-            InventoryContract.CategoryEntry.TABLE_NAME + "." + InventoryContract.CategoryEntry._ID,
             InventoryContract.CategoryEntry.COLUMN_CATEGORY,
-            InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
     };
-
-    // Inventory item column indices
-    public static final int COL_ITEM_ID = 0;
-    public static final int COL_ITEM_BARCODE = 1;
-    public static final int COL_ITEM_NAME = 2;
-    public static final int COL_ITEM_DESC = 3;
-    public static final int COL_ITEM_CAT_KEY = 4;
-    public static final int COL_ITEM_VALUE = 5;
-    public static final int COL_CATEGORY_ID = 6;
-    public static final int COL_CATEGORY_NAME = 7;
-    public static final int COL_CATEGORY_BARCODE = 8;
-
-    // Callback for when item is selected
-    public interface Callback {
-        void onItemSelected(Uri invItemURI);
-    }
+    private ViewInventoryItemAdapter mViewInventoryItemAdapter;
+    private ListView mListView;
+    private int mPosition = ListView.INVALID_POSITION;
 
     public ViewInventoryItemListFragment() {
         // Required empty public constructor
@@ -73,7 +58,8 @@ public class ViewInventoryItemListFragment extends Fragment
         View rootView = inflater.inflate(R.layout.fragment_view_inventory_item_list, container, false);
 
         // add floating action button
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.inventory_item_list_fab);
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(
+                R.id.inventory_item_list_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -170,5 +156,10 @@ public class ViewInventoryItemListFragment extends Fragment
     @Override
     public void onButtonCancel() {
         // do nothing on cancel
+    }
+
+    // Callback for when item is selected
+    public interface Callback {
+        void onItemSelected(Uri invItemURI);
     }
 }

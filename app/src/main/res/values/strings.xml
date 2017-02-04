@@ -34,10 +34,11 @@
     <string name="add_inv_ok">OK</string>
 
     <!-- fragment_view_inventory -->
-    <string name="choose_inventory_header">Select Inventory to View</string>
-    <string name="choose_inv_current_button">View Current Inventory</string>
-    <string name="choose_inv_past_button">View Past Inventory</string>
-    <string name="choose_inv_item_button">View/Edit Inventory Items</string>
+    <string name="choose_inventory_header">Select Table to View/Edit</string>
+    <string name="choose_inv_current_button">Current Inventory</string>
+    <string name="choose_inv_past_button">Past Inventory</string>
+    <string name="choose_inv_item_button">Barcode Items</string>
+    <string name="choose_inv_category_button">Categories</string>
     <string name="title_activity_view_inventory">ViewInventoryActivity</string>
 
     <!-- content_main_home -->

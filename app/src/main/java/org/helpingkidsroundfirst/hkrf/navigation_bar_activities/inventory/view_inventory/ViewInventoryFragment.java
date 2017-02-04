@@ -18,15 +18,12 @@ public class ViewInventoryFragment extends Fragment {
     public static final int BUTTON_ITEM = 1;
     public static final int BUTTON_CURRENT = 2;
     public static final int BUTTON_PAST = 3;
+    public static final int BUTTON_CATEGORIES = 4;
 
     private Button inventoryItemButton;
     private Button currentInventoryButton;
     private Button pastInventoryButton;
-
-    public interface onViewInventoryButtonListener {
-        void onViewInventoryButtonClicked(int button);
-    }
-
+    private Button categoryButton;
     private onViewInventoryButtonListener mListener;
 
     public ViewInventoryFragment() {
@@ -71,6 +68,18 @@ public class ViewInventoryFragment extends Fragment {
             }
         });
 
+        categoryButton = (Button) view.findViewById(R.id.choose_inv_category_button);
+        categoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onViewInventoryButtonClicked(BUTTON_CATEGORIES);
+            }
+        });
+
         return view;
+    }
+
+    public interface onViewInventoryButtonListener {
+        void onViewInventoryButtonClicked(int button);
     }
 }

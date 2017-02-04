@@ -10,6 +10,7 @@ import android.util.Log;
 
 import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.ViewInventoryFragment.onViewInventoryButtonListener;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.categories.ViewCategoryListFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.current_inventory.ViewCurrentInventoryDetailFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.current_inventory.ViewCurrentInventoryListFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.inventory_items.ViewInventoryItemDetailFragment;
@@ -53,7 +54,7 @@ public class ViewInventoryActivity extends AppCompatActivity
             case ViewInventoryFragment.BUTTON_ITEM:
                 fragment = new ViewInventoryItemListFragment();
                 startFragment(fragment, "ViewInventoryItemListFragment");
-                getSupportActionBar().setTitle("Inventory Items");
+                getSupportActionBar().setTitle("Barcode Items");
                 break;
 
             case ViewInventoryFragment.BUTTON_CURRENT:
@@ -66,6 +67,12 @@ public class ViewInventoryActivity extends AppCompatActivity
                 fragment = new ViewPastInventoryListFragment();
                 startFragment(fragment, "ViewPastInventoryListFragment");
                 getSupportActionBar().setTitle("View Past Inventory");
+                break;
+
+            case ViewInventoryFragment.BUTTON_CATEGORIES:
+                fragment = new ViewCategoryListFragment();
+                startFragment(fragment, "ViewCategoryListFragment");
+                getSupportActionBar().setTitle("View Categories");
                 break;
         }
     }
