@@ -37,8 +37,11 @@ public class ViewInventoryItemListFragment extends Fragment
             InventoryContract.ItemEntry.COLUMN_BARCODE_ID,
             InventoryContract.ItemEntry.COLUMN_NAME,
             InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
-            InventoryContract.ItemEntry.COLUMN_CATEGORY,
-            InventoryContract.ItemEntry.COLUMN_VALUE
+            InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY,
+            InventoryContract.ItemEntry.COLUMN_VALUE,
+            InventoryContract.CategoryEntry.TABLE_NAME + "." + InventoryContract.CategoryEntry._ID,
+            InventoryContract.CategoryEntry.COLUMN_NAME,
+            InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
     };
 
     // Inventory item column indices
@@ -46,8 +49,11 @@ public class ViewInventoryItemListFragment extends Fragment
     public static final int COL_ITEM_BARCODE = 1;
     public static final int COL_ITEM_NAME = 2;
     public static final int COL_ITEM_DESC = 3;
-    public static final int COL_ITEM_CAT = 4;
+    public static final int COL_ITEM_CAT_KEY = 4;
     public static final int COL_ITEM_VALUE = 5;
+    public static final int COL_CATEGORY_ID = 6;
+    public static final int COL_CATEGORY_NAME = 7;
+    public static final int COL_CATEGORY_BARCODE = 8;
 
     // Callback for when item is selected
     public interface Callback {

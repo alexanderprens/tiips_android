@@ -32,8 +32,7 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
     private Uri mUri;
 
     private static final String[] PAST_DETAIL_COLUMNS = {
-            InventoryContract.PastInventoryEntry.TABLE_NAME + "." +
-                    InventoryContract.PastInventoryEntry._ID,
+            InventoryContract.PastInventoryEntry.TABLE_NAME + "." + InventoryContract.PastInventoryEntry._ID,
             InventoryContract.PastInventoryEntry.COLUMN_ITEM_KEY,
             InventoryContract.PastInventoryEntry.COLUMN_QTY,
             InventoryContract.PastInventoryEntry.COLUMN_DATE_SHIPPED,
@@ -42,8 +41,11 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
             InventoryContract.ItemEntry.COLUMN_BARCODE_ID,
             InventoryContract.ItemEntry.COLUMN_NAME,
             InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
-            InventoryContract.ItemEntry.COLUMN_CATEGORY,
-            InventoryContract.ItemEntry.COLUMN_VALUE
+            InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY,
+            InventoryContract.ItemEntry.COLUMN_VALUE,
+            InventoryContract.CategoryEntry.TABLE_NAME + "." + InventoryContract.CategoryEntry._ID,
+            InventoryContract.CategoryEntry.COLUMN_NAME,
+            InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
     };
 
     public static final int COL_PAST_ID = 0;
@@ -55,8 +57,11 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
     public static final int COL_ITEM_BARCODE = 6;
     public static final int COL_ITEM_NAME = 7;
     public static final int COL_ITEM_DESCRIPTION = 8;
-    public static final int COL_ITEM_CATEGORY = 9;
+    public static final int COL_ITEM_CATEGORY_KEY = 9;
     public static final int COL_ITEM_VALUE = 10;
+    public static final int COL_CATEGORY_ID = 11;
+    public static final int COL_CATEGORY_NAME = 12;
+    public static final int COL_CATEGORY_BARCODE = 13;
 
     public static final String DETAILED_PAST_KEY = "PAST_URI";
     public static final int PAST_DETAIL_LOADER = 6;
@@ -124,7 +129,7 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
             //read data from cursor
             String name = data.getString(COL_ITEM_NAME);
             String description = data.getString(COL_ITEM_DESCRIPTION);
-            String category = data.getString(COL_ITEM_CATEGORY);
+            String category = data.getString(COL_CATEGORY_NAME);
             int value = data.getInt(COL_ITEM_VALUE);
             String valueString = "" + value;
             String barcode = data.getString(COL_ITEM_BARCODE);

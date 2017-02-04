@@ -285,7 +285,7 @@ public class AddItemDialogFragment extends android.support.v4.app.DialogFragment
         // make content values of inventory item data
         itemValues.put(InventoryContract.ItemEntry.COLUMN_NAME, name);
         itemValues.put(InventoryContract.ItemEntry.COLUMN_DESCRIPTION, desc);
-        itemValues.put(InventoryContract.ItemEntry.COLUMN_CATEGORY, cat);
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY, cat);   // TODO: 2/3/2017 fix this
         itemValues.put(InventoryContract.ItemEntry.COLUMN_BARCODE_ID, barcode);
         itemValues.put(InventoryContract.ItemEntry.COLUMN_VALUE, value);
 

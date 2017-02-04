@@ -52,7 +52,7 @@ public class ViewInventoryItemAdapter extends CursorAdapter {
         // get data from cursor
         String name = cursor.getString(ViewInventoryItemListFragment.COL_ITEM_NAME);
         String description = cursor.getString(ViewInventoryItemListFragment.COL_ITEM_DESC);
-        String category = cursor.getString(ViewInventoryItemListFragment.COL_ITEM_CAT);
+        String category = cursor.getString(ViewInventoryItemListFragment.COL_CATEGORY_NAME);
         String barcode = cursor.getString(ViewInventoryItemListFragment.COL_ITEM_BARCODE);
 
         // place cursor data into view

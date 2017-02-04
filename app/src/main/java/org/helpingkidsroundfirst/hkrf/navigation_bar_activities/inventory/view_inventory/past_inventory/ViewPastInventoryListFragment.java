@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.helpingkidsroundfirst.hkrf.R;
+import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.ItemEntry;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.PastInventoryEntry;
 
@@ -41,8 +42,11 @@ public class ViewPastInventoryListFragment extends Fragment
             ItemEntry.COLUMN_BARCODE_ID,
             ItemEntry.COLUMN_NAME,
             ItemEntry.COLUMN_DESCRIPTION,
-            ItemEntry.COLUMN_CATEGORY,
-            ItemEntry.COLUMN_VALUE
+            ItemEntry.COLUMN_CATEGORY_KEY,
+            ItemEntry.COLUMN_VALUE,
+            InventoryContract.CategoryEntry.TABLE_NAME + "." + InventoryContract.CategoryEntry._ID,
+            InventoryContract.CategoryEntry.COLUMN_NAME,
+            InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
     };
 
     public static final int COL_PAST_ID = 0;
@@ -54,8 +58,11 @@ public class ViewPastInventoryListFragment extends Fragment
     public static final int COL_ITEM_BARCODE = 6;
     public static final int COL_ITEM_NAME = 7;
     public static final int COL_ITEM_DESCRIPTION = 8;
-    public static final int COL_ITEM_CATEGORY = 9;
+    public static final int COL_ITEM_CATEGORY_KEY = 9;
     public static final int COL_ITEM_VALUE = 10;
+    public static final int COL_CATEGORY_ID = 11;
+    public static final int COL_CATEGORY_NAME = 12;
+    public static final int COL_CATEGORY_BARCODE = 13;
 
     public interface Callback {
         void onPastInventorySelected(Uri pastItemURI);

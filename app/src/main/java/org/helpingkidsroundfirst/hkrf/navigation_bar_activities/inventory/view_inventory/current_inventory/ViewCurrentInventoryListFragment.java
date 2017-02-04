@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.helpingkidsroundfirst.hkrf.R;
+import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.CurrentInventoryEntry;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.ItemEntry;
 
@@ -32,18 +33,22 @@ public class ViewCurrentInventoryListFragment extends Fragment
 
     // Current inventory columns
     private static final String[] CURRENT_INVENTORY_COLUMNS = {
-            CurrentInventoryEntry.TABLE_NAME + "." + CurrentInventoryEntry._ID,
-            CurrentInventoryEntry.COLUMN_ITEM_KEY,
-            CurrentInventoryEntry.COLUMN_QTY,
-            CurrentInventoryEntry.COLUMN_DONOR,
-            CurrentInventoryEntry.COLUMN_DATE_RECEIVED,
-            CurrentInventoryEntry.COLUMN_WAREHOUSE,
-            ItemEntry.TABLE_NAME + "." + ItemEntry._ID,
-            ItemEntry.COLUMN_BARCODE_ID,
-            ItemEntry.COLUMN_NAME,
-            ItemEntry.COLUMN_DESCRIPTION,
-            ItemEntry.COLUMN_CATEGORY,
-            ItemEntry.COLUMN_VALUE
+            InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
+                    InventoryContract.CurrentInventoryEntry._ID,
+            InventoryContract.CurrentInventoryEntry.COLUMN_ITEM_KEY,
+            InventoryContract.CurrentInventoryEntry.COLUMN_QTY,
+            InventoryContract.CurrentInventoryEntry.COLUMN_DONOR,
+            InventoryContract.CurrentInventoryEntry.COLUMN_DATE_RECEIVED,
+            InventoryContract.CurrentInventoryEntry.COLUMN_WAREHOUSE,
+            InventoryContract.ItemEntry.TABLE_NAME + "." + InventoryContract.ItemEntry._ID,
+            InventoryContract.ItemEntry.COLUMN_BARCODE_ID,
+            InventoryContract.ItemEntry.COLUMN_NAME,
+            InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
+            InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY,
+            InventoryContract.ItemEntry.COLUMN_VALUE,
+            InventoryContract.CategoryEntry.TABLE_NAME + "." + InventoryContract.CategoryEntry._ID,
+            InventoryContract.CategoryEntry.COLUMN_NAME,
+            InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
     };
 
     // Current inventory column indices
@@ -57,8 +62,11 @@ public class ViewCurrentInventoryListFragment extends Fragment
     public static final int COL_ITEM_BARCODE = 7;
     public static final int COL_ITEM_NAME = 8;
     public static final int COL_ITEM_DESCRIPTION = 9;
-    public static final int COL_ITEM_CATEGORY = 10;
+    public static final int COL_ITEM_CATEGORY_KEY = 10;
     public static final int COL_ITEM_VALUE = 11;
+    public static final int COL_CATEGORY_ID = 12;
+    public static final int COL_CATEGORY_NAME = 13;
+    public static final int COL_CATEGORY_BARCODE_PREFIX = 14;
 
     public interface Callback {
         void onCurrentInventorySelected(Uri currentItemURI);

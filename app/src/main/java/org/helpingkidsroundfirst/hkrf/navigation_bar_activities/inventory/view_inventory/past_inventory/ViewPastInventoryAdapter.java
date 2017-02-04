@@ -52,7 +52,7 @@ public class ViewPastInventoryAdapter extends CursorAdapter {
         //get data from cursor
         String name = cursor.getString(ViewPastInventoryListFragment.COL_ITEM_NAME);
         String description = cursor.getString(ViewPastInventoryListFragment.COL_ITEM_DESCRIPTION);
-        String category = cursor.getString(ViewPastInventoryListFragment.COL_ITEM_CATEGORY);
+        String category = cursor.getString(ViewPastInventoryListFragment.COL_CATEGORY_NAME);
         int qty = cursor.getInt(ViewPastInventoryListFragment.COL_PAST_QTY);
         String qty_str = "" + qty;
 

@@ -45,8 +45,11 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
             InventoryContract.ItemEntry.COLUMN_BARCODE_ID,
             InventoryContract.ItemEntry.COLUMN_NAME,
             InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
-            InventoryContract.ItemEntry.COLUMN_CATEGORY,
-            InventoryContract.ItemEntry.COLUMN_VALUE
+            InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY,
+            InventoryContract.ItemEntry.COLUMN_VALUE,
+            InventoryContract.CategoryEntry.TABLE_NAME + "." + InventoryContract.CategoryEntry._ID,
+            InventoryContract.CategoryEntry.COLUMN_NAME,
+            InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
     };
 
     // Current inventory column indices
@@ -60,8 +63,11 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
     public static final int COL_ITEM_BARCODE = 7;
     public static final int COL_ITEM_NAME = 8;
     public static final int COL_ITEM_DESCRIPTION = 9;
-    public static final int COL_ITEM_CATEGORY = 10;
+    public static final int COL_ITEM_CATEGORY_KEY = 10;
     public static final int COL_ITEM_VALUE = 11;
+    public static final int COL_CATEGORY_ID = 12;
+    public static final int COL_CATEGORY_NAME = 13;
+    public static final int COL_CATEGORY_BARCODE_PREFIX = 14;
 
     public static final String DETAILED_CURRENT_KEY = "CURRENT_URI";
     public static final int CURRENT_DETAIL_LOADER = 5;
@@ -129,7 +135,7 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
             //read data from cursor
             String name = data.getString(COL_ITEM_NAME);
             String description = data.getString(COL_ITEM_DESCRIPTION);
-            String category = data.getString(COL_ITEM_CATEGORY);
+            String category = data.getString(COL_CATEGORY_NAME);
             int value = data.getInt(COL_ITEM_VALUE);
             String valueString = "" + value;
             String barcode = data.getString(COL_ITEM_BARCODE);
