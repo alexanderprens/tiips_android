@@ -8,11 +8,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.helpingkidsroundfirst.hkrf.R;
@@ -25,15 +27,23 @@ import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
 public class AddItemDialogFragment extends DialogFragment implements
         View.OnClickListener {
 
+    // category columns
+    private static final String[] CATEGORY_COLUMNS = {
+            InventoryContract.CategoryEntry.COLUMN_CATEGORY
+    };
+    private static int[] TO_VIEWS = {
+            android.R.id.text1
+    };
     // dialog inputs
     private String nameInput;
     private String descInput;
-    private String categoryInput;
+    private long categoryInput;
     private String valueInString;
     private int valueInput;
     private String barcodeInput;
     private String error;
     private AddItemDialogListener caller;
+    private Spinner categorySpinner;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -61,7 +71,7 @@ public class AddItemDialogFragment extends DialogFragment implements
         //init inputs
         nameInput = "";
         descInput = "";
-        categoryInput = "";
+        categoryInput = -1;
         valueInput = 0;
         valueInString = "";
         barcodeInput = "";
@@ -105,23 +115,27 @@ public class AddItemDialogFragment extends DialogFragment implements
         });
 
         // listen to category input
-        final EditText catText = (EditText) view.findViewById(R.id.new_item_category);
-        catText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // required stub
-            }
+        categorySpinner = (Spinner) view.findViewById(R.id.new_item_category);
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                categoryInput = s.toString();
-            }
+        Cursor cursor = getContext().getContentResolver().query(
+                InventoryContract.CategoryEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                InventoryContract.CategoryEntry.COLUMN_CATEGORY
+        );
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                // required stub
-            }
-        });
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                getContext(),
+                android.R.layout.simple_spinner_item,
+                cursor,
+                CATEGORY_COLUMNS,
+                TO_VIEWS,
+                0
+        );
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(adapter);
 
         // listen to value input
         final EditText valueText = (EditText) view.findViewById(R.id.new_item_value);
@@ -143,6 +157,7 @@ public class AddItemDialogFragment extends DialogFragment implements
         });
 
         // listen to barcode input
+        // TODO: 2/4/2017 change barcode to last 4 input
         final EditText barcodeText = (EditText) view.findViewById(R.id.new_item_barcode);
         barcodeText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -180,7 +195,6 @@ public class AddItemDialogFragment extends DialogFragment implements
                 break;
 
             case R.id.new_item_cancel:
-                caller.onButtonCancel();
                 this.dismiss();
                 break;
             default:
@@ -200,8 +214,7 @@ public class AddItemDialogFragment extends DialogFragment implements
             if (!checkIfItemExists(barcodeInput)) {
 
                 // attempt to add item
-                if (addInventoryItemToDB(nameInput, descInput, categoryInput, barcodeInput,
-                        valueInput) != -1) {
+                if (addInventoryItemToDB() != -1) {
                     added = true;
                 } else {
                     error = "Error adding item to database";
@@ -255,7 +268,8 @@ public class AddItemDialogFragment extends DialogFragment implements
         // Check if barcode id already exists in the db
         Cursor itemCursor = getContext().getContentResolver().query(
                 InventoryContract.ItemEntry.CONTENT_URI,
-                new String[]{InventoryContract.ItemEntry._ID},
+                new String[]{InventoryContract.ItemEntry.TABLE_NAME + "." +
+                        InventoryContract.ItemEntry._ID},
                 InventoryContract.ItemEntry.COLUMN_BARCODE_ID + " = ?",
                 new String[]{barcode},
                 null
@@ -268,17 +282,20 @@ public class AddItemDialogFragment extends DialogFragment implements
         return exists;
     }
 
-    private long addInventoryItemToDB(String name, String desc, String cat, String barcode, int value) {
+    private long addInventoryItemToDB() {
         long itemId;
 
         ContentValues itemValues = new ContentValues();
 
+        // get category id
+        categoryInput = categorySpinner.getSelectedItemId();
+
         // make content values of inventory item data
-        itemValues.put(InventoryContract.ItemEntry.COLUMN_NAME, name);
-        itemValues.put(InventoryContract.ItemEntry.COLUMN_DESCRIPTION, desc);
-        itemValues.put(InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY, cat);   // TODO: 2/3/2017 fix this
-        itemValues.put(InventoryContract.ItemEntry.COLUMN_BARCODE_ID, barcode);
-        itemValues.put(InventoryContract.ItemEntry.COLUMN_VALUE, value);
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_NAME, nameInput);
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_DESCRIPTION, descInput);
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY, categoryInput);
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_BARCODE_ID, barcodeInput);
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_VALUE, valueInString);
 
         // insert item into database
         Uri insertedUri = getContext().getContentResolver().insert(
@@ -293,7 +310,5 @@ public class AddItemDialogFragment extends DialogFragment implements
 
     public interface AddItemDialogListener {
         void onButtonOK();
-
-        void onButtonCancel();
     }
 }

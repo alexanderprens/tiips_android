@@ -156,6 +156,8 @@ public class AddCategoryDialogFragment extends DialogFragment implements
             Toast.makeText(getActivity(), "Category cannot be empty", Toast.LENGTH_SHORT).show();
         }
 
+        // TODO: 2/4/2017 two letter validation for barcode
+
         return check;
     }
 

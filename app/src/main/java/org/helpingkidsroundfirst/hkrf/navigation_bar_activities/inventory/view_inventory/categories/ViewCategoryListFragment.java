@@ -79,9 +79,9 @@ public class ViewCategoryListFragment extends Fragment implements
 
                 // gets the item id from the selected item
                 if (cursor != null) {
-                    ((Callback) getActivity())
-                            .onCategorySelected(InventoryContract.ItemEntry
-                                    .buildInventoryItemWithIdUri(
+                    ((ViewCategoryListFragment.Callback) getActivity())
+                            .onCategorySelected(InventoryContract.CategoryEntry
+                                    .buildCategoryWithIdUri(
                                             cursor.getLong(COL_CATEGORY_ID)
                                     )
                             );

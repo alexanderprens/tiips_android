@@ -154,11 +154,6 @@ public class ViewInventoryItemListFragment extends Fragment
         getLoaderManager().restartLoader(INVENTORY_ITEM_LOADER, null, this);
     }
 
-    @Override
-    public void onButtonCancel() {
-        // do nothing on cancel
-    }
-
     // Callback for when item is selected
     public interface Callback {
         void onItemSelected(Uri invItemURI);

@@ -26,7 +26,7 @@
     <!-- dialog_add_inventory_item -->
     <string name="add_inventory_item_title">New Inventory Item</string>
     <string name="add_inv_name">Item Name</string>
-    <string name="add_inv_barcode">Barcode #</string>
+    <string name="add_inv_barcode">Barcode (HKRF-XX-XXXX)</string>
     <string name="add_inv_desc">Description</string>
     <string name="add_inv_category">Category</string>
     <string name="add_inv_value">Value</string>

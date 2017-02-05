@@ -50,6 +50,10 @@ public class InventoryProvider extends ContentProvider {
     private static final String sPastInventoryIdSelection =
             InventoryContract.PastInventoryEntry.TABLE_NAME + "." +
                     InventoryContract.PastInventoryEntry._ID + " = ? ";
+    // category with id
+    private static final String sCategoryIdSelection =
+            InventoryContract.CategoryEntry.TABLE_NAME + "." +
+                    InventoryContract.CategoryEntry._ID + " = ? ";
 
     static {
         sInventoryItemQueryBuilder = new SQLiteQueryBuilder();
@@ -140,6 +144,20 @@ public class InventoryProvider extends ContentProvider {
     }
 
     // Cursors
+    // category with id cursor
+    private Cursor getCategoryById(Uri uri, String[] projection, String sortOrder) {
+        long categoryId = InventoryContract.CategoryEntry.getCategoryIdFromUri(uri);
+
+        return mOpenHelper.getReadableDatabase().query(
+                InventoryContract.CategoryEntry.TABLE_NAME,
+                projection,
+                sCategoryIdSelection,
+                new String[]{Long.toString(categoryId)},
+                null,
+                null,
+                sortOrder
+        );
+    }
     // inventory with id cursor
     private Cursor getItemById(Uri uri, String[] projection, String sortOrder) {
         long itemId = InventoryContract.ItemEntry.getItemIdFromUri(uri);
@@ -305,8 +323,7 @@ public class InventoryProvider extends ContentProvider {
                 );
                 break;
             case CATEGORY_WITH_ID:
-                // TODO: 2/3/2017 implement query
-                retCursor = null;
+                retCursor = getCategoryById(uri, projection, sortOrder);
                 break;
 
             default:

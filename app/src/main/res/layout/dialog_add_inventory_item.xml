@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
@@ -10,61 +10,58 @@
         android:text="@string/add_inventory_item_title"/>
 
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/new_item_name"
-        android:inputType="text"
-        android:hint="@string/add_inv_name" />
-
-    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="@string/add_inv_name"
+        android:inputType="textCapWords" />
+
+    <EditText
         android:id="@+id/new_item_desc"
-        android:inputType="text"
-        android:hint="@string/add_inv_desc" />
-
-    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:id="@+id/new_item_category"
-        android:inputType="text"
-        android:hint="@string/add_inv_category" />
+        android:hint="@string/add_inv_desc"
+        android:inputType="textCapSentences" />
 
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
         android:id="@+id/new_item_value"
-        android:inputType="number"
-        android:hint="@string/add_inv_value" />
-
-    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
         android:ems="10"
+        android:hint="@string/add_inv_value"
+        android:inputType="number" />
+
+    <Spinner
+        android:id="@+id/new_item_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
         android:id="@+id/new_item_barcode"
-        android:hint="@string/add_inv_barcode" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/add_inv_barcode"
+        android:inputType="textCapCharacters" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
         <Button
-            android:text="@string/add_inv_cancel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/new_item_cancel"
-            android:layout_weight="1" />
-
-        <Button
-            android:text="@string/add_inv_ok"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/add_inv_cancel" />
+
+        <Button
             android:id="@+id/new_item_ok"
-            android:layout_weight="1" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/add_inv_ok" />
     </LinearLayout>
 
 </LinearLayout>

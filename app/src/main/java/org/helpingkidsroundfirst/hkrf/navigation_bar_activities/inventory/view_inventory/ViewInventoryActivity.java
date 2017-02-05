@@ -22,7 +22,8 @@ public class ViewInventoryActivity extends AppCompatActivity
     implements onViewInventoryButtonListener,
         ViewInventoryItemListFragment.Callback,
         ViewCurrentInventoryListFragment.Callback,
-        ViewPastInventoryListFragment.Callback {
+        ViewPastInventoryListFragment.Callback,
+        ViewCategoryListFragment.Callback {
 
     private static final String TAG = "ViewInventoryActivity";
 
@@ -117,6 +118,11 @@ public class ViewInventoryActivity extends AppCompatActivity
 
         //replace fragment
         startFragment(fragment, "ViewPastInventoryDetailFragment");
+    }
+
+    @Override
+    public void onCategorySelected(Uri categoryUri) {
+        // TODO: 2/4/2017 create detail fragment for category
     }
 
     private void startFragment(Fragment fragment, String fragmentTag) {
