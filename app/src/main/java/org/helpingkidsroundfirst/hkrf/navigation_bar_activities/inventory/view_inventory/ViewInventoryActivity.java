@@ -1,5 +1,6 @@
 package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory;
 
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.ViewInventoryFragment.onViewInventoryButtonListener;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.categories.ViewCategoryDetailFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.categories.ViewCategoryListFragment;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.category_intermediate.ViewIntermediateListFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.current_inventory.ViewCurrentInventoryDetailFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.current_inventory.ViewCurrentInventoryListFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.inventory_items.ViewInventoryItemDetailFragment;
@@ -24,7 +26,8 @@ public class ViewInventoryActivity extends AppCompatActivity
         ViewInventoryItemListFragment.Callback,
         ViewCurrentInventoryListFragment.Callback,
         ViewPastInventoryListFragment.Callback,
-        ViewCategoryListFragment.Callback {
+        ViewCategoryListFragment.Callback,
+        ViewIntermediateListFragment.Callback {
 
     private static final String TAG = "ViewInventoryActivity";
 
@@ -51,23 +54,51 @@ public class ViewInventoryActivity extends AppCompatActivity
     // View inventory button listener
     public void onViewInventoryButtonClicked(int button){
         Fragment fragment;
+        Bundle bundle;
 
         switch (button){
             case ViewInventoryFragment.BUTTON_ITEM:
-                fragment = new ViewInventoryItemListFragment();
-                startFragment(fragment, "ViewInventoryItemListFragment");
+                //create fragment
+                fragment = new ViewIntermediateListFragment();
+
+                //create bundle for fragment
+                bundle = new Bundle();
+                bundle.putInt(ViewIntermediateListFragment.EXPECTED_KEY,
+                        ViewIntermediateListFragment.EXPECTED_INVENTORY_ITEM);
+                fragment.setArguments(bundle);
+
+                //replace fragment
+                startFragment(fragment, "ViewIntermediateListFragment");
                 getSupportActionBar().setTitle("Barcode Items");
                 break;
 
             case ViewInventoryFragment.BUTTON_CURRENT:
-                fragment = new ViewCurrentInventoryListFragment();
-                startFragment(fragment, "ViewCurrentInventoryListFragment");
+                //create fragment
+                fragment = new ViewIntermediateListFragment();
+
+                //create bundle for fragment
+                bundle = new Bundle();
+                bundle.putInt(ViewIntermediateListFragment.EXPECTED_KEY,
+                        ViewIntermediateListFragment.EXPECTED_CURRENT_INVENTORY);
+                fragment.setArguments(bundle);
+
+                //replace fragment
+                startFragment(fragment, "ViewIntermediateListFragment");
                 getSupportActionBar().setTitle("View Current Inventory");
                 break;
 
             case ViewInventoryFragment.BUTTON_PAST:
-                fragment = new ViewPastInventoryListFragment();
-                startFragment(fragment, "ViewPastInventoryListFragment");
+                //create fragment
+                fragment = new ViewIntermediateListFragment();
+
+                //create bundle for fragment
+                bundle = new Bundle();
+                bundle.putInt(ViewIntermediateListFragment.EXPECTED_KEY,
+                        ViewIntermediateListFragment.EXPECTED_PAST_INVENTORY);
+                fragment.setArguments(bundle);
+
+                //replace fragment
+                startFragment(fragment, "ViewIntermediateListFragment");
                 getSupportActionBar().setTitle("View Past Inventory");
                 break;
 
