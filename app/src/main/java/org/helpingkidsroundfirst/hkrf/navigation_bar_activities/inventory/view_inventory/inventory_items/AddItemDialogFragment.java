@@ -13,8 +13,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.helpingkidsroundfirst.hkrf.R;
@@ -44,6 +46,8 @@ public class AddItemDialogFragment extends DialogFragment implements
     private String error;
     private AddItemDialogListener caller;
     private Spinner categorySpinner;
+    private String barcodePrefix;
+    private TextView prefixView;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -136,6 +140,17 @@ public class AddItemDialogFragment extends DialogFragment implements
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(adapter);
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                getBarcodePrefix();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         // listen to value input
         final EditText valueText = (EditText) view.findViewById(R.id.new_item_value);
@@ -157,7 +172,6 @@ public class AddItemDialogFragment extends DialogFragment implements
         });
 
         // listen to barcode input
-        // TODO: 2/4/2017 change barcode to last 4 input
         final EditText barcodeText = (EditText) view.findViewById(R.id.new_item_barcode);
         barcodeText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -175,6 +189,9 @@ public class AddItemDialogFragment extends DialogFragment implements
                 // required stub
             }
         });
+
+        prefixView = (TextView) view.findViewById(R.id.new_item_prefix);
+        getBarcodePrefix();
 
         builder.setView(view);
         return builder.create();
@@ -211,7 +228,7 @@ public class AddItemDialogFragment extends DialogFragment implements
         if(dialogValidation()) {
 
             // check if item already exists
-            if (!checkIfItemExists(barcodeInput)) {
+            if (!checkIfItemExists()) {
 
                 // attempt to add item
                 if (addInventoryItemToDB() != -1) {
@@ -255,15 +272,26 @@ public class AddItemDialogFragment extends DialogFragment implements
         if(barcodeInput.isEmpty()) {
             check = false;
             Toast.makeText(getActivity(), "Barcode cannot be empty", Toast.LENGTH_SHORT).show();
+        } else {
+
+            if (barcodeInput.length() != 4) {
+                check = false;
+                Toast.makeText(getActivity(), "Barcode must be 4 characters", Toast.LENGTH_SHORT)
+                        .show();
+            }
         }
 
         return check;
     }
 
     // checks if item already exists by looking at the barcode string
-    private boolean checkIfItemExists(String barcode) {
+    private boolean checkIfItemExists() {
 
         boolean exists;
+
+        // get barcode prefix
+        getBarcodePrefix();
+        String barcodeFull = "HKRF-" + barcodePrefix + "-" + barcodeInput;
 
         // Check if barcode id already exists in the db
         Cursor itemCursor = getContext().getContentResolver().query(
@@ -271,7 +299,7 @@ public class AddItemDialogFragment extends DialogFragment implements
                 new String[]{InventoryContract.ItemEntry.TABLE_NAME + "." +
                         InventoryContract.ItemEntry._ID},
                 InventoryContract.ItemEntry.COLUMN_BARCODE_ID + " = ?",
-                new String[]{barcode},
+                new String[]{barcodeFull},
                 null
         );
 
@@ -284,6 +312,7 @@ public class AddItemDialogFragment extends DialogFragment implements
 
     private long addInventoryItemToDB() {
         long itemId;
+        String barcodeFull = "HKRF-" + barcodePrefix + "-" + barcodeInput;
 
         ContentValues itemValues = new ContentValues();
 
@@ -294,7 +323,7 @@ public class AddItemDialogFragment extends DialogFragment implements
         itemValues.put(InventoryContract.ItemEntry.COLUMN_NAME, nameInput);
         itemValues.put(InventoryContract.ItemEntry.COLUMN_DESCRIPTION, descInput);
         itemValues.put(InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY, categoryInput);
-        itemValues.put(InventoryContract.ItemEntry.COLUMN_BARCODE_ID, barcodeInput);
+        itemValues.put(InventoryContract.ItemEntry.COLUMN_BARCODE_ID, barcodeFull);
         itemValues.put(InventoryContract.ItemEntry.COLUMN_VALUE, valueInString);
 
         // insert item into database
@@ -306,6 +335,31 @@ public class AddItemDialogFragment extends DialogFragment implements
         itemId = ContentUris.parseId(insertedUri);
 
         return itemId;
+    }
+
+    private void getBarcodePrefix() {
+
+        String barcodeFull;
+
+        Uri prefixUri = InventoryContract.CategoryEntry.buildCategoryWithIdUri(
+                categorySpinner.getSelectedItemId());
+        Cursor prefixCursor = getContext().getContentResolver().query(
+                prefixUri,
+                null,
+                null,
+                null,
+                null
+        );
+
+        if (null != prefixCursor && prefixCursor.moveToFirst()) {
+            barcodePrefix = prefixCursor.getString(2);
+        } else {
+            barcodePrefix = "XX";
+        }
+        prefixCursor.close();
+
+        barcodeFull = "HKRF-" + barcodePrefix + "-" + barcodeInput;
+        prefixView.setText(barcodeFull);
     }
 
     public interface AddItemDialogListener {
