@@ -10,6 +10,7 @@ import android.util.Log;
 
 import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.ViewInventoryFragment.onViewInventoryButtonListener;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.categories.ViewCategoryDetailFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.categories.ViewCategoryListFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.current_inventory.ViewCurrentInventoryDetailFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.current_inventory.ViewCurrentInventoryListFragment;
@@ -122,7 +123,16 @@ public class ViewInventoryActivity extends AppCompatActivity
 
     @Override
     public void onCategorySelected(Uri categoryUri) {
-        // TODO: 2/4/2017 create detail fragment for category
+        //create fragment
+        Fragment fragment = new ViewCategoryDetailFragment();
+
+        //create bundle for fragment
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(ViewCategoryDetailFragment.DETAILED_CATEGORY_KEY, categoryUri);
+        fragment.setArguments(bundle);
+
+        //replace fragment
+        startFragment(fragment, "ViewCategoryDetailFragment");
     }
 
     private void startFragment(Fragment fragment, String fragmentTag) {

@@ -142,6 +142,8 @@ public class AddCategoryDialogFragment extends DialogFragment implements
             } else {
                 error = "Category already exists in database";
             }
+        } else {
+            error = "Validation Error";
         }
 
         return added;
@@ -151,12 +153,27 @@ public class AddCategoryDialogFragment extends DialogFragment implements
     private boolean dialogValidation() {
         boolean check = true;
 
+        // check if category is empty
         if (categoryInput.isEmpty()) {
             check = false;
             Toast.makeText(getActivity(), "Category cannot be empty", Toast.LENGTH_SHORT).show();
         }
 
-        // TODO: 2/4/2017 two letter validation for barcode
+        // check if barcode prefix is empty or greater than
+        if (barcodeInput.isEmpty()) {
+            check = false;
+            Toast.makeText(getContext(), "Barcode prefix cannot be empty",
+                    Toast.LENGTH_SHORT).show();
+
+        } else {
+
+            // check if barcode prefix is two letters
+            if (barcodeInput.length() != 2) {
+                check = false;
+                Toast.makeText(getContext(), "Barcode prefix must be 2 characters",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
 
         return check;
     }
