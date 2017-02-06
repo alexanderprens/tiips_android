@@ -39,6 +39,7 @@ public class ViewPastInventoryListFragment extends Fragment
     public static final int COL_CATEGORY_ID = 11;
     public static final int COL_CATEGORY_NAME = 12;
     public static final int COL_CATEGORY_BARCODE = 13;
+    public static final String PAST_URI_KEY = "past_uri_key";
     private static final String SELECTED_KEY = "selected_position";
     private static final int PAST_INVENTORY_LOADER = 2;
     // Past inventory columns
@@ -61,6 +62,7 @@ public class ViewPastInventoryListFragment extends Fragment
     private ViewPastInventoryAdapter mViewPastInventoryAdapter;
     private ListView mListView;
     private int mPosition = ListView.INVALID_POSITION;
+    private Uri mUri;
 
     public ViewPastInventoryListFragment() {
         // Required empty public constructor
@@ -88,6 +90,12 @@ public class ViewPastInventoryListFragment extends Fragment
             }
         });
 
+        // get uri from arguments
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            mUri = bundle.getParcelable(PAST_URI_KEY);
+        }
+
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
@@ -111,17 +119,20 @@ public class ViewPastInventoryListFragment extends Fragment
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String sortOrder = ItemEntry.COLUMN_NAME + " ASC";
 
-        Uri pastInventoryUri = PastInventoryEntry.buildPastInventoryUri();
+        if (mUri != null) {
+            String sortOrder = ItemEntry.COLUMN_NAME + " ASC";
 
-        return new CursorLoader(getActivity(),
-                pastInventoryUri,
-                PAST_INVENTORY_COLUMNS,
-                null,
-                null,
-                sortOrder
-        );
+            return new CursorLoader(getActivity(),
+                    mUri,
+                    PAST_INVENTORY_COLUMNS,
+                    null,
+                    null,
+                    sortOrder
+            );
+        }
+
+        return null;
     }
 
     @Override

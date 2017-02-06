@@ -25,12 +25,25 @@ import org.helpingkidsroundfirst.hkrf.data.InventoryContract.ItemEntry;
 public class ViewCurrentInventoryListFragment extends Fragment
     implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private ViewCurrentInventoryAdapter mViewCurrentInventoryAdapter;
-    private ListView mListView;
-    private int mPosition = ListView.INVALID_POSITION;
+    // Current inventory column indices
+    public static final int COL_CURRENT_ID = 0;
+    public static final int COL_CURRENT_ITEM_KEY = 1;
+    public static final int COL_CURRENT_QTY = 2;
+    public static final int COL_CURRENT_DATE_RECEIVED = 3;
+    public static final int COL_CURRENT_DONOR = 4;
+    public static final int COL_CURRENT_WAREHOUSE = 5;
+    public static final int COL_ITEM_ID = 6;
+    public static final int COL_ITEM_BARCODE = 7;
+    public static final int COL_ITEM_NAME = 8;
+    public static final int COL_ITEM_DESCRIPTION = 9;
+    public static final int COL_ITEM_CATEGORY_KEY = 10;
+    public static final int COL_ITEM_VALUE = 11;
+    public static final int COL_CATEGORY_ID = 12;
+    public static final int COL_CATEGORY_NAME = 13;
+    public static final int COL_CATEGORY_BARCODE_PREFIX = 14;
+    public static final String CURRENT_URI_KEY = "current_uri_key";
     private static final String SELECTED_KEY = "selected_position";
     private static final int CURRENT_INVENTORY_LOADER = 1;
-
     // Current inventory columns
     private static final String[] CURRENT_INVENTORY_COLUMNS = {
             InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
@@ -50,27 +63,10 @@ public class ViewCurrentInventoryListFragment extends Fragment
             InventoryContract.CategoryEntry.COLUMN_CATEGORY,
             InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
     };
-
-    // Current inventory column indices
-    public static final int COL_CURRENT_ID = 0;
-    public static final int COL_CURRENT_ITEM_KEY = 1;
-    public static final int COL_CURRENT_QTY = 2;
-    public static final int COL_CURRENT_DATE_RECEIVED = 3;
-    public static final int COL_CURRENT_DONOR = 4;
-    public static final int COL_CURRENT_WAREHOUSE = 5;
-    public static final int COL_ITEM_ID = 6;
-    public static final int COL_ITEM_BARCODE = 7;
-    public static final int COL_ITEM_NAME = 8;
-    public static final int COL_ITEM_DESCRIPTION = 9;
-    public static final int COL_ITEM_CATEGORY_KEY = 10;
-    public static final int COL_ITEM_VALUE = 11;
-    public static final int COL_CATEGORY_ID = 12;
-    public static final int COL_CATEGORY_NAME = 13;
-    public static final int COL_CATEGORY_BARCODE_PREFIX = 14;
-
-    public interface Callback {
-        void onCurrentInventorySelected(Uri currentItemURI);
-    }
+    private ViewCurrentInventoryAdapter mViewCurrentInventoryAdapter;
+    private ListView mListView;
+    private int mPosition = ListView.INVALID_POSITION;
+    private Uri mUri;
 
     public ViewCurrentInventoryListFragment() {
         // Required empty public constructor
@@ -100,6 +96,12 @@ public class ViewCurrentInventoryListFragment extends Fragment
             }
         });
 
+        // get arguments from bundle
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            mUri = bundle.getParcelable(CURRENT_URI_KEY);
+        }
+
         if(savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
@@ -126,17 +128,20 @@ public class ViewCurrentInventoryListFragment extends Fragment
     // when a new loader is created for the view
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String sortOrder = ItemEntry.COLUMN_NAME + " ASC";
 
-        Uri currentInventoryUri = CurrentInventoryEntry.buildCurrentInventoryUri();
+        if (mUri != null) {
+            String sortOrder = ItemEntry.COLUMN_NAME + " ASC";
 
-        return new CursorLoader(getActivity(),
-                currentInventoryUri,
-                CURRENT_INVENTORY_COLUMNS,
-                null,
-                null,
-                sortOrder
-        );
+            return new CursorLoader(getActivity(),
+                    mUri,
+                    CURRENT_INVENTORY_COLUMNS,
+                    null,
+                    null,
+                    sortOrder
+            );
+        }
+
+        return null;
     }
 
     @Override
@@ -153,5 +158,9 @@ public class ViewCurrentInventoryListFragment extends Fragment
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mViewCurrentInventoryAdapter.swapCursor(null);
+    }
+
+    public interface Callback {
+        void onCurrentInventorySelected(Uri currentItemURI);
     }
 }

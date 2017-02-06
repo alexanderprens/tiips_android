@@ -31,6 +31,7 @@ public class ViewInventoryItemListFragment extends Fragment
     public static final int COL_ITEM_NAME = 2;
     public static final int COL_ITEM_DESC = 3;
     public static final int COL_CATEGORY_NAME = 4;
+    public static final String ITEM_URI_KEY = "item_uri_key";
     private static final String SELECTED_KEY = "selected_position";
     private static final int INVENTORY_ITEM_LOADER = 0;
 
@@ -45,6 +46,7 @@ public class ViewInventoryItemListFragment extends Fragment
     private ViewInventoryItemAdapter mViewInventoryItemAdapter;
     private ListView mListView;
     private int mPosition = ListView.INVALID_POSITION;
+    private Uri mUri;
 
     public ViewInventoryItemListFragment() {
         // Required empty public constructor
@@ -93,6 +95,12 @@ public class ViewInventoryItemListFragment extends Fragment
             }
         });
 
+        // get uri from arguments
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            mUri = bundle.getParcelable(ITEM_URI_KEY);
+        }
+
         // Check for instance state
         if(savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)){
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
@@ -120,18 +128,19 @@ public class ViewInventoryItemListFragment extends Fragment
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle){
         // called when a new loader is created
+        if (mUri != null) {
+            String sortOrder = InventoryContract.ItemEntry.COLUMN_NAME + " ASC";
 
-        String sortOrder = InventoryContract.ItemEntry.COLUMN_NAME + " ASC";
+            return new CursorLoader(getActivity(),
+                    mUri,
+                    INVENTORY_ITEM_COLUMNS,
+                    null,
+                    null,
+                    sortOrder
+            );
+        }
 
-        Uri itemUri = InventoryContract.ItemEntry.buildInventoryItemUri();
-
-        return new CursorLoader(getActivity(),
-                itemUri,
-                INVENTORY_ITEM_COLUMNS,
-                null,
-                null,
-                sortOrder
-        );
+        return null;
     }
 
     @Override

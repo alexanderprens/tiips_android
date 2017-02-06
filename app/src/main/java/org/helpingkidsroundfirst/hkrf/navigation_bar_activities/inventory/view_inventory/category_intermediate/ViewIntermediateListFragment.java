@@ -74,7 +74,7 @@ public class ViewIntermediateListFragment extends Fragment implements
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
 
                 if (cursor != null) {
-                    // TODO: 2/5/2017 implement click for item/current/past
+                    handleOnItemClickListener(cursor);
                 }
                 mPosition = position;
             }
@@ -148,16 +148,18 @@ public class ViewIntermediateListFragment extends Fragment implements
                     null,
                     sortOrder
             );
+        } else {
+            return null;
         }
-        return null;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
-        mViewIntermediateAdapter.swapCursor(data);
-        if (mPosition != ListView.INVALID_POSITION) {
-            mListView.smoothScrollToPosition(mPosition);
+        if (data != null && data.moveToFirst()) {
+            mViewIntermediateAdapter.swapCursor(data);
+            if (mPosition != ListView.INVALID_POSITION) {
+                mListView.smoothScrollToPosition(mPosition);
+            }
         }
     }
 
@@ -171,7 +173,36 @@ public class ViewIntermediateListFragment extends Fragment implements
         getLoaderManager().restartLoader(INTERMEDIATE_LOADER, null, this);
     }
 
-    public interface Callback {
+    private void handleOnItemClickListener(Cursor cursor) {
+        Uri uri;
+        Callback callback = (Callback) getActivity();
 
+        switch (mExpected) {
+            case EXPECTED_CURRENT_INVENTORY:
+                uri = InventoryContract.CurrentInventoryEntry
+                        .buildCurrentInventoryWithCategoryUri(cursor.getLong(COL_CATEGORY_ID));
+                break;
+
+            case EXPECTED_PAST_INVENTORY:
+                uri = InventoryContract.PastInventoryEntry
+                        .buildPastInventoryWithCategoryUri(cursor.getLong(COL_CATEGORY_ID));
+                break;
+
+            case EXPECTED_INVENTORY_ITEM:
+                uri = InventoryContract.ItemEntry
+                        .buildInventoryItemWithCategoryUri(cursor.getLong(COL_CATEGORY_ID));
+                break;
+
+            default:
+                uri = InventoryContract.ItemEntry
+                        .buildInventoryItemWithCategoryUri(cursor.getLong(COL_CATEGORY_ID));
+                break;
+        }
+
+        callback.onIntermediateCategorySelected(uri, mExpected);
+    }
+
+    public interface Callback {
+        void onIntermediateCategorySelected(Uri uri, int expected);
     }
 }

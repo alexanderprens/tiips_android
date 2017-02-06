@@ -173,4 +173,61 @@ public class ViewInventoryActivity extends AppCompatActivity
                 .addToBackStack(fragmentTag)
                 .commit();
     }
+
+    @Override
+    public void onIntermediateCategorySelected(Uri uri, int expected) {
+
+        Fragment fragment;
+        Bundle bundle = new Bundle();
+
+        switch (expected) {
+            case ViewIntermediateListFragment.EXPECTED_CURRENT_INVENTORY:
+                //create fragment
+                fragment = new ViewCurrentInventoryListFragment();
+
+                //create bundle for fragment
+                bundle.putParcelable(ViewCurrentInventoryListFragment.CURRENT_URI_KEY, uri);
+                fragment.setArguments(bundle);
+
+                //replace fragment
+                startFragment(fragment, "ViewCurrentInventoryListFragment");
+                break;
+
+            case ViewIntermediateListFragment.EXPECTED_PAST_INVENTORY:
+                //create fragment
+                fragment = new ViewPastInventoryListFragment();
+
+                //create bundle for fragment
+                bundle.putParcelable(ViewPastInventoryListFragment.PAST_URI_KEY, uri);
+                fragment.setArguments(bundle);
+
+                //replace fragment
+                startFragment(fragment, "ViewPastInventoryListFragment");
+                break;
+
+            case ViewIntermediateListFragment.EXPECTED_INVENTORY_ITEM:
+                //create fragment
+                fragment = new ViewInventoryItemListFragment();
+
+                //create bundle for fragment
+                bundle.putParcelable(ViewInventoryItemListFragment.ITEM_URI_KEY, uri);
+                fragment.setArguments(bundle);
+
+                //replace fragment
+                startFragment(fragment, "ViewInventoryItemListFragment");
+                break;
+
+            default:
+                //create fragment
+                fragment = new ViewInventoryItemListFragment();
+
+                //create bundle for fragment
+                bundle.putParcelable(ViewInventoryItemListFragment.ITEM_URI_KEY, uri);
+                fragment.setArguments(bundle);
+
+                //replace fragment
+                startFragment(fragment, "ViewInventoryItemListFragment");
+                break;
+        }
+    }
 }

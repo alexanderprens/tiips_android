@@ -82,16 +82,17 @@ public class InventoryContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static Uri buildInventoryItemWithCategoryUri(String category) {
-            return CONTENT_URI.buildUpon().appendPath(category).build();
+        public static Uri buildInventoryItemWithCategoryUri(Long category) {
+            return CONTENT_URI.buildUpon().appendPath("category_id")
+                    .appendPath(Long.toString(category)).build();
         }
 
         public static long getItemIdFromUri(Uri uri) {
             return Long.parseLong(uri.getPathSegments().get(1));
         }
 
-        public static String getCategoryFromUri(Uri uri) {
-            return uri.getPathSegments().get(1);
+        public static Long getCategoryFromUri(Uri uri) {
+            return Long.parseLong(uri.getPathSegments().get(2));
         }
     }
 
@@ -125,16 +126,17 @@ public class InventoryContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static Uri buildCurrentInventoryWithCategoryUri(String category) {
-            return CONTENT_URI.buildUpon().appendPath(category).build();
+        public static Uri buildCurrentInventoryWithCategoryUri(Long category) {
+            return CONTENT_URI.buildUpon().appendPath("category_id")
+                    .appendPath(Long.toString(category)).build();
         }
 
         public static long getCurrentIdFromUri(Uri uri) {
             return Long.parseLong(uri.getPathSegments().get(1));
         }
 
-        public static String getCategoryFromUri(Uri uri) {
-            return uri.getPathSegments().get(1);
+        public static Long getCategoryFromUri(Uri uri) {
+            return Long.parseLong(uri.getPathSegments().get(2));
         }
     }
 
@@ -167,16 +169,17 @@ public class InventoryContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static Uri buildPastInventoryWithCategoryUri(String category) {
-            return CONTENT_URI.buildUpon().appendPath(category).build();
+        public static Uri buildPastInventoryWithCategoryUri(Long category) {
+            return CONTENT_URI.buildUpon().appendPath("category_id")
+                    .appendPath(Long.toString(category)).build();
         }
 
         public static long getPastIdFromUri(Uri uri) {
             return Long.parseLong(uri.getPathSegments().get(1));
         }
 
-        public static String getCategoryFromUri(Uri uri) {
-            return uri.getPathSegments().get(1);
+        public static Long getCategoryFromUri(Uri uri) {
+            return Long.parseLong(uri.getPathSegments().get(2));
         }
     }
 }

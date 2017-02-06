@@ -42,6 +42,9 @@ public class InventoryProvider extends ContentProvider {
     private static final String sItemIdSelection =
             InventoryContract.ItemEntry.TABLE_NAME + "." +
                     InventoryContract.ItemEntry._ID + " = ? ";
+    // inventory item with category
+    private static final String sItemCategorySelection =
+            InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY + " = ? ";
     // current inventory with id
     private static final String sCurrentInventoryIdSelection =
             InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
@@ -121,20 +124,20 @@ public class InventoryProvider extends ContentProvider {
         matcher.addURI(authority, InventoryContract.PATH_CURRENT_INVENTORY, CURRENT_INVENTORY);
         matcher.addURI(authority, InventoryContract.PATH_CURRENT_INVENTORY + "/#",
                 CURRENT_INVENTORY_WITH_ID);
-        matcher.addURI(authority, InventoryContract.PATH_CURRENT_INVENTORY + "/*",
+        matcher.addURI(authority, InventoryContract.PATH_CURRENT_INVENTORY + "/*/#",
                 CURRENT_INVENTORY_WITH_CATEGORY);
 
         // past inventory codes
         matcher.addURI(authority, InventoryContract.PATH_PAST_INVENTORY, PAST_INVENTORY);
         matcher.addURI(authority, InventoryContract.PATH_PAST_INVENTORY + "/#",
                 PAST_INVENTORY_WITH_ID);
-        matcher.addURI(authority, InventoryContract.PATH_PAST_INVENTORY + "/*",
+        matcher.addURI(authority, InventoryContract.PATH_PAST_INVENTORY + "/*/#",
                 PAST_INVENTORY_WITH_CATEGORY);
 
         // inventory item codes
         matcher.addURI(authority, InventoryContract.PATH_ITEM, INVENTORY_ITEM);
         matcher.addURI(authority, InventoryContract.PATH_ITEM + "/#", INVENTORY_ITEM_WITH_ID);
-        matcher.addURI(authority, InventoryContract.PATH_ITEM + "/*", INVENTORY_ITEM_WITH_CATEGORY);
+        matcher.addURI(authority, InventoryContract.PATH_ITEM + "/*/#", INVENTORY_ITEM_WITH_CATEGORY);
 
         // category codes
         matcher.addURI(authority, InventoryContract.PATH_CATEGORY, CATEGORY);
@@ -158,6 +161,7 @@ public class InventoryProvider extends ContentProvider {
                 sortOrder
         );
     }
+
     // inventory with id cursor
     private Cursor getItemById(Uri uri, String[] projection, String sortOrder) {
         long itemId = InventoryContract.ItemEntry.getItemIdFromUri(uri);
@@ -166,6 +170,20 @@ public class InventoryProvider extends ContentProvider {
                 projection,
                 sItemIdSelection,
                 new String[] {Long.toString(itemId)},
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    // inventory item with category
+    private Cursor getItemByCategory(Uri uri, String[] projection, String sortOrder) {
+        long categoryId = InventoryContract.ItemEntry.getCategoryFromUri(uri);
+
+        return sInventoryItemQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                sItemCategorySelection,
+                new String[]{Long.toString(categoryId)},
                 null,
                 null,
                 sortOrder
@@ -186,6 +204,20 @@ public class InventoryProvider extends ContentProvider {
         );
     }
 
+    // current inventory with category cursor
+    private Cursor getCurrentInventoryByCategory(Uri uri, String[] projection, String sortOrder) {
+        long currentInventoryId = InventoryContract.CurrentInventoryEntry.getCategoryFromUri(uri);
+
+        return sCurrentInventoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                sItemCategorySelection,
+                new String[]{Long.toString(currentInventoryId)},
+                null,
+                null,
+                sortOrder
+        );
+    }
+
     // past inventory with id cursor
     private Cursor getPastInventoryById(Uri uri, String[] projection, String sortOrder) {
         long pastInventoryId = InventoryContract.PastInventoryEntry.getPastIdFromUri(uri);
@@ -194,6 +226,20 @@ public class InventoryProvider extends ContentProvider {
                 projection,
                 sPastInventoryIdSelection,
                 new String[] {Long.toString(pastInventoryId)},
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    // past inventory with category cursor
+    private Cursor getPastInventoryByCategory(Uri uri, String[] projection, String sortOrder) {
+        long pastInventoryId = InventoryContract.PastInventoryEntry.getCategoryFromUri(uri);
+
+        return sPastInventoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                sItemCategorySelection,
+                new String[]{Long.toString(pastInventoryId)},
                 null,
                 null,
                 sortOrder
@@ -267,8 +313,7 @@ public class InventoryProvider extends ContentProvider {
                 break;
 
             case CURRENT_INVENTORY_WITH_CATEGORY:
-                // TODO: 2/3/2017 implement query
-                retCursor = null;
+                retCursor = getCurrentInventoryByCategory(uri, projection, sortOrder);
                 break;
 
             case PAST_INVENTORY:
@@ -287,8 +332,7 @@ public class InventoryProvider extends ContentProvider {
                 break;
 
             case PAST_INVENTORY_WITH_CATEGORY:
-                // TODO: 2/3/2017 implement query
-                retCursor = null;
+                retCursor = getPastInventoryByCategory(uri, projection, sortOrder);
                 break;
 
             case INVENTORY_ITEM:
@@ -307,8 +351,7 @@ public class InventoryProvider extends ContentProvider {
                 break;
 
             case INVENTORY_ITEM_WITH_CATEGORY:
-                // TODO: 2/3/2017 implement query
-                retCursor = null;
+                retCursor = getItemByCategory(uri, projection, sortOrder);
                 break;
 
             case CATEGORY:
