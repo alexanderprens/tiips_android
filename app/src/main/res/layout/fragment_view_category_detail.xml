@@ -5,8 +5,6 @@
     android:layout_height="match_parent"
     tools:context="org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.categories.ViewCategoryDetailFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/view_category_detail_fab"
         android:layout_width="match_parent"
@@ -43,6 +41,12 @@
             android:id="@+id/category_detail_barcode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/view_category_detail_delete_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/view_category_delete" />
 
     </LinearLayout>
 

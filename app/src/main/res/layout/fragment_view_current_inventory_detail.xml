@@ -1,116 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".navigation_bar_activities.inventory.view_inventory.ViewInventoryActivity">
 
-    <TextView
-        android:text="@string/view_current_inventory_detail_name"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView17" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/current_inventory_detail_text_name" />
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/view_current_inventory_detail_name" />
 
-    <TextView
-        android:text="@string/view_inventory_item_detail_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView15" />
+        <TextView
+            android:id="@+id/current_inventory_detail_text_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/current_inventory_detail_text_description" />
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/view_inventory_item_detail_description" />
 
-    <TextView
-        android:text="@string/view_inventory_item_detail_category"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView13" />
+        <TextView
+            android:id="@+id/current_inventory_detail_text_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/current_inventory_detail_text_category" />
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/view_inventory_item_detail_category" />
 
-    <TextView
-        android:text="@string/view_inventory_item_detail_barcode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView8" />
+        <TextView
+            android:id="@+id/current_inventory_detail_text_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/current_inventory_detail_text_barcode" />
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/view_inventory_item_detail_barcode" />
 
-    <TextView
-        android:text="@string/view_current_inventory_detail_value"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView4" />
+        <TextView
+            android:id="@+id/current_inventory_detail_text_barcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/current_inventory_detail_text_value" />
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/view_current_inventory_detail_value" />
 
-    <TextView
-        android:text="@string/view_current_inventory_detail_qty"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView19" />
+        <TextView
+            android:id="@+id/current_inventory_detail_text_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/current_inventory_detail_text_qty" />
+        <TextView
+            android:id="@+id/textView19"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/view_current_inventory_detail_qty" />
 
-    <TextView
-        android:text="@string/view_current_inventory_detail_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView21" />
+        <TextView
+            android:id="@+id/current_inventory_detail_text_qty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/current_inventory_detail_text_date" />
+        <TextView
+            android:id="@+id/textView21"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/view_current_inventory_detail_date" />
 
-    <TextView
-        android:text="@string/view_current_inventory_detail_donor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView23" />
+        <TextView
+            android:id="@+id/current_inventory_detail_text_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
 
-    <TextView
-        android:text="TextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/current_inventory_detail_text_donor" />
+        <TextView
+            android:id="@+id/textView23"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/view_current_inventory_detail_donor" />
 
-    <TextView
-        android:text="@string/view_current_inventory_detail_warehouse"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView25" />
+        <TextView
+            android:id="@+id/current_inventory_detail_text_donor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
 
-    <TextView
-        android:text="TextView"
+        <TextView
+            android:id="@+id/textView25"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/view_current_inventory_detail_warehouse" />
+
+        <TextView
+            android:id="@+id/current_inventory_detail_text_warehouse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <Button
+            android:id="@+id/view_current_inventory_delete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/view_current_inventory_detail_delete" />
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/view_current_inventor_detail_fab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/current_inventory_detail_text_warehouse" />
-</LinearLayout>
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:clickable="true"
+        app:fabSize="normal"
+        app:srcCompat="@android:drawable/ic_menu_edit" />
+
+</FrameLayout>

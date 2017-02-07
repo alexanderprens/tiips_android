@@ -51,6 +51,7 @@
     <string name="view_inventory_item_detail_category">Category: </string>
     <string name="view_inventory_item_detail_barcode">Barcode: </string>
     <string name="view_inventory_item_detail_value">Value: </string>
+    <string name="view_inventory_item_detail_delete">Delete Inventory Item</string>
 
     <!-- fragment_view_current_inventory_detail -->
     <string name="view_current_inventory_detail_name">Name: </string>
@@ -62,6 +63,7 @@
     <string name="view_current_inventory_detail_date">Date Received:</string>
     <string name="view_current_inventory_detail_donor">Donor: </string>
     <string name="view_current_inventory_detail_warehouse">Warehouse: </string>
+    <string name="view_current_inventory_detail_delete">Delete Current Inventory Record</string>
 
     <!-- fragment_view_past_inventory_detail -->
     <string name="view_past_inventory_detail_name">Name: </string>
@@ -72,6 +74,7 @@
     <string name="view_past_inventory_detail_qty">Quantity: </string>
     <string name="view_past_inventory_detail_date">Date Shipped:</string>
     <string name="view_past_inventory_detail_donor">Donor: </string>
+    <string name="view_past_inventory_detail_delete">Delete Past Inventory Record</string>
 
     <!-- activity_receive_inventory -->
     <string name="title_activity_receive_inventory">ReceiveInventoryActivity</string>
@@ -84,8 +87,13 @@
     <string name="add_category_cancel">Cancel</string>
 
     <!-- fragment_view_category_detail -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="view_category_detail_name">Name: </string>
     <string name="view_category_detail_barcode">Barcode Prefix: </string>
+    <string name="view_category_delete">Delete Category</string>
+
+    <!-- generic yes/no dialog box -->
+    <string name="are_you_sure_message">Are you sure?</string>
+    <string name="are_you_sure_yes">Yes</string>
+    <string name="are_you_sure_no">No</string>
 
 </resources>

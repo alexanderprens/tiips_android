@@ -33,7 +33,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
                 CategoryEntry.TABLE_NAME + " (" +
                 CategoryEntry._ID + " INTEGER PRIMARY KEY, " +
                 CategoryEntry.COLUMN_CATEGORY + " TEXT UNIQUE NOT NULL, " +
-                CategoryEntry.COLUMN_BARCODE_PREFIX + " TEXT);";
+                CategoryEntry.COLUMN_BARCODE_PREFIX + " TEXT UNIQUE NOT NULL);";
 
         // create item table
         final String SQL_CREATE_ITEM_TABLE = "CREATE TABLE " +

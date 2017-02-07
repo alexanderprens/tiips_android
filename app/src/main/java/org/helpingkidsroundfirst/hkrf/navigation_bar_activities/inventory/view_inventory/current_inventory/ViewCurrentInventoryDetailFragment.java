@@ -1,16 +1,21 @@
 package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.current_inventory;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
@@ -22,17 +27,24 @@ import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
 public class ViewCurrentInventoryDetailFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
-    private TextView nameView;
-    private TextView descriptionView;
-    private TextView categoryView;
-    private TextView valueView;
-    private TextView barcodeView;
-    private TextView qtyView;
-    private TextView dateView;
-    private TextView donorView;
-    private TextView warehouseView;
-    private Uri mUri;
-
+    // Current inventory column indices
+    public static final int COL_CURRENT_ID = 0;
+    public static final int COL_CURRENT_ITEM_KEY = 1;
+    public static final int COL_CURRENT_QTY = 2;
+    public static final int COL_CURRENT_DATE_RECEIVED = 3;
+    public static final int COL_CURRENT_DONOR = 4;
+    public static final int COL_CURRENT_WAREHOUSE = 5;
+    public static final int COL_ITEM_ID = 6;
+    public static final int COL_ITEM_BARCODE = 7;
+    public static final int COL_ITEM_NAME = 8;
+    public static final int COL_ITEM_DESCRIPTION = 9;
+    public static final int COL_ITEM_CATEGORY_KEY = 10;
+    public static final int COL_ITEM_VALUE = 11;
+    public static final int COL_CATEGORY_ID = 12;
+    public static final int COL_CATEGORY_NAME = 13;
+    public static final int COL_CATEGORY_BARCODE_PREFIX = 14;
+    public static final String DETAILED_CURRENT_KEY = "CURRENT_URI";
+    public static final int CURRENT_DETAIL_LOADER = 5;
     private static final String[] CURRENT_DETAIL_COLUMNS = {
             InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
                     InventoryContract.CurrentInventoryEntry._ID,
@@ -51,26 +63,17 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
             InventoryContract.CategoryEntry.COLUMN_CATEGORY,
             InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
     };
-
-    // Current inventory column indices
-    public static final int COL_CURRENT_ID = 0;
-    public static final int COL_CURRENT_ITEM_KEY = 1;
-    public static final int COL_CURRENT_QTY = 2;
-    public static final int COL_CURRENT_DATE_RECEIVED = 3;
-    public static final int COL_CURRENT_DONOR = 4;
-    public static final int COL_CURRENT_WAREHOUSE = 5;
-    public static final int COL_ITEM_ID = 6;
-    public static final int COL_ITEM_BARCODE = 7;
-    public static final int COL_ITEM_NAME = 8;
-    public static final int COL_ITEM_DESCRIPTION = 9;
-    public static final int COL_ITEM_CATEGORY_KEY = 10;
-    public static final int COL_ITEM_VALUE = 11;
-    public static final int COL_CATEGORY_ID = 12;
-    public static final int COL_CATEGORY_NAME = 13;
-    public static final int COL_CATEGORY_BARCODE_PREFIX = 14;
-
-    public static final String DETAILED_CURRENT_KEY = "CURRENT_URI";
-    public static final int CURRENT_DETAIL_LOADER = 5;
+    private TextView nameView;
+    private TextView descriptionView;
+    private TextView categoryView;
+    private TextView valueView;
+    private TextView barcodeView;
+    private TextView qtyView;
+    private TextView dateView;
+    private TextView donorView;
+    private TextView warehouseView;
+    private Uri mUri;
+    private long currentInventoryId;
 
     public ViewCurrentInventoryDetailFragment() {
         //required empty public constructor
@@ -89,7 +92,7 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
             mUri = bundle.getParcelable(DETAILED_CURRENT_KEY);
         }
 
-        //assign text view
+        // assign text view
         nameView = (TextView) rootView.findViewById(R.id.current_inventory_detail_text_name);
         descriptionView = (TextView) rootView.findViewById(
                 R.id.current_inventory_detail_text_description);
@@ -100,6 +103,36 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
         dateView = (TextView) rootView.findViewById(R.id.current_inventory_detail_text_date);
         donorView = (TextView) rootView.findViewById(R.id.current_inventory_detail_text_donor);
         warehouseView = (TextView) rootView.findViewById(R.id.current_inventory_detail_text_warehouse);
+
+        // implement fab
+
+        // implement delete button
+        final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        if (handleCurrentInventoryDeletion()) {
+                            FragmentManager manager = getActivity().getSupportFragmentManager();
+                            manager.popBackStack();
+                        }
+                        break;
+                }
+            }
+        };
+
+        Button delete = (Button) rootView.findViewById(R.id.view_current_inventory_delete);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // call dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setMessage(R.string.are_you_sure_message)
+                        .setPositiveButton(R.string.are_you_sure_yes, dialogClickListener)
+                        .setNegativeButton(R.string.are_you_sure_no, dialogClickListener)
+                        .show();
+            }
+        });
 
         return rootView;
     }
@@ -144,6 +177,7 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
             String date = data.getString(COL_CURRENT_DATE_RECEIVED);
             String donor = data.getString(COL_CURRENT_DONOR);
             String warehouse = data.getString(COL_CURRENT_WAREHOUSE);
+            currentInventoryId = data.getLong(COL_CURRENT_ID);
 
             //place data into text views
             nameView.setText(name);
@@ -161,5 +195,31 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    private boolean handleCurrentInventoryDeletion() {
+        boolean deleted = false;
+        int rowDeleted = -1;
+        Uri currentInventoryUri = InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri();
+        String selection = InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
+                InventoryContract.CurrentInventoryEntry._ID + " = ? ";
+        String[] selectionArgs = {Long.toString(currentInventoryId)};
+        String message = "Current Inventory Record delete failed.";
+
+        if (currentInventoryId != -1) {
+            rowDeleted = getContext().getContentResolver().delete(
+                    currentInventoryUri,
+                    selection,
+                    selectionArgs
+            );
+        }
+
+        if (rowDeleted != 0) {
+            message = "Current Inventory Record delete successful";
+            deleted = true;
+        }
+
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        return deleted;
     }
 }

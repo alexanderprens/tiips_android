@@ -1,17 +1,22 @@
 package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.categories;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
@@ -35,6 +40,7 @@ public class ViewCategoryDetailFragment extends Fragment implements
     private TextView nameView;
     private TextView barcodeView;
     private Uri mUri;
+    private long categoryID = -1;
 
     public ViewCategoryDetailFragment() {
         // Required empty public constructor
@@ -59,6 +65,34 @@ public class ViewCategoryDetailFragment extends Fragment implements
 
         // implement fab
 
+
+        // implement delete
+        final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        if (handleCategoryDeletion()) {
+                            FragmentManager manager = getActivity().getSupportFragmentManager();
+                            manager.popBackStack();
+                        }
+                        break;
+                }
+            }
+        };
+
+        Button delete = (Button) rootView.findViewById(R.id.view_category_detail_delete_button);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // call dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setMessage(R.string.are_you_sure_message)
+                        .setPositiveButton(R.string.are_you_sure_yes, dialogClickListener)
+                        .setNegativeButton(R.string.are_you_sure_no, dialogClickListener)
+                        .show();
+            }
+        });
 
         return rootView;
     }
@@ -94,6 +128,7 @@ public class ViewCategoryDetailFragment extends Fragment implements
             // read data from cursor
             String name = data.getString(COL_CATEGORY_CAT);
             String barcode = data.getString(COL_CATEGORY_BARCODE);
+            categoryID = data.getLong(COL_CATEGORY_ID);
 
             //place data into text views
             nameView.setText(name);
@@ -104,5 +139,31 @@ public class ViewCategoryDetailFragment extends Fragment implements
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    private boolean handleCategoryDeletion() {
+        boolean deleted = false;
+        int rowDeleted = -1;
+        Uri categoryUri = InventoryContract.CategoryEntry.buildCategoryUri();
+        String selection = InventoryContract.CategoryEntry.TABLE_NAME + "." +
+                InventoryContract.CategoryEntry._ID + " = ? ";
+        String[] selectionArgs = {Long.toString(categoryID)};
+        String message = "Category delete failed.";
+
+        if (categoryID != -1) {
+            rowDeleted = getContext().getContentResolver().delete(
+                    categoryUri,
+                    selection,
+                    selectionArgs
+            );
+        }
+
+        if (rowDeleted != 0) {
+            message = "Category delete successful";
+            deleted = true;
+        }
+
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        return deleted;
     }
 }

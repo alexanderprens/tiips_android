@@ -130,7 +130,7 @@ public class AddCategoryDialogFragment extends DialogFragment implements
         if (dialogValidation()) {
 
             // check if category exists
-            if (!checkIfCategoryExists(categoryInput)) {
+            if (!checkIfCategoryExists()) {
 
                 // attempt to add category
                 if (addCategoryToDB() != -1) {
@@ -140,7 +140,7 @@ public class AddCategoryDialogFragment extends DialogFragment implements
                 }
 
             } else {
-                error = "Category already exists in database";
+                //
             }
         } else {
             error = "Validation Error";
@@ -178,23 +178,45 @@ public class AddCategoryDialogFragment extends DialogFragment implements
         return check;
     }
 
-    private boolean checkIfCategoryExists(String category) {
-        boolean exists;
+    private boolean checkIfCategoryExists() {
+        boolean prefix;
+        boolean category;
 
         // check if category already exists in the db
         Cursor catCursor = getContext().getContentResolver().query(
                 InventoryContract.CategoryEntry.CONTENT_URI,
                 new String[]{InventoryContract.CategoryEntry._ID},
                 InventoryContract.CategoryEntry.COLUMN_CATEGORY + " = ?",
-                new String[]{category},
+                new String[]{categoryInput},
                 null
         );
 
         // if category exists, return true
-        exists = catCursor.moveToFirst();
+        category = catCursor.moveToFirst();
+
+        // check if barcode prefix exists
+        catCursor = getContext().getContentResolver().query(
+                InventoryContract.CategoryEntry.CONTENT_URI,
+                new String[]{InventoryContract.CategoryEntry._ID},
+                InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX + " = ?",
+                new String[]{barcodeInput},
+                null
+        );
+
+        // check if prefix exists
+        prefix = catCursor.moveToFirst();
+
+        // set error message
+        if (prefix && category) {
+            error = "Category and Prefix already exist";
+        } else if (category) {
+            error = "Category already exists in database";
+        } else if (prefix) {
+            error = "Prefix already exists in database";
+        }
 
         catCursor.close();
-        return exists;
+        return prefix | category;
     }
 
     private long addCategoryToDB() {

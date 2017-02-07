@@ -1,16 +1,21 @@
 package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.past_inventory;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
@@ -21,16 +26,22 @@ import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
 public class ViewPastInventoryDetailFragment extends Fragment implements
     LoaderManager.LoaderCallbacks<Cursor> {
 
-    private TextView nameView;
-    private TextView descriptionView;
-    private TextView categoryView;
-    private TextView valueView;
-    private TextView barcodeView;
-    private TextView qtyView;
-    private TextView dateView;
-    private TextView donorView;
-    private Uri mUri;
-
+    public static final int COL_PAST_ID = 0;
+    public static final int COL_PAST_ITEM_KEY = 1;
+    public static final int COL_PAST_QTY = 2;
+    public static final int COL_PAST_DATE_SHIPPED = 3;
+    public static final int COL_PAST_DONOR = 4;
+    public static final int COL_ITEM_ID = 5;
+    public static final int COL_ITEM_BARCODE = 6;
+    public static final int COL_ITEM_NAME = 7;
+    public static final int COL_ITEM_DESCRIPTION = 8;
+    public static final int COL_ITEM_CATEGORY_KEY = 9;
+    public static final int COL_ITEM_VALUE = 10;
+    public static final int COL_CATEGORY_ID = 11;
+    public static final int COL_CATEGORY_NAME = 12;
+    public static final int COL_CATEGORY_BARCODE = 13;
+    public static final String DETAILED_PAST_KEY = "PAST_URI";
+    public static final int PAST_DETAIL_LOADER = 6;
     private static final String[] PAST_DETAIL_COLUMNS = {
             InventoryContract.PastInventoryEntry.TABLE_NAME + "." + InventoryContract.PastInventoryEntry._ID,
             InventoryContract.PastInventoryEntry.COLUMN_ITEM_KEY,
@@ -47,24 +58,16 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
             InventoryContract.CategoryEntry.COLUMN_CATEGORY,
             InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
     };
-
-    public static final int COL_PAST_ID = 0;
-    public static final int COL_PAST_ITEM_KEY = 1;
-    public static final int COL_PAST_QTY = 2;
-    public static final int COL_PAST_DATE_SHIPPED = 3;
-    public static final int COL_PAST_DONOR = 4;
-    public static final int COL_ITEM_ID = 5;
-    public static final int COL_ITEM_BARCODE = 6;
-    public static final int COL_ITEM_NAME = 7;
-    public static final int COL_ITEM_DESCRIPTION = 8;
-    public static final int COL_ITEM_CATEGORY_KEY = 9;
-    public static final int COL_ITEM_VALUE = 10;
-    public static final int COL_CATEGORY_ID = 11;
-    public static final int COL_CATEGORY_NAME = 12;
-    public static final int COL_CATEGORY_BARCODE = 13;
-
-    public static final String DETAILED_PAST_KEY = "PAST_URI";
-    public static final int PAST_DETAIL_LOADER = 6;
+    private TextView nameView;
+    private TextView descriptionView;
+    private TextView categoryView;
+    private TextView valueView;
+    private TextView barcodeView;
+    private TextView qtyView;
+    private TextView dateView;
+    private TextView donorView;
+    private Uri mUri;
+    private long pastInventoryId;
 
     public ViewPastInventoryDetailFragment() {
         // Required empty public constructor
@@ -94,6 +97,36 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
         qtyView = (TextView) rootView.findViewById(R.id.past_inventory_detail_text_qty);
         dateView = (TextView) rootView.findViewById(R.id.past_inventory_detail_text_date);
         donorView = (TextView) rootView.findViewById(R.id.past_inventory_detail_text_donor);
+
+        // implement fab
+
+        // implement delete button
+        final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        if (handlePastInventoryDelete()) {
+                            FragmentManager manager = getActivity().getSupportFragmentManager();
+                            manager.popBackStack();
+                        }
+                        break;
+                }
+            }
+        };
+
+        Button delete = (Button) rootView.findViewById(R.id.view_past_inventory_delete);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // call dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setMessage(R.string.are_you_sure_message)
+                        .setPositiveButton(R.string.are_you_sure_yes, dialogClickListener)
+                        .setNegativeButton(R.string.are_you_sure_no, dialogClickListener)
+                        .show();
+            }
+        });
 
         return rootView;
     }
@@ -137,6 +170,7 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
             String quantityString = "" + quantity;
             String date = data.getString(COL_PAST_DATE_SHIPPED);
             String donor = data.getString(COL_PAST_DONOR);
+            pastInventoryId = data.getLong(COL_PAST_ID);
 
             //place data into text views
             nameView.setText(name);
@@ -153,5 +187,31 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    private boolean handlePastInventoryDelete() {
+        boolean deleted = false;
+        int rowDeleted = -1;
+        Uri pastInventoryUri = InventoryContract.PastInventoryEntry.buildPastInventoryUri();
+        String selection = InventoryContract.PastInventoryEntry.TABLE_NAME + "." +
+                InventoryContract.PastInventoryEntry._ID + " = ? ";
+        String[] selectionArgs = {Long.toString(pastInventoryId)};
+        String message = "Past Inventory delete failed.";
+
+        if (pastInventoryId != -1) {
+            rowDeleted = getContext().getContentResolver().delete(
+                    pastInventoryUri,
+                    selection,
+                    selectionArgs
+            );
+        }
+
+        if (rowDeleted != 0) {
+            message = "Past Inventory delete successful";
+            deleted = true;
+        }
+
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        return deleted;
     }
 }
