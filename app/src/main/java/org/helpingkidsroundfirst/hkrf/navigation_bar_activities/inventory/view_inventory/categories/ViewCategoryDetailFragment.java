@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
@@ -25,7 +26,8 @@ import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
  * A simple {@link Fragment} subclass.
  */
 public class ViewCategoryDetailFragment extends Fragment implements
-        LoaderManager.LoaderCallbacks<Cursor> {
+        LoaderManager.LoaderCallbacks<Cursor>,
+        UpdateCategoryDialogFragment.UpdateCategoryListener {
 
     public static final int COL_CATEGORY_ID = 0;
     public static final int COL_CATEGORY_CAT = 1;
@@ -41,6 +43,7 @@ public class ViewCategoryDetailFragment extends Fragment implements
     private TextView barcodeView;
     private Uri mUri;
     private long categoryID = -1;
+    private String name;
 
     public ViewCategoryDetailFragment() {
         // Required empty public constructor
@@ -64,6 +67,21 @@ public class ViewCategoryDetailFragment extends Fragment implements
         barcodeView = (TextView) rootView.findViewById(R.id.category_detail_barcode);
 
         // implement fab
+        FloatingActionButton fab = (FloatingActionButton) rootView
+                .findViewById(R.id.view_category_detail_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getFragmentManager();
+                UpdateCategoryDialogFragment dialog = new UpdateCategoryDialogFragment();
+                Bundle dialogInputs = new Bundle();
+                dialogInputs.putString(UpdateCategoryDialogFragment.CATEGORY_KEY, name);
+                dialogInputs.putLong(UpdateCategoryDialogFragment.ID_KEY, categoryID);
+                dialog.setArguments(dialogInputs);
+                dialog.setTargetFragment(ViewCategoryDetailFragment.this, 300);
+                dialog.show(fragmentManager, "open update category dialog");
+            }
+        });
 
 
         // implement delete
@@ -126,7 +144,7 @@ public class ViewCategoryDetailFragment extends Fragment implements
         // if there's data then load it
         if (data != null && data.moveToFirst()) {
             // read data from cursor
-            String name = data.getString(COL_CATEGORY_CAT);
+            name = data.getString(COL_CATEGORY_CAT);
             String barcode = data.getString(COL_CATEGORY_BARCODE);
             categoryID = data.getLong(COL_CATEGORY_ID);
 
@@ -165,5 +183,10 @@ public class ViewCategoryDetailFragment extends Fragment implements
 
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         return deleted;
+    }
+
+    @Override
+    public void onButtonOK() {
+        getLoaderManager().restartLoader(CATEGORY_DETAIL_LOADER, null, this);
     }
 }

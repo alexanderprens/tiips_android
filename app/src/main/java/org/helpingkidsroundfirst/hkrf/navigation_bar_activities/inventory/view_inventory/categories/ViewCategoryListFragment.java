@@ -64,7 +64,7 @@ public class ViewCategoryListFragment extends Fragment implements
                 FragmentManager fragmentManager = getFragmentManager();
                 AddCategoryDialogFragment addCategoryDialogFragment = new AddCategoryDialogFragment();
                 addCategoryDialogFragment.setTargetFragment(ViewCategoryListFragment.this, 300);
-                addCategoryDialogFragment.show(fragmentManager, "open cateogory dialog");
+                addCategoryDialogFragment.show(fragmentManager, "open add category dialog");
             }
         });
 

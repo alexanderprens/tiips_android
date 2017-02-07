@@ -96,4 +96,16 @@
     <string name="are_you_sure_yes">Yes</string>
     <string name="are_you_sure_no">No</string>
 
+    <!-- dialog_update_category -->
+    <string name="update_category_header">Update Category</string>
+    <string name="update_category_barcode">Barcode Prefix Cannot be Changed</string>
+    <string name="update_category_cancel">Cancel</string>
+    <string name="update_category_ok">OK</string>
+
+    <!-- input validation strings -->
+    <string name="validation_category_empty">Category cannot be empty</string>
+    <string name="validation_error">Validation error</string>
+    <string name="validation_category_exists">Category already exists in database</string>
+    <string name="error_updating_category">Error Updating Category</string>
+
 </resources>
