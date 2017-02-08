@@ -23,6 +23,7 @@ public class InventoryContract {
     public static final String PATH_ITEM = "items";
     public static final String PATH_CURRENT_INVENTORY = "current_inventory";
     public static final String PATH_PAST_INVENTORY = "past_inventory";
+    public static final String PATH_RECEIVE_INVENTORY = "receive_inventory";
 
     /* Define Category Table */
     public static final class CategoryEntry implements BaseColumns {
@@ -132,6 +133,50 @@ public class InventoryContract {
         }
 
         public static long getCurrentIdFromUri(Uri uri) {
+            return Long.parseLong(uri.getPathSegments().get(1));
+        }
+
+        public static Long getCategoryFromUri(Uri uri) {
+            return Long.parseLong(uri.getPathSegments().get(2));
+        }
+    }
+
+    /* Define Receive Inventory Table */
+    public static final class ReceiveInventoryEntry implements BaseColumns {
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_RECEIVE_INVENTORY).build();
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY +
+                        "/" + PATH_RECEIVE_INVENTORY;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY +
+                        "/" + PATH_RECEIVE_INVENTORY;
+
+        // Table name
+        public static final String TABLE_NAME = "current_inventory";
+
+        // Table columns
+        public static final String COLUMN_ITEM_KEY = "receive_item_id";
+        public static final String COLUMN_QTY = "receive_qty";
+        public static final String COLUMN_DATE_RECEIVED = "receive_date_received";
+        public static final String COLUMN_DONOR = "receive_donor";
+        public static final String COLUMN_WAREHOUSE = "receive_warehouse";
+
+        public static Uri buildReceiveInventoryUri() {
+            return CONTENT_URI;
+        }
+
+        public static Uri buildReceiveInventoryWithIdUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static Uri buildReceiveInventoryWithCategoryUri(Long category) {
+            return CONTENT_URI.buildUpon().appendPath("category_id")
+                    .appendPath(Long.toString(category)).build();
+        }
+
+        public static long getReceiveIdFromUri(Uri uri) {
             return Long.parseLong(uri.getPathSegments().get(1));
         }
 
