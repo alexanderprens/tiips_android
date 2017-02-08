@@ -24,6 +24,7 @@ public class InventoryContract {
     public static final String PATH_CURRENT_INVENTORY = "current_inventory";
     public static final String PATH_PAST_INVENTORY = "past_inventory";
     public static final String PATH_RECEIVE_INVENTORY = "receive_inventory";
+    public static final String PATH_SHIP_INVENTORY = "ship_inventory";
 
     /* Define Category Table */
     public static final class CategoryEntry implements BaseColumns {
@@ -220,6 +221,49 @@ public class InventoryContract {
         }
 
         public static long getPastIdFromUri(Uri uri) {
+            return Long.parseLong(uri.getPathSegments().get(1));
+        }
+
+        public static Long getCategoryFromUri(Uri uri) {
+            return Long.parseLong(uri.getPathSegments().get(2));
+        }
+    }
+
+    /* Define Ship Inventory Table */
+    public static final class ShipInventoryEntry implements BaseColumns {
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_SHIP_INVENTORY).build();
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" +
+                        PATH_SHIP_INVENTORY;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" +
+                        PATH_SHIP_INVENTORY;
+
+        // Table name
+        public static final String TABLE_NAME = "ship_inventory";
+
+        // Table columns
+        public static final String COLUMN_ITEM_KEY = "ship_item_id";
+        public static final String COLUMN_QTY = "ship_qty";
+        public static final String COLUMN_DATE_SHIPPED = "ship_date_shipped";
+        public static final String COLUMN_DONOR = "ship_donor";
+
+        public static Uri buildShipInventoryUri() {
+            return CONTENT_URI;
+        }
+
+        public static Uri buildShipInventoryWithIdUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static Uri buildShipInventoryWithCategoryUri(Long category) {
+            return CONTENT_URI.buildUpon().appendPath("category_id")
+                    .appendPath(Long.toString(category)).build();
+        }
+
+        public static long getShipIdFromUri(Uri uri) {
             return Long.parseLong(uri.getPathSegments().get(1));
         }
 
