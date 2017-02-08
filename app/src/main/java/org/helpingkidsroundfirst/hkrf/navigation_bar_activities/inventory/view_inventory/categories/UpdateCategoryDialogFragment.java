@@ -117,7 +117,7 @@ public class UpdateCategoryDialogFragment extends DialogFragment implements
             if (!checkIfCategoryExists()) {
 
                 // attempt to update category
-                if (attemptUpdateCateogory() != 0) {
+                if (attemptUpdateCategory() != 0) {
                     added = true;
                 } else {
                     error = getContext().getResources().getString(R.string.error_updating_category);
@@ -161,7 +161,7 @@ public class UpdateCategoryDialogFragment extends DialogFragment implements
         return check;
     }
 
-    private int attemptUpdateCateogory() {
+    private int attemptUpdateCategory() {
         int rowsUpdated;
         Uri categoryUri = InventoryContract.CategoryEntry.buildCategoryUri();
         String selection = InventoryContract.CategoryEntry.TABLE_NAME + "." +

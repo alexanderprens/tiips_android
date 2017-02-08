@@ -102,10 +102,25 @@
     <string name="update_category_cancel">Cancel</string>
     <string name="update_category_ok">OK</string>
 
+    <!-- dialog_update_inventory_item -->
+    <string name="update_item_header">Update Barcode Item</string>
+    <string name="update_item_cancel">Cancel</string>
+    <string name="update_item_ok">OK</string>
+    <string name="update_item_not_updatable">Category and barcode not updatable</string>
+
     <!-- input validation strings -->
     <string name="validation_category_empty">Category cannot be empty</string>
     <string name="validation_error">Validation error</string>
     <string name="validation_category_exists">Category already exists in database</string>
-    <string name="error_updating_category">Error Updating Category</string>
+    <string name="error_updating_category">Error updating category</string>
+    <string name="validation_name_empty">Name cannot be empty</string>
+    <string name="validation_value_negative">Value must be above zero</string>
+    <string name="error_updating_item">Error updating barcode item</string>
+    <string name="barcode_item_delete_success">Barcode item delete successful</string>
+    <string name="barcode_item_delete_failed">Barcode item delete failed</string>
+    <string name="validation_barcode_empty">Barcode cannot be empty</string>
+    <string name="validation_barcode_long">Barcode must be 4 characters</string>
+    <string name="validation_barcode_exists">Barcode already exists</string>
+    <string name="error_adding_item">Error adding item to database</string>
 
 </resources>

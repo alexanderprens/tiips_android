@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
@@ -24,8 +25,9 @@ import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ViewInventoryItemDetailFragment extends Fragment
-    implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ViewInventoryItemDetailFragment extends Fragment implements
+        LoaderManager.LoaderCallbacks<Cursor>,
+        UpdateItemDialogFragment.UpdateItemListener {
 
     // Inventory item column indices
     public static final int COL_ITEM_ID = 0;
@@ -57,6 +59,9 @@ public class ViewInventoryItemDetailFragment extends Fragment
     private TextView barcodeView;
     private Uri inventoryItemDetailUri;
     private long itemId = -1;
+    private String name;
+    private String description;
+    private int value;
 
     public ViewInventoryItemDetailFragment() {
         // Required empty public constructor
@@ -71,7 +76,7 @@ public class ViewInventoryItemDetailFragment extends Fragment
                 false);
 
         // get item uri from bundle
-        Bundle bundle = this.getArguments();
+        final Bundle bundle = this.getArguments();
         if (bundle != null) {
             inventoryItemDetailUri = bundle.getParcelable(DETAILED_ITEM_KEY);
         }
@@ -85,6 +90,23 @@ public class ViewInventoryItemDetailFragment extends Fragment
         barcodeView = (TextView) rootView.findViewById(R.id.inventory_item_detail_text_barcode);
 
         // implement fab
+        FloatingActionButton fab = (FloatingActionButton) rootView
+                .findViewById(R.id.view_item_detail_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getFragmentManager();
+                UpdateItemDialogFragment dialog = new UpdateItemDialogFragment();
+                Bundle dialogInputs = new Bundle();
+                dialogInputs.putString(UpdateItemDialogFragment.NAME_KEY, name);
+                dialogInputs.putString(UpdateItemDialogFragment.DESCRIPTION_KEY, description);
+                dialogInputs.putInt(UpdateItemDialogFragment.VALUE_KEY, value);
+                dialogInputs.putLong(UpdateItemDialogFragment.ID_KEY, itemId);
+                dialog.setArguments(dialogInputs);
+                dialog.setTargetFragment(ViewInventoryItemDetailFragment.this, 300);
+                dialog.show(fragmentManager, "open update item dialog");
+            }
+        });
 
         // implement delete button
         final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -145,10 +167,10 @@ public class ViewInventoryItemDetailFragment extends Fragment
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if(data != null && data.moveToFirst()) {
             //read data from cursor
-            String name = data.getString(COL_ITEM_NAME);
-            String description = data.getString(COL_ITEM_DESC);
+            name = data.getString(COL_ITEM_NAME);
+            description = data.getString(COL_ITEM_DESC);
             String category = data.getString(COL_CATEGORY_NAME);
-            int value = data.getInt(COL_ITEM_VALUE);
+            value = data.getInt(COL_ITEM_VALUE);
             String valueString = "" + value;
             String barcode = data.getString(COL_ITEM_BARCODE);
             itemId = data.getLong(COL_ITEM_ID);
@@ -174,7 +196,7 @@ public class ViewInventoryItemDetailFragment extends Fragment
         String selection = InventoryContract.ItemEntry.TABLE_NAME + "." +
                 InventoryContract.ItemEntry._ID + " = ? ";
         String[] selectionArgs = {Long.toString(itemId)};
-        String message = "Barcode Item delete failed.";
+        String message = getContext().getResources().getString(R.string.barcode_item_delete_failed);
 
         if (itemId != -1) {
             rowDeleted = getContext().getContentResolver().delete(
@@ -185,11 +207,16 @@ public class ViewInventoryItemDetailFragment extends Fragment
         }
 
         if (rowDeleted != 0) {
-            message = "Barcode Item delete successful";
+            message = getContext().getResources().getString(R.string.barcode_item_delete_success);
             deleted = true;
         }
 
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         return deleted;
+    }
+
+    @Override
+    public void onUpdateItemOKButton() {
+        getLoaderManager().restartLoader(ITEM_DETAIL_LOADER, null, this);
     }
 }

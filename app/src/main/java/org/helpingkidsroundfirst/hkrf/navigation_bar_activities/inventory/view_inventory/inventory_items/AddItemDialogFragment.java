@@ -234,13 +234,13 @@ public class AddItemDialogFragment extends DialogFragment implements
                 if (addInventoryItemToDB() != -1) {
                     added = true;
                 } else {
-                    error = "Error adding item to database";
+                    error = getContext().getResources().getString(R.string.error_adding_item);
                 }
             } else {
-                error = "Barcode already exists";
+                error = getContext().getResources().getString(R.string.validation_barcode_exists);
             }
         } else {
-            error = "Validation error";
+            error = getContext().getResources().getString(R.string.validation_error);
         }
 
         return added;
@@ -251,9 +251,8 @@ public class AddItemDialogFragment extends DialogFragment implements
 
         if(nameInput.isEmpty()){
             check = false;
-            Toast.makeText(getActivity(), "Name cannot be empty", Toast.LENGTH_SHORT).show();
-        } else {
-            //Toast.makeText(getActivity(), nameInput, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getContext().getResources()
+                    .getString(R.string.validation_name_empty), Toast.LENGTH_SHORT).show();
         }
 
         if(!valueInString.isEmpty()) {
@@ -261,23 +260,21 @@ public class AddItemDialogFragment extends DialogFragment implements
 
             if(valueInput < 1) {
                 check = false;
-                Toast.makeText(getActivity(), "Value must be greater than zero",
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                //Toast.makeText(getActivity(), Integer.toString(valueInput), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getContext().getResources()
+                        .getString(R.string.validation_value_negative), Toast.LENGTH_SHORT).show();
             }
-
         }
 
         if(barcodeInput.isEmpty()) {
             check = false;
-            Toast.makeText(getActivity(), "Barcode cannot be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getContext().getResources()
+                    .getString(R.string.validation_barcode_empty), Toast.LENGTH_SHORT).show();
         } else {
 
             if (barcodeInput.length() != 4) {
                 check = false;
-                Toast.makeText(getActivity(), "Barcode must be 4 characters", Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(getActivity(), getContext().getResources()
+                        .getString(R.string.validation_barcode_long), Toast.LENGTH_SHORT).show();
             }
         }
 
