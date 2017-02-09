@@ -28,6 +28,12 @@ public class InventoryProvider extends ContentProvider {
     static final int INVENTORY_ITEM_WITH_CATEGORY = 302;
     static final int CATEGORY = 400;
     static final int CATEGORY_WITH_ID = 401;
+    static final int RECEIVE_INVENTORY = 500;
+    static final int RECEIVE_INVENTORY_WITH_ID = 501;
+    static final int RECEIVE_INVENTORY_WITH_CATEGORY = 502;
+    static final int SHIP_INVENTORY = 600;
+    static final int SHIP_INVENTORY_WITH_ID = 601;
+    static final int SHIP_INVENTORY_WITH_CATEGORY = 602;
     // The URI matcher used by this content provider
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     // Make Query builders for joined tables
@@ -37,6 +43,10 @@ public class InventoryProvider extends ContentProvider {
     private static final SQLiteQueryBuilder sCurrentInventoryQueryBuilder;
     // Past Inventory
     private static final SQLiteQueryBuilder sPastInventoryQueryBuilder;
+    // receive inventory
+    private static final SQLiteQueryBuilder sReceiveInventoryQueryBuilder;
+    // ship inventory
+    private static final SQLiteQueryBuilder sShipInventoryQueryBuilder;
     // strings for cursors
     // inventory item with id
     private static final String sItemIdSelection =
@@ -57,7 +67,14 @@ public class InventoryProvider extends ContentProvider {
     private static final String sCategoryIdSelection =
             InventoryContract.CategoryEntry.TABLE_NAME + "." +
                     InventoryContract.CategoryEntry._ID + " = ? ";
-
+    // receive inventory with id
+    private static final String sReceiveInventoryIdSelection =
+            InventoryContract.ReceiveInventoryEntry.TABLE_NAME + "." +
+                    InventoryContract.ReceiveInventoryEntry._ID + " = ? ";
+    // ship inventory with id
+    private static final String sShipInventoryIdSelection =
+            InventoryContract.ShipInventoryEntry.TABLE_NAME + "." +
+                    InventoryContract.ShipInventoryEntry._ID + " = ? ";
     static {
         sInventoryItemQueryBuilder = new SQLiteQueryBuilder();
 
@@ -112,6 +129,46 @@ public class InventoryProvider extends ContentProvider {
         );
     }
 
+    static {
+        sReceiveInventoryQueryBuilder = new SQLiteQueryBuilder();
+
+        // Inner join item on current inventory
+        sReceiveInventoryQueryBuilder.setTables(
+                InventoryContract.ReceiveInventoryEntry.TABLE_NAME + " INNER JOIN (" +
+                        InventoryContract.ItemEntry.TABLE_NAME + " INNER JOIN " +
+                        InventoryContract.CategoryEntry.TABLE_NAME +
+                        " ON " + InventoryContract.ItemEntry.TABLE_NAME +
+                        "." + InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY +
+                        " = " + InventoryContract.CategoryEntry.TABLE_NAME +
+                        "." + InventoryContract.CategoryEntry._ID + ") " +
+                        InventoryContract.ItemEntry.TABLE_NAME +
+                        " ON " + InventoryContract.ReceiveInventoryEntry.TABLE_NAME +
+                        "." + InventoryContract.ReceiveInventoryEntry.COLUMN_ITEM_KEY +
+                        " = " + InventoryContract.ItemEntry.TABLE_NAME +
+                        "." + InventoryContract.ItemEntry._ID
+        );
+    }
+
+    static {
+        sShipInventoryQueryBuilder = new SQLiteQueryBuilder();
+
+        // Inner join item on current inventory
+        sShipInventoryQueryBuilder.setTables(
+                InventoryContract.ShipInventoryEntry.TABLE_NAME + " INNER JOIN (" +
+                        InventoryContract.ItemEntry.TABLE_NAME + " INNER JOIN " +
+                        InventoryContract.CategoryEntry.TABLE_NAME +
+                        " ON " + InventoryContract.ItemEntry.TABLE_NAME +
+                        "." + InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY +
+                        " = " + InventoryContract.CategoryEntry.TABLE_NAME +
+                        "." + InventoryContract.CategoryEntry._ID + ") " +
+                        InventoryContract.ItemEntry.TABLE_NAME +
+                        " ON " + InventoryContract.ShipInventoryEntry.TABLE_NAME +
+                        "." + InventoryContract.ShipInventoryEntry.COLUMN_ITEM_KEY +
+                        " = " + InventoryContract.ItemEntry.TABLE_NAME +
+                        "." + InventoryContract.ItemEntry._ID
+        );
+    }
+
     private InventoryDbHelper mOpenHelper;
 
     // uri matcher to match incoming uris
@@ -142,6 +199,20 @@ public class InventoryProvider extends ContentProvider {
         // category codes
         matcher.addURI(authority, InventoryContract.PATH_CATEGORY, CATEGORY);
         matcher.addURI(authority, InventoryContract.PATH_CATEGORY + "/#", CATEGORY_WITH_ID);
+
+        // receive inventory codes
+        matcher.addURI(authority, InventoryContract.PATH_RECEIVE_INVENTORY, RECEIVE_INVENTORY);
+        matcher.addURI(authority, InventoryContract.PATH_RECEIVE_INVENTORY + "/#",
+                RECEIVE_INVENTORY_WITH_ID);
+        matcher.addURI(authority, InventoryContract.PATH_RECEIVE_INVENTORY + "/*/#",
+                RECEIVE_INVENTORY_WITH_CATEGORY);
+
+        // ship inventory codes
+        matcher.addURI(authority, InventoryContract.PATH_SHIP_INVENTORY, SHIP_INVENTORY);
+        matcher.addURI(authority, InventoryContract.PATH_SHIP_INVENTORY + "/#",
+                SHIP_INVENTORY_WITH_ID);
+        matcher.addURI(authority, InventoryContract.PATH_SHIP_INVENTORY + "/*/#",
+                SHIP_INVENTORY_WITH_CATEGORY);
 
         return matcher;
     }
@@ -246,6 +317,62 @@ public class InventoryProvider extends ContentProvider {
         );
     }
 
+    // receive inventory with id cursor
+    private Cursor getReceiveInventoryById(Uri uri, String[] projection, String sortOrder) {
+        long receiveInventoryId = InventoryContract.ReceiveInventoryEntry.getReceiveIdFromUri(uri);
+
+        return sReceiveInventoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                sReceiveInventoryIdSelection,
+                new String[]{Long.toString(receiveInventoryId)},
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    // receive inventory with category cursor
+    private Cursor getReceiveInventoryByCategory(Uri uri, String[] projection, String sortOrder) {
+        long receiveInventoryId = InventoryContract.ReceiveInventoryEntry.getCategoryFromUri(uri);
+
+        return sReceiveInventoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                sItemCategorySelection,
+                new String[]{Long.toString(receiveInventoryId)},
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    // ship inventory with id cursor
+    private Cursor getShipInventoryById(Uri uri, String[] projection, String sortOrder) {
+        long shipInventoryId = InventoryContract.ShipInventoryEntry.getShipIdFromUri(uri);
+
+        return sShipInventoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                sShipInventoryIdSelection,
+                new String[]{Long.toString(shipInventoryId)},
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    // ship inventory with category cursor
+    private Cursor getShipInventoryByCategory(Uri uri, String[] projection, String sortOrder) {
+        long shipInventoryId = InventoryContract.ReceiveInventoryEntry.getCategoryFromUri(uri);
+
+        return sShipInventoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                sShipInventoryIdSelection,
+                new String[]{Long.toString(shipInventoryId)},
+                null,
+                null,
+                sortOrder
+        );
+    }
+
     // create provider
     @Override
     public boolean onCreate() {
@@ -285,6 +412,18 @@ public class InventoryProvider extends ContentProvider {
                 return InventoryContract.CategoryEntry.CONTENT_TYPE;
             case CATEGORY_WITH_ID:
                 return InventoryContract.CategoryEntry.CONTENT_ITEM_TYPE;
+            case RECEIVE_INVENTORY:
+                return InventoryContract.ReceiveInventoryEntry.CONTENT_TYPE;
+            case RECEIVE_INVENTORY_WITH_ID:
+                return InventoryContract.ReceiveInventoryEntry.CONTENT_ITEM_TYPE;
+            case RECEIVE_INVENTORY_WITH_CATEGORY:
+                return InventoryContract.ReceiveInventoryEntry.CONTENT_TYPE;
+            case SHIP_INVENTORY:
+                return InventoryContract.ShipInventoryEntry.CONTENT_TYPE;
+            case SHIP_INVENTORY_WITH_ID:
+                return InventoryContract.ShipInventoryEntry.CONTENT_ITEM_TYPE;
+            case SHIP_INVENTORY_WITH_CATEGORY:
+                return InventoryContract.ShipInventoryEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -365,8 +504,47 @@ public class InventoryProvider extends ContentProvider {
                         sortOrder
                 );
                 break;
+
             case CATEGORY_WITH_ID:
                 retCursor = getCategoryById(uri, projection, sortOrder);
+                break;
+
+            case RECEIVE_INVENTORY:
+                retCursor = sReceiveInventoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+
+            case RECEIVE_INVENTORY_WITH_ID:
+                retCursor = getReceiveInventoryById(uri, projection, sortOrder);
+                break;
+
+            case RECEIVE_INVENTORY_WITH_CATEGORY:
+                retCursor = getReceiveInventoryByCategory(uri, projection, sortOrder);
+                break;
+
+            case SHIP_INVENTORY:
+                retCursor = sShipInventoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+
+            case SHIP_INVENTORY_WITH_ID:
+                retCursor = getShipInventoryById(uri, projection, sortOrder);
+                break;
+
+            case SHIP_INVENTORY_WITH_CATEGORY:
+                retCursor = getShipInventoryByCategory(uri, projection, sortOrder);
                 break;
 
             default:
@@ -426,6 +604,26 @@ public class InventoryProvider extends ContentProvider {
                 break;
             }
 
+            case RECEIVE_INVENTORY: {
+                long _id = db.insert(InventoryContract.ReceiveInventoryEntry.TABLE_NAME, null, values);
+                if (_id > 0) {
+                    returnUri = InventoryContract.ReceiveInventoryEntry.buildReceiveInventoryWithIdUri(_id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
+            }
+
+            case SHIP_INVENTORY: {
+                long _id = db.insert(InventoryContract.ShipInventoryEntry.TABLE_NAME, null, values);
+                if (_id > 0) {
+                    returnUri = InventoryContract.ShipInventoryEntry.buildShipInventoryWithCategoryUri(_id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
+            }
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -463,8 +661,18 @@ public class InventoryProvider extends ContentProvider {
                         selection, selectionArgs);
                 break;
 
+            case RECEIVE_INVENTORY:
+                rowsDeleted = db.delete(InventoryContract.ReceiveInventoryEntry.TABLE_NAME,
+                        selection, selectionArgs);
+                break;
+
+            case SHIP_INVENTORY:
+                rowsDeleted = db.delete(InventoryContract.ShipInventoryEntry.TABLE_NAME,
+                        selection, selectionArgs);
+                break;
+
             default:
-                throw new UnsupportedOperationException("Unkown uri: " + uri);
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
         //if rows deleted = 0 all rows have been deleted
@@ -502,16 +710,24 @@ public class InventoryProvider extends ContentProvider {
                         selection, selectionArgs);
                 break;
 
+            case RECEIVE_INVENTORY:
+                rowsUpdated = db.update(InventoryContract.ReceiveInventoryEntry.TABLE_NAME,
+                        values, selection, selectionArgs);
+                break;
+
+            case SHIP_INVENTORY:
+                rowsUpdated = db.update(InventoryContract.ShipInventoryEntry.TABLE_NAME,
+                        values, selection, selectionArgs);
+                break;
+
             default:
-                throw new UnsupportedOperationException("Unkown uri: " + uri);
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
         if (rowsUpdated != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return rowsUpdated;
     }
-
-    // TODO: 12/20/2016 bulk inserts
 
     //Target api testing helper function
     @Override

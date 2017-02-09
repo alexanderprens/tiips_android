@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView34"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_receive_header" />
+
+    <AutoCompleteTextView
+        android:id="@+id/add_receive_barcode_complete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:completionHint="@string/add_receive_barcode_hint"
+        android:inputType="textCapCharacters"
+        android:maxLength="12"
+        android:text="@string/add_receive_barcode_text" />
+
+    <EditText
+        android:id="@+id/add_receive_qty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/add_receive_qty"
+        android:inputType="number" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/add_receive_button_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/add_receive_button_ok"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/ok" />
+    </LinearLayout>
+</LinearLayout>

@@ -122,5 +122,27 @@
     <string name="validation_barcode_long">Barcode must be 4 characters</string>
     <string name="validation_barcode_exists">Barcode already exists</string>
     <string name="error_adding_item">Error adding item to database</string>
+    <string name="validation_qty_zero">Quantity must be greater than zero</string>
+    <string name="validation_qty_null">Quantity cannot be empty</string>
+    <string name="error_barcode_nonexistant">Barcode does not exist</string>
+    <string name="error_adding_receive">Error adding to database</string>
+
+    <!-- title bar strings -->
+    <string name="receive_inventory_title">Receive Inventory</string>
+
+    <!-- fragment_receive_inventory -->
+    <string name="receive_inventory_header">Select Receive Inventory Action</string>
+    <string name="receive_inventory_button_add">Add Inventory</string>
+    <string name="receive_inventory_button_submit">Submit New Inventory</string>
+
+    <!-- dialog_add_receive_inventory -->
+    <string name="add_receive_header">Receive Inventory Dialog</string>
+    <string name="add_receive_barcode_hint">Barcode #</string>
+    <string name="add_receive_barcode_text">HKRF-</string>
+    <string name="add_receive_qty">Quantity</string>
+
+    <!-- generic strings -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

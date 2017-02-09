@@ -155,7 +155,7 @@ public class InventoryContract {
                         "/" + PATH_RECEIVE_INVENTORY;
 
         // Table name
-        public static final String TABLE_NAME = "current_inventory";
+        public static final String TABLE_NAME = "receive_inventory";
 
         // Table columns
         public static final String COLUMN_ITEM_KEY = "receive_item_id";

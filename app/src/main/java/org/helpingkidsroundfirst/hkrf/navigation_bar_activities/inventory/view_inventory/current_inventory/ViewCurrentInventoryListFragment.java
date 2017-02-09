@@ -22,8 +22,8 @@ import org.helpingkidsroundfirst.hkrf.data.InventoryContract.ItemEntry;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ViewCurrentInventoryListFragment extends Fragment
-    implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ViewCurrentInventoryListFragment extends Fragment implements
+        LoaderManager.LoaderCallbacks<Cursor> {
 
     // Current inventory column indices
     public static final int COL_CURRENT_ID = 0;

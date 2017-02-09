@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import org.helpingkidsroundfirst.hkrf.R;
 
@@ -14,14 +15,8 @@ import org.helpingkidsroundfirst.hkrf.R;
 
 public class ReceiveInventoryFragment extends Fragment {
 
-    public static final int BUTTON_VIEW_RECEPTION = 1;
-    public static final int BUTTON_ADD_ITEMS_MANUAL = 2;
-    public static final int BUTTON_ADD_ITEMS_CAMERA = 3;
-
-    public interface onReceiveInventoryButtonListener {
-        void onReceiveInventoryButtonClicked(int button);
-    }
-
+    public static final int BUTTON_ADD_ITEMS = 1;
+    public static final int BUTTON_SUBMIT_RECEPTION = 2;
     private onReceiveInventoryButtonListener mListener;
 
     public ReceiveInventoryFragment() {
@@ -41,8 +36,26 @@ public class ReceiveInventoryFragment extends Fragment {
         }
 
         // Listen to button clicks
+        Button addInventoryButton = (Button) view.findViewById(R.id.receive_inventory_button_add);
+        addInventoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onReceiveInventoryButtonClicked(BUTTON_ADD_ITEMS);
+            }
+        });
 
+        Button submitListButton = (Button) view.findViewById(R.id.receive_inventory_button_submit);
+        submitListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onReceiveInventoryButtonClicked(BUTTON_SUBMIT_RECEPTION);
+            }
+        });
 
         return view;
+    }
+
+    public interface onReceiveInventoryButtonListener {
+        void onReceiveInventoryButtonClicked(int button);
     }
 }
