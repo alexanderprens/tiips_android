@@ -166,11 +166,18 @@ public class AddReceiveDialogFragment extends DialogFragment implements
             // check if barcode exists
             if (checkIfItemExists()) {
 
-                // attempt to add to receive inventory table
-                if (addReceiveToDb() != -1) {
+                // check if barcode item already exists in table
+                if (checkIfBarcodeExistsInReceiveTable()) {
+                    // do nothing
                     added = true;
                 } else {
-                    error = getContext().getResources().getString(R.string.error_adding_receive);
+
+                    // attempt to add to receive inventory table
+                    if (addReceiveToDb() != -1) {
+                        added = true;
+                    } else {
+                        error = getContext().getResources().getString(R.string.error_adding_receive);
+                    }
                 }
 
             } else {
@@ -246,6 +253,53 @@ public class AddReceiveDialogFragment extends DialogFragment implements
         receiveId = ContentUris.parseId(insertedUri);
 
         return receiveId;
+    }
+
+    private boolean checkIfBarcodeExistsInReceiveTable() {
+        boolean exists = false;
+        long receiveId;
+        int oldQty;
+        int rowsUpdated;
+
+        Uri uri = InventoryContract.ReceiveInventoryEntry.buildReceiveInventoryUri();
+        String[] projection = {InventoryContract.ReceiveInventoryEntry.TABLE_NAME +
+                "." + InventoryContract.ReceiveInventoryEntry._ID,
+                InventoryContract.ReceiveInventoryEntry.COLUMN_QTY};
+        String selection = InventoryContract.ReceiveInventoryEntry.COLUMN_ITEM_KEY + " = ? ";
+        String[] selectionArgs = {Long.toString(itemId)};
+
+        Cursor cursor = getContext().getContentResolver().query(
+                uri,
+                projection,
+                selection,
+                selectionArgs,
+                null
+        );
+
+        if (cursor.moveToFirst()) {
+            exists = true;
+            receiveId = cursor.getLong(0);
+            oldQty = cursor.getInt(1);
+            String updateSelection = InventoryContract.ReceiveInventoryEntry.TABLE_NAME + "."
+                    + InventoryContract.ReceiveInventoryEntry._ID + " = ? ";
+
+            ContentValues updateQty = new ContentValues();
+            updateQty.put(InventoryContract.ReceiveInventoryEntry.COLUMN_QTY, qty + oldQty);
+
+            rowsUpdated = getContext().getContentResolver().update(
+                    uri,
+                    updateQty,
+                    updateSelection,
+                    new String[]{Long.toString(receiveId)}
+            );
+
+            if (rowsUpdated != 0) {
+                Toast.makeText(getContext(), getContext().getResources()
+                        .getString(R.string.updated_qty), Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        return exists;
     }
 
     public interface AddReceiveDialogListener {

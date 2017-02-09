@@ -140,6 +140,7 @@
     <string name="add_receive_barcode_hint">Barcode #</string>
     <string name="add_receive_barcode_text">HKRF-</string>
     <string name="add_receive_qty">Quantity</string>
+    <string name="updated_qty">Quantity updated</string>
 
     <!-- generic strings -->
     <string name="ok">OK</string>

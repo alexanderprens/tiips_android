@@ -137,7 +137,7 @@ public class ReceiveInventoryListFragment extends Fragment implements
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        //String sortOrder = InventoryContract.ItemEntry.COLUMN_NAME + " ASC";
+        String sortOrder = InventoryContract.ItemEntry.COLUMN_NAME + " ASC";
         Uri uri = InventoryContract.ReceiveInventoryEntry.buildReceiveInventoryUri();
 
         return new CursorLoader(
@@ -146,7 +146,7 @@ public class ReceiveInventoryListFragment extends Fragment implements
                 RECEIVE_INVENTORY_COLUMNS,
                 null,
                 null,
-                null
+                sortOrder
         );
     }
 
