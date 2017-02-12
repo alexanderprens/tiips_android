@@ -47,7 +47,7 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
     public static final int CURRENT_DETAIL_LOADER = 5;
     private static final String[] CURRENT_DETAIL_COLUMNS = {
             InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
-                    InventoryContract.CurrentInventoryEntry._ID,
+                    InventoryContract.CurrentInventoryEntry._ID + " AS _id",
             InventoryContract.CurrentInventoryEntry.COLUMN_ITEM_KEY,
             InventoryContract.CurrentInventoryEntry.COLUMN_QTY,
             InventoryContract.CurrentInventoryEntry.COLUMN_DONOR,

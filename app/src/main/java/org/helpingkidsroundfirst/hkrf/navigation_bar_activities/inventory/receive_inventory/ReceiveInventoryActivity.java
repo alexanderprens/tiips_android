@@ -13,7 +13,8 @@ import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.receiv
 
 public class ReceiveInventoryActivity extends AppCompatActivity implements
         ReceiveInventoryFragment.onReceiveInventoryButtonListener,
-        ReceiveInventoryListFragment.ReceiveInventoryListListener {
+        ReceiveInventoryListFragment.ReceiveInventoryListListener,
+        ReceiveInventorySubmitFragment.SubmitReceiveListListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,10 @@ public class ReceiveInventoryActivity extends AppCompatActivity implements
                 break;
 
             case ReceiveInventoryFragment.BUTTON_SUBMIT_RECEPTION:
-
+                // make dialog, start
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                ReceiveInventorySubmitFragment dialog = new ReceiveInventorySubmitFragment();
+                dialog.show(fragmentManager, "open submit receive dialog");
                 break;
         }
     }
@@ -61,6 +65,11 @@ public class ReceiveInventoryActivity extends AppCompatActivity implements
         bundle.putParcelable(ReceiveInventoryDetailFragment.DETAILED_RECEIVE_KEY, uri);
         fragment.setArguments(bundle);
         startFragment(fragment, "ReceiveInventoryDetailFragment");
+    }
+
+    @Override
+    public void onSubmitButtonClicked() {
+
     }
 
     private void startFragment(Fragment fragment, String fragmentTag) {

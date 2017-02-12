@@ -47,7 +47,7 @@ public class ViewCurrentInventoryListFragment extends Fragment implements
     // Current inventory columns
     private static final String[] CURRENT_INVENTORY_COLUMNS = {
             InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
-                    InventoryContract.CurrentInventoryEntry._ID,
+                    InventoryContract.CurrentInventoryEntry._ID + " AS _id",
             InventoryContract.CurrentInventoryEntry.COLUMN_ITEM_KEY,
             InventoryContract.CurrentInventoryEntry.COLUMN_QTY,
             InventoryContract.CurrentInventoryEntry.COLUMN_DONOR,
