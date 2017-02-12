@@ -121,7 +121,7 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
             }
         };
 
-        Button delete = (Button) rootView.findViewById(R.id.view_current_inventory_delete);
+        Button delete = (Button) rootView.findViewById(R.id.view_category_detail_delete_button);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

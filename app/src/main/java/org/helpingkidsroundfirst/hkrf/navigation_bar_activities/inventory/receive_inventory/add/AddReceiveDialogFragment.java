@@ -13,8 +13,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.helpingkidsroundfirst.hkrf.R;
@@ -37,10 +38,9 @@ public class AddReceiveDialogFragment extends DialogFragment implements
     // dialog inputs
     private String qtyString;
     private int qty;
-    private String barcodeInput;
     private long itemId;
     private AddReceiveDialogListener caller;
-    private AutoCompleteTextView barcodeView;
+    private Spinner barcodeView;
     private String error;
 
     @Override
@@ -68,11 +68,10 @@ public class AddReceiveDialogFragment extends DialogFragment implements
         // init inputs
         qty = 0;
         qtyString = "";
-        barcodeInput = "";
         itemId = -1;
 
         // listen to barcodeInput input
-        barcodeView = (AutoCompleteTextView) view.findViewById(R.id.add_receive_barcode_complete);
+        barcodeView = (Spinner) view.findViewById(R.id.add_receive_spinner);
 
         Cursor cursor = getContext().getContentResolver().query(
                 InventoryContract.ItemEntry.CONTENT_URI,
@@ -84,35 +83,24 @@ public class AddReceiveDialogFragment extends DialogFragment implements
 
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(
                 getContext(),
-                android.R.layout.simple_list_item_1,
+                android.R.layout.simple_spinner_item,
                 cursor,
                 BARCODE_AUTOCOMPLETE,
                 BARCODE_TO_VIEW,
                 0
         );
 
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         barcodeView.setAdapter(adapter);
-        barcodeView.addTextChangedListener(new TextWatcher() {
+        barcodeView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // required stub
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                itemId = barcodeView.getSelectedItemId();
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                barcodeInput = s.toString();
-            }
+            public void onNothingSelected(AdapterView<?> parent) {
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                // required stub
-            }
-        });
-
-        adapter.setCursorToStringConverter(new SimpleCursorAdapter.CursorToStringConverter() {
-            @Override
-            public CharSequence convertToString(Cursor cursor) {
-                return cursor.getString(cursor.getColumnIndexOrThrow(InventoryContract.ItemEntry.COLUMN_BARCODE_ID));
             }
         });
 
@@ -219,8 +207,9 @@ public class AddReceiveDialogFragment extends DialogFragment implements
                 InventoryContract.ItemEntry.CONTENT_URI,
                 new String[]{InventoryContract.ItemEntry.TABLE_NAME + "." +
                         InventoryContract.ItemEntry._ID},
-                InventoryContract.ItemEntry.COLUMN_BARCODE_ID + " = ?",
-                new String[]{barcodeInput},
+                InventoryContract.ItemEntry.TABLE_NAME + "." +
+                        InventoryContract.ItemEntry._ID + " = ?",
+                new String[]{Long.toString(itemId)},
                 null
         );
 

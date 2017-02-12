@@ -126,6 +126,8 @@
     <string name="validation_qty_null">Quantity cannot be empty</string>
     <string name="error_barcode_nonexistant">Barcode does not exist</string>
     <string name="error_adding_receive">Error adding to database</string>
+    <string name="error_updating_receive">Error updating quantity</string>
+    <string name="update_receive_successful">Quantity updated</string>
 
     <!-- title bar strings -->
     <string name="receive_inventory_title">Receive Inventory</string>
@@ -145,5 +147,19 @@
     <!-- generic strings -->
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+
+    <!-- fragment_view_receive_inventory_detail -->
+    <string name="view_receive_inventory_detail_name">Name: </string>
+    <string name="view_receive_inventory_detail_description">Description: </string>
+    <string name="view_receive_inventory_detail_category">Category: </string>
+    <string name="view_receive_inventory_detail_barcode">Barcode: </string>
+    <string name="view_receive_inventory_detail_value">Value: </string>
+    <string name="view_receive_inventory_detail_qty">Quantity: </string>
+    <string name="view_receive_inventory_detail_delete">Delete Receive Inventory Record</string>
+    <string name="error_receive_not_deleted">Receive inventory delete failed</string>
+    <string name="message_receive_deleted">Receive inventory delete successful</string>
+    <string name="receive_detail_subtract">-</string>
+    <string name="receive_detail_add">+</string>
+    <string name="receive_detail_update">Update</string>
 
 </resources>

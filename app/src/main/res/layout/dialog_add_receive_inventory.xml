@@ -10,14 +10,10 @@
         android:layout_height="wrap_content"
         android:text="@string/add_receive_header" />
 
-    <AutoCompleteTextView
-        android:id="@+id/add_receive_barcode_complete"
+    <Spinner
+        android:id="@+id/add_receive_spinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:completionHint="@string/add_receive_barcode_hint"
-        android:inputType="textCapCharacters"
-        android:maxLength="12"
-        android:text="@string/add_receive_barcode_text" />
+        android:layout_height="wrap_content" />
 
     <EditText
         android:id="@+id/add_receive_qty"

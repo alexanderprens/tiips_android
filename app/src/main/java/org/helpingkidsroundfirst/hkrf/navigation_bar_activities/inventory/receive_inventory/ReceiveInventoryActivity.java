@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import org.helpingkidsroundfirst.hkrf.R;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.receive_inventory.add.ReceiveInventoryDetailFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.receive_inventory.add.ReceiveInventoryListFragment;
 
 public class ReceiveInventoryActivity extends AppCompatActivity implements
@@ -51,16 +52,22 @@ public class ReceiveInventoryActivity extends AppCompatActivity implements
         }
     }
 
+    @Override
+    public void onItemSelected(Uri uri) {
+        Fragment fragment;
+        Bundle bundle = new Bundle();
+
+        fragment = new ReceiveInventoryDetailFragment();
+        bundle.putParcelable(ReceiveInventoryDetailFragment.DETAILED_RECEIVE_KEY, uri);
+        fragment.setArguments(bundle);
+        startFragment(fragment, "ReceiveInventoryDetailFragment");
+    }
+
     private void startFragment(Fragment fragment, String fragmentTag) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_recieve_inventory, fragment)
                 .addToBackStack(fragmentTag)
                 .commit();
-    }
-
-    @Override
-    public void onItemSelected(Uri uri) {
-
     }
 }
