@@ -30,7 +30,7 @@ import java.util.Calendar;
  * Created by alexa on 2/12/2017.
  */
 
-public class ReceiveInventorySubmitFragment extends DialogFragment implements
+public class ReceiveInventorySubmitDialogFragment extends DialogFragment implements
         View.OnClickListener {
 
     private static final String[] RECEIVE_INV_COLUMNS = {

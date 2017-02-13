@@ -112,27 +112,32 @@
     <string name="validation_category_empty">Category cannot be empty</string>
     <string name="validation_error">Validation error</string>
     <string name="validation_category_exists">Category already exists in database</string>
-    <string name="error_updating_category">Error updating category</string>
     <string name="validation_name_empty">Name cannot be empty</string>
     <string name="validation_value_negative">Value must be above zero</string>
-    <string name="error_updating_item">Error updating barcode item</string>
-    <string name="barcode_item_delete_success">Barcode item delete successful</string>
-    <string name="barcode_item_delete_failed">Barcode item delete failed</string>
     <string name="validation_barcode_empty">Barcode cannot be empty</string>
     <string name="validation_barcode_long">Barcode must be 4 characters</string>
     <string name="validation_barcode_exists">Barcode already exists</string>
-    <string name="error_adding_item">Error adding item to database</string>
     <string name="validation_qty_zero">Quantity must be greater than zero</string>
     <string name="validation_qty_null">Quantity cannot be empty</string>
-    <string name="error_barcode_nonexistant">Barcode does not exist</string>
-    <string name="error_adding_receive">Error adding to database</string>
-    <string name="error_updating_receive">Error updating quantity</string>
     <string name="update_receive_successful">Quantity updated</string>
     <string name="validation_donor_empty">Donor cannot be empty</string>
     <string name="validation_warehouse_empty">Warehouse cannot be empty</string>
     <string name="validation_date_invalid">Date must be picked</string>
+
+    <!-- error messages -->
     <string name="error_receive_inventory_not_updated">Receive inventory not updated</string>
     <string name="error_inserted_into_current">Error inserting into current inventory</string>
+    <string name="error_barcode_nonexistant">Barcode does not exist</string>
+    <string name="error_adding_receive">Error adding to database</string>
+    <string name="error_updating_receive">Error updating quantity</string>
+    <string name="error_adding_item">Error adding item to database</string>
+    <string name="error_updating_item">Error updating barcode item</string>
+    <string name="error_updating_category">Error updating category</string>
+    <string name="barcode_item_delete_success">Barcode item delete successful</string>
+    <string name="barcode_item_delete_failed">Barcode item delete failed</string>
+    <string name="current_inventory_delete_success">Current inventory delete successful</string>
+    <string name="current_inventory_delete_fail">Current inventory delete failed</string>
+    <string name="current_inventory_update_fail">Current inventory updated failed</string>
 
     <!-- title bar strings -->
     <string name="receive_inventory_title">Receive Inventory</string>
@@ -174,5 +179,14 @@
     <string name="submit_receive_date_default">YYYY-MM-DD</string>
     <string name="submit_receive_header">Submit Received Inventory</string>
     <string name="message_submit_successful">Submit successful</string>
+
+    <!-- dialog_update_current -->
+    <string name="update_current_qty">Quantity</string>
+    <string name="update_current_donor">Donor</string>
+    <string name="update_current_warehouse">Warehouse</string>
+    <string name="update_current_header">Update Current Inv. Record</string>
+    <string name="update_current_date_temp">YYYY-MM-DD</string>
+    <string name="update_current_data_pick">Pick Date Received</string>
+    <string name="update_current_successful">Update successful</string>
 
 </resources>

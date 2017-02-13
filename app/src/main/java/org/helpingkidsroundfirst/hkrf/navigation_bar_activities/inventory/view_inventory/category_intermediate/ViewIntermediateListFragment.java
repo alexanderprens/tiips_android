@@ -43,7 +43,8 @@ public class ViewIntermediateListFragment extends Fragment implements
     // category columns
     private static final String[] CATEGORY_COLUMNS = {
             "DISTINCT " + InventoryContract.CategoryEntry.COLUMN_CATEGORY,
-            InventoryContract.CategoryEntry.TABLE_NAME + "." + InventoryContract.CategoryEntry._ID
+            InventoryContract.CategoryEntry.TABLE_NAME + "." +
+                    InventoryContract.CategoryEntry._ID + " AS _id"
     };
 
     // internal vars

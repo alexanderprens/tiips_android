@@ -75,7 +75,9 @@ public class AddReceiveDialogFragment extends DialogFragment implements
 
         Cursor cursor = getContext().getContentResolver().query(
                 InventoryContract.ItemEntry.CONTENT_URI,
-                null,
+                new String[]{InventoryContract.ItemEntry.TABLE_NAME + "." +
+                        InventoryContract.ItemEntry._ID + " AS _id",
+                        InventoryContract.ItemEntry.COLUMN_BARCODE_ID},
                 null,
                 null,
                 InventoryContract.ItemEntry.COLUMN_BARCODE_ID
@@ -254,7 +256,7 @@ public class AddReceiveDialogFragment extends DialogFragment implements
         String[] projection = {InventoryContract.ReceiveInventoryEntry.TABLE_NAME +
                 "." + InventoryContract.ReceiveInventoryEntry._ID,
                 InventoryContract.ReceiveInventoryEntry.COLUMN_QTY};
-        String selection = InventoryContract.ReceiveInventoryEntry.COLUMN_ITEM_KEY + " = ? ";
+        String selection = InventoryContract.ReceiveInventoryEntry.COLUMN_ITEM_KEY + " = ?";
         String[] selectionArgs = {Long.toString(itemId)};
 
         Cursor cursor = getContext().getContentResolver().query(

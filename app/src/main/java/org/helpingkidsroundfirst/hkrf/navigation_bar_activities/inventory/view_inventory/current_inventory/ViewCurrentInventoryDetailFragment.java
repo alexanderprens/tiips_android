@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
@@ -31,8 +32,8 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
     public static final int COL_CURRENT_ID = 0;
     public static final int COL_CURRENT_ITEM_KEY = 1;
     public static final int COL_CURRENT_QTY = 2;
-    public static final int COL_CURRENT_DATE_RECEIVED = 3;
-    public static final int COL_CURRENT_DONOR = 4;
+    public static final int COL_CURRENT_DONOR = 3;
+    public static final int COL_CURRENT_DATE_RECEIVED = 4;
     public static final int COL_CURRENT_WAREHOUSE = 5;
     public static final int COL_ITEM_ID = 6;
     public static final int COL_ITEM_BARCODE = 7;
@@ -74,6 +75,10 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
     private TextView warehouseView;
     private Uri mUri;
     private long currentInventoryId;
+    private int quantity;
+    private String date;
+    private String warehouse;
+    private String donor;
 
     public ViewCurrentInventoryDetailFragment() {
         //required empty public constructor
@@ -105,6 +110,24 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
         warehouseView = (TextView) rootView.findViewById(R.id.current_inventory_detail_text_warehouse);
 
         // implement fab
+        FloatingActionButton fab = (FloatingActionButton) rootView
+                .findViewById(R.id.view_current_inventor_detail_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getFragmentManager();
+                UpdateCurrentDialogFragment dialog = new UpdateCurrentDialogFragment();
+                Bundle dialogInputs = new Bundle();
+                dialogInputs.putInt(UpdateCurrentDialogFragment.QTY_KEY, quantity);
+                dialogInputs.putString(UpdateCurrentDialogFragment.WAREHOUSE_KEY, warehouse);
+                dialogInputs.putString(UpdateCurrentDialogFragment.DATE_KEY, date);
+                dialogInputs.putString(UpdateCurrentDialogFragment.DONOR_KEY, donor);
+                dialogInputs.putLong(UpdateCurrentDialogFragment.ID_KEY, currentInventoryId);
+                dialog.setArguments(dialogInputs);
+                dialog.setTargetFragment(ViewCurrentInventoryDetailFragment.this, 300);
+                dialog.show(fragmentManager, "open update current dialog");
+            }
+        });
 
         // implement delete button
         final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -115,13 +138,15 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
                         if (handleCurrentInventoryDeletion()) {
                             FragmentManager manager = getActivity().getSupportFragmentManager();
                             manager.popBackStack();
+                            manager.popBackStack();
+                            manager.popBackStack();
                         }
                         break;
                 }
             }
         };
 
-        Button delete = (Button) rootView.findViewById(R.id.view_category_detail_delete_button);
+        Button delete = (Button) rootView.findViewById(R.id.view_current_inventory_delete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,11 +197,11 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
             int value = data.getInt(COL_ITEM_VALUE);
             String valueString = "" + value;
             String barcode = data.getString(COL_ITEM_BARCODE);
-            int quantity = data.getInt(COL_CURRENT_QTY);
+            quantity = data.getInt(COL_CURRENT_QTY);
             String quantityString = "" + quantity;
-            String date = data.getString(COL_CURRENT_DATE_RECEIVED);
-            String donor = data.getString(COL_CURRENT_DONOR);
-            String warehouse = data.getString(COL_CURRENT_WAREHOUSE);
+            date = data.getString(COL_CURRENT_DATE_RECEIVED);
+            donor = data.getString(COL_CURRENT_DONOR);
+            warehouse = data.getString(COL_CURRENT_WAREHOUSE);
             currentInventoryId = data.getLong(COL_CURRENT_ID);
 
             //place data into text views
@@ -204,7 +229,7 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
         String selection = InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
                 InventoryContract.CurrentInventoryEntry._ID + " = ? ";
         String[] selectionArgs = {Long.toString(currentInventoryId)};
-        String message = "Current Inventory Record delete failed.";
+        String message = getContext().getResources().getString(R.string.current_inventory_delete_fail);
 
         if (currentInventoryId != -1) {
             rowDeleted = getContext().getContentResolver().delete(
@@ -215,7 +240,7 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
         }
 
         if (rowDeleted != 0) {
-            message = "Current Inventory Record delete successful";
+            message = getContext().getResources().getString(R.string.current_inventory_delete_success);
             deleted = true;
         }
 
