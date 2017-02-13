@@ -26,38 +26,38 @@ public class ViewPastInventoryListFragment extends Fragment
     implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final int COL_PAST_ID = 0;
-    public static final int COL_PAST_ITEM_KEY = 1;
-    public static final int COL_PAST_QTY = 2;
-    public static final int COL_PAST_DATE_SHIPPED = 3;
-    public static final int COL_PAST_DONOR = 4;
-    public static final int COL_ITEM_ID = 5;
-    public static final int COL_ITEM_BARCODE = 6;
-    public static final int COL_ITEM_NAME = 7;
-    public static final int COL_ITEM_DESCRIPTION = 8;
-    public static final int COL_ITEM_CATEGORY_KEY = 9;
-    public static final int COL_ITEM_VALUE = 10;
-    public static final int COL_CATEGORY_ID = 11;
-    public static final int COL_CATEGORY_NAME = 12;
-    public static final int COL_CATEGORY_BARCODE = 13;
+    public static final int COL_PAST_QTY = 1;
+    public static final int COL_PAST_DATE_SHIPPED = 2;
+    public static final int COL_PAST_DONOR = 3;
+    public static final int COL_ITEM_NAME = 4;
+    public static final int COL_ITEM_DESCRIPTION = 5;
+    public static final int COL_ITEM_CATEGORY_KEY = 6;
+    public static final int COL_ITEM_VALUE = 7;
+    public static final int COL_CATEGORY_ID = 8;
+    public static final int COL_CATEGORY_NAME = 9;
+    public static final int COL_CATEGORY_BARCODE = 10;
+    public static final int COL_BARCODE_ID = 11;
+    public static final int COL_BARCODE_COMPLETE = 12;
     public static final String PAST_URI_KEY = "past_uri_key";
     private static final String SELECTED_KEY = "selected_position";
     private static final int PAST_INVENTORY_LOADER = 2;
     // Past inventory columns
     private static final String[] PAST_INVENTORY_COLUMNS = {
-            PastInventoryEntry.TABLE_NAME + "." + PastInventoryEntry._ID,
-            PastInventoryEntry.COLUMN_ITEM_KEY,
-            PastInventoryEntry.COLUMN_QTY,
-            PastInventoryEntry.COLUMN_DATE_SHIPPED,
-            PastInventoryEntry.COLUMN_DONOR,
-            ItemEntry.TABLE_NAME + "." + ItemEntry._ID,
-            ItemEntry.COLUMN_BARCODE_ID,
-            ItemEntry.COLUMN_NAME,
-            ItemEntry.COLUMN_DESCRIPTION,
-            ItemEntry.COLUMN_CATEGORY_KEY,
-            ItemEntry.COLUMN_VALUE,
-            InventoryContract.CategoryEntry.TABLE_NAME + "." + InventoryContract.CategoryEntry._ID,
+            InventoryContract.PastInventoryEntry.TABLE_NAME + "." + InventoryContract.PastInventoryEntry._ID,
+            InventoryContract.PastInventoryEntry.COLUMN_QTY,
+            InventoryContract.PastInventoryEntry.COLUMN_DATE_SHIPPED,
+            InventoryContract.PastInventoryEntry.COLUMN_DONOR,
+            InventoryContract.PastInventoryEntry.COLUMN_NAME,
+            InventoryContract.PastInventoryEntry.COLUMN_DESCRIPTION,
+            InventoryContract.PastInventoryEntry.COLUMN_CATEGORY_KEY,
+            InventoryContract.PastInventoryEntry.COLUMN_VALUE,
+            InventoryContract.CategoryEntry.TABLE_NAME + "." +
+                    InventoryContract.CategoryEntry._ID,
             InventoryContract.CategoryEntry.COLUMN_CATEGORY,
-            InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
+            InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX,
+            InventoryContract.BarcodeEntry.TABLE_NAME + "." +
+                    InventoryContract.BarcodeEntry._ID,
+            InventoryContract.BarcodeEntry.COLUMN_BARCODE_COMPLETE
     };
     private ViewPastInventoryAdapter mViewPastInventoryAdapter;
     private ListView mListView;

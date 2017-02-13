@@ -30,39 +30,39 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
 
     // Current inventory column indices
     public static final int COL_CURRENT_ID = 0;
-    public static final int COL_CURRENT_ITEM_KEY = 1;
-    public static final int COL_CURRENT_QTY = 2;
-    public static final int COL_CURRENT_DONOR = 3;
-    public static final int COL_CURRENT_DATE_RECEIVED = 4;
-    public static final int COL_CURRENT_WAREHOUSE = 5;
-    public static final int COL_ITEM_ID = 6;
-    public static final int COL_ITEM_BARCODE = 7;
-    public static final int COL_ITEM_NAME = 8;
-    public static final int COL_ITEM_DESCRIPTION = 9;
-    public static final int COL_ITEM_CATEGORY_KEY = 10;
-    public static final int COL_ITEM_VALUE = 11;
-    public static final int COL_CATEGORY_ID = 12;
-    public static final int COL_CATEGORY_NAME = 13;
-    public static final int COL_CATEGORY_BARCODE_PREFIX = 14;
+    public static final int COL_CURRENT_QTY = 1;
+    public static final int COL_CURRENT_DONOR = 2;
+    public static final int COL_CURRENT_DATE_RECEIVED = 3;
+    public static final int COL_CURRENT_WAREHOUSE = 4;
+    public static final int COL_ITEM_NAME = 5;
+    public static final int COL_ITEM_DESCRIPTION = 6;
+    public static final int COL_ITEM_CATEGORY_KEY = 7;
+    public static final int COL_ITEM_VALUE = 8;
+    public static final int COL_CATEGORY_ID = 9;
+    public static final int COL_CATEGORY_NAME = 10;
+    public static final int COL_CATEGORY_BARCODE_PREFIX = 11;
+    public static final int COL_BARCODE_ID = 12;
+    public static final int COL_BARCODE_COMPLETE = 13;
     public static final String DETAILED_CURRENT_KEY = "CURRENT_URI";
     public static final int CURRENT_DETAIL_LOADER = 5;
     private static final String[] CURRENT_DETAIL_COLUMNS = {
             InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
                     InventoryContract.CurrentInventoryEntry._ID + " AS _id",
-            InventoryContract.CurrentInventoryEntry.COLUMN_ITEM_KEY,
             InventoryContract.CurrentInventoryEntry.COLUMN_QTY,
             InventoryContract.CurrentInventoryEntry.COLUMN_DONOR,
             InventoryContract.CurrentInventoryEntry.COLUMN_DATE_RECEIVED,
             InventoryContract.CurrentInventoryEntry.COLUMN_WAREHOUSE,
-            InventoryContract.ItemEntry.TABLE_NAME + "." + InventoryContract.ItemEntry._ID,
-            InventoryContract.ItemEntry.COLUMN_BARCODE_ID,
-            InventoryContract.ItemEntry.COLUMN_NAME,
-            InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
-            InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY,
-            InventoryContract.ItemEntry.COLUMN_VALUE,
-            InventoryContract.CategoryEntry.TABLE_NAME + "." + InventoryContract.CategoryEntry._ID,
+            InventoryContract.CurrentInventoryEntry.COLUMN_NAME,
+            InventoryContract.CurrentInventoryEntry.COLUMN_DESCRIPTION,
+            InventoryContract.CurrentInventoryEntry.COLUMN_CATEGORY_KEY,
+            InventoryContract.CurrentInventoryEntry.COLUMN_VALUE,
+            InventoryContract.CategoryEntry.TABLE_NAME + "." +
+                    InventoryContract.CategoryEntry._ID,
             InventoryContract.CategoryEntry.COLUMN_CATEGORY,
-            InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
+            InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX,
+            InventoryContract.BarcodeEntry.TABLE_NAME + "." +
+                    InventoryContract.BarcodeEntry._ID,
+            InventoryContract.BarcodeEntry.COLUMN_BARCODE_COMPLETE
     };
     private TextView nameView;
     private TextView descriptionView;
@@ -196,7 +196,7 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
             String category = data.getString(COL_CATEGORY_NAME);
             int value = data.getInt(COL_ITEM_VALUE);
             String valueString = "" + value;
-            String barcode = data.getString(COL_ITEM_BARCODE);
+            String barcode = data.getString(COL_BARCODE_COMPLETE);
             quantity = data.getInt(COL_CURRENT_QTY);
             String quantityString = "" + quantity;
             date = data.getString(COL_CURRENT_DATE_RECEIVED);

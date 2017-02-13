@@ -34,6 +34,7 @@ public class InventoryProvider extends ContentProvider {
     static final int SHIP_INVENTORY = 600;
     static final int SHIP_INVENTORY_WITH_ID = 601;
     static final int SHIP_INVENTORY_WITH_CATEGORY = 602;
+    static final int BARCODE = 700;
     // The URI matcher used by this content provider
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     // Make Query builders for joined tables
@@ -94,18 +95,17 @@ public class InventoryProvider extends ContentProvider {
 
         // Inner join item on current inventory
         sCurrentInventoryQueryBuilder.setTables(
-                InventoryContract.CurrentInventoryEntry.TABLE_NAME + " INNER JOIN (" +
-                        InventoryContract.ItemEntry.TABLE_NAME + " INNER JOIN " +
-                        InventoryContract.CategoryEntry.TABLE_NAME +
-                        " ON " + InventoryContract.ItemEntry.TABLE_NAME +
-                        "." + InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY +
-                        " = " + InventoryContract.CategoryEntry.TABLE_NAME +
-                        "." + InventoryContract.CategoryEntry._ID + ") " +
-                        InventoryContract.ItemEntry.TABLE_NAME +
+                InventoryContract.CurrentInventoryEntry.TABLE_NAME + " INNER JOIN " +
+                        InventoryContract.BarcodeEntry.TABLE_NAME +
                         " ON " + InventoryContract.CurrentInventoryEntry.TABLE_NAME +
-                        "." + InventoryContract.CurrentInventoryEntry.COLUMN_ITEM_KEY +
-                        " = " + InventoryContract.ItemEntry.TABLE_NAME +
-                        "." + InventoryContract.ItemEntry._ID
+                        "." + InventoryContract.CurrentInventoryEntry.COLUMN_BARCODE_KEY +
+                        " = " + InventoryContract.BarcodeEntry.TABLE_NAME +
+                        "." + InventoryContract.BarcodeEntry._ID + " INNER JOIN " +
+                        InventoryContract.CategoryEntry.TABLE_NAME +
+                        " ON " + InventoryContract.CurrentInventoryEntry.TABLE_NAME +
+                        "." + InventoryContract.CurrentInventoryEntry.COLUMN_CATEGORY_KEY +
+                        " = " + InventoryContract.CategoryEntry.TABLE_NAME +
+                        "." + InventoryContract.CategoryEntry._ID
         );
     }
 
@@ -114,18 +114,17 @@ public class InventoryProvider extends ContentProvider {
 
         // Inner join item on past inventory
         sPastInventoryQueryBuilder.setTables(
-                InventoryContract.PastInventoryEntry.TABLE_NAME + " INNER JOIN (" +
-                        InventoryContract.ItemEntry.TABLE_NAME + " INNER JOIN " +
-                        InventoryContract.CategoryEntry.TABLE_NAME +
-                        " ON " + InventoryContract.ItemEntry.TABLE_NAME +
-                        "." + InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY +
-                        " = " + InventoryContract.CategoryEntry.TABLE_NAME +
-                        "." + InventoryContract.CategoryEntry._ID + ") " +
+                InventoryContract.PastInventoryEntry.TABLE_NAME + " INNER JOIN " +
                         InventoryContract.ItemEntry.TABLE_NAME +
                         " ON " + InventoryContract.PastInventoryEntry.TABLE_NAME +
-                        "." + InventoryContract.PastInventoryEntry.COLUMN_ITEM_KEY +
-                        " = " + InventoryContract.ItemEntry.TABLE_NAME +
-                        "." + InventoryContract.ItemEntry._ID
+                        "." + InventoryContract.PastInventoryEntry.COLUMN_BARCODE_KEY +
+                        " = " + InventoryContract.BarcodeEntry.TABLE_NAME +
+                        "." + InventoryContract.BarcodeEntry._ID + " INNER JOIN " +
+                        InventoryContract.CategoryEntry.TABLE_NAME +
+                        " ON " + InventoryContract.PastInventoryEntry.TABLE_NAME +
+                        "." + InventoryContract.PastInventoryEntry.COLUMN_CATEGORY_KEY +
+                        " = " + InventoryContract.CategoryEntry.TABLE_NAME +
+                        "." + InventoryContract.CategoryEntry._ID
         );
     }
 
@@ -134,18 +133,17 @@ public class InventoryProvider extends ContentProvider {
 
         // Inner join item on current inventory
         sReceiveInventoryQueryBuilder.setTables(
-                InventoryContract.ReceiveInventoryEntry.TABLE_NAME + " INNER JOIN (" +
-                        InventoryContract.ItemEntry.TABLE_NAME + " INNER JOIN " +
-                        InventoryContract.CategoryEntry.TABLE_NAME +
-                        " ON " + InventoryContract.ItemEntry.TABLE_NAME +
-                        "." + InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY +
-                        " = " + InventoryContract.CategoryEntry.TABLE_NAME +
-                        "." + InventoryContract.CategoryEntry._ID + ") " +
-                        InventoryContract.ItemEntry.TABLE_NAME +
+                InventoryContract.ReceiveInventoryEntry.TABLE_NAME + " INNER JOIN " +
+                        InventoryContract.BarcodeEntry.TABLE_NAME +
                         " ON " + InventoryContract.ReceiveInventoryEntry.TABLE_NAME +
-                        "." + InventoryContract.ReceiveInventoryEntry.COLUMN_ITEM_KEY +
-                        " = " + InventoryContract.ItemEntry.TABLE_NAME +
-                        "." + InventoryContract.ItemEntry._ID
+                        "." + InventoryContract.ReceiveInventoryEntry.COLUMN_BARCODE_KEY +
+                        " = " + InventoryContract.BarcodeEntry.TABLE_NAME +
+                        "." + InventoryContract.BarcodeEntry._ID + " INNER JOIN " +
+                        InventoryContract.CategoryEntry.TABLE_NAME +
+                        " ON " + InventoryContract.ReceiveInventoryEntry.TABLE_NAME +
+                        "." + InventoryContract.ReceiveInventoryEntry.COLUMN_CATEGORY_KEY +
+                        " = " + InventoryContract.CategoryEntry.TABLE_NAME +
+                        "." + InventoryContract.CategoryEntry._ID
         );
     }
 
@@ -154,18 +152,17 @@ public class InventoryProvider extends ContentProvider {
 
         // Inner join item on current inventory
         sShipInventoryQueryBuilder.setTables(
-                InventoryContract.ShipInventoryEntry.TABLE_NAME + " INNER JOIN (" +
-                        InventoryContract.ItemEntry.TABLE_NAME + " INNER JOIN " +
-                        InventoryContract.CategoryEntry.TABLE_NAME +
-                        " ON " + InventoryContract.ItemEntry.TABLE_NAME +
-                        "." + InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY +
-                        " = " + InventoryContract.CategoryEntry.TABLE_NAME +
-                        "." + InventoryContract.CategoryEntry._ID + ") " +
-                        InventoryContract.ItemEntry.TABLE_NAME +
+                InventoryContract.ShipInventoryEntry.TABLE_NAME + " INNER JOIN " +
+                        InventoryContract.BarcodeEntry.TABLE_NAME +
                         " ON " + InventoryContract.ShipInventoryEntry.TABLE_NAME +
-                        "." + InventoryContract.ShipInventoryEntry.COLUMN_ITEM_KEY +
-                        " = " + InventoryContract.ItemEntry.TABLE_NAME +
-                        "." + InventoryContract.ItemEntry._ID
+                        "." + InventoryContract.ShipInventoryEntry.COLUMN_BARCODE_KEY +
+                        " = " + InventoryContract.BarcodeEntry.TABLE_NAME +
+                        "." + InventoryContract.BarcodeEntry._ID + " INNER JOIN " +
+                        InventoryContract.CategoryEntry.TABLE_NAME +
+                        " ON " + InventoryContract.ShipInventoryEntry.TABLE_NAME +
+                        "." + InventoryContract.ShipInventoryEntry.COLUMN_CATEGORY_KEY +
+                        " = " + InventoryContract.CategoryEntry.TABLE_NAME +
+                        "." + InventoryContract.CategoryEntry._ID
         );
     }
 
@@ -213,6 +210,9 @@ public class InventoryProvider extends ContentProvider {
                 SHIP_INVENTORY_WITH_ID);
         matcher.addURI(authority, InventoryContract.PATH_SHIP_INVENTORY + "/*/#",
                 SHIP_INVENTORY_WITH_CATEGORY);
+
+        // barcode codes
+        matcher.addURI(authority, InventoryContract.PATH_BARCODE, BARCODE);
 
         return matcher;
     }
@@ -424,6 +424,8 @@ public class InventoryProvider extends ContentProvider {
                 return InventoryContract.ShipInventoryEntry.CONTENT_ITEM_TYPE;
             case SHIP_INVENTORY_WITH_CATEGORY:
                 return InventoryContract.ShipInventoryEntry.CONTENT_TYPE;
+            case BARCODE:
+                return InventoryContract.BarcodeEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -547,6 +549,18 @@ public class InventoryProvider extends ContentProvider {
                 retCursor = getShipInventoryByCategory(uri, projection, sortOrder);
                 break;
 
+            case BARCODE:
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        InventoryContract.BarcodeEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -617,7 +631,17 @@ public class InventoryProvider extends ContentProvider {
             case SHIP_INVENTORY: {
                 long _id = db.insert(InventoryContract.ShipInventoryEntry.TABLE_NAME, null, values);
                 if (_id > 0) {
-                    returnUri = InventoryContract.ShipInventoryEntry.buildShipInventoryWithCategoryUri(_id);
+                    returnUri = InventoryContract.ShipInventoryEntry.buildShipInventoryWithIdUri(_id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
+            }
+
+            case BARCODE: {
+                long _id = db.insert(InventoryContract.BarcodeEntry.TABLE_NAME, null, values);
+                if (_id > 0) {
+                    returnUri = InventoryContract.BarcodeEntry.buildBarcodeWithIdUri(_id);
                 } else {
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 }
@@ -671,6 +695,11 @@ public class InventoryProvider extends ContentProvider {
                         selection, selectionArgs);
                 break;
 
+            case BARCODE:
+                rowsDeleted = db.delete(InventoryContract.BarcodeEntry.TABLE_NAME,
+                        selection, selectionArgs);
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -719,6 +748,10 @@ public class InventoryProvider extends ContentProvider {
                 rowsUpdated = db.update(InventoryContract.ShipInventoryEntry.TABLE_NAME,
                         values, selection, selectionArgs);
                 break;
+
+            case BARCODE:
+                rowsUpdated = db.update(InventoryContract.BarcodeEntry.TABLE_NAME,
+                        values, selection, selectionArgs);
 
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);

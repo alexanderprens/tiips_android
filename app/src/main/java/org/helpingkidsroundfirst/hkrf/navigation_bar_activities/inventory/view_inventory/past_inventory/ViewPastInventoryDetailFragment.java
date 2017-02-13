@@ -27,36 +27,36 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
     LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final int COL_PAST_ID = 0;
-    public static final int COL_PAST_ITEM_KEY = 1;
-    public static final int COL_PAST_QTY = 2;
-    public static final int COL_PAST_DATE_SHIPPED = 3;
-    public static final int COL_PAST_DONOR = 4;
-    public static final int COL_ITEM_ID = 5;
-    public static final int COL_ITEM_BARCODE = 6;
-    public static final int COL_ITEM_NAME = 7;
-    public static final int COL_ITEM_DESCRIPTION = 8;
-    public static final int COL_ITEM_CATEGORY_KEY = 9;
-    public static final int COL_ITEM_VALUE = 10;
-    public static final int COL_CATEGORY_ID = 11;
-    public static final int COL_CATEGORY_NAME = 12;
-    public static final int COL_CATEGORY_BARCODE = 13;
+    public static final int COL_PAST_QTY = 1;
+    public static final int COL_PAST_DATE_SHIPPED = 2;
+    public static final int COL_PAST_DONOR = 3;
+    public static final int COL_ITEM_NAME = 4;
+    public static final int COL_ITEM_DESCRIPTION = 5;
+    public static final int COL_ITEM_CATEGORY_KEY = 6;
+    public static final int COL_ITEM_VALUE = 7;
+    public static final int COL_CATEGORY_ID = 8;
+    public static final int COL_CATEGORY_NAME = 9;
+    public static final int COL_CATEGORY_BARCODE = 10;
+    public static final int COL_BARCODE_ID = 11;
+    public static final int COL_BARCODE_COMPLETE = 12;
     public static final String DETAILED_PAST_KEY = "PAST_URI";
     public static final int PAST_DETAIL_LOADER = 6;
     private static final String[] PAST_DETAIL_COLUMNS = {
             InventoryContract.PastInventoryEntry.TABLE_NAME + "." + InventoryContract.PastInventoryEntry._ID,
-            InventoryContract.PastInventoryEntry.COLUMN_ITEM_KEY,
             InventoryContract.PastInventoryEntry.COLUMN_QTY,
             InventoryContract.PastInventoryEntry.COLUMN_DATE_SHIPPED,
             InventoryContract.PastInventoryEntry.COLUMN_DONOR,
-            InventoryContract.ItemEntry.TABLE_NAME + "." + InventoryContract.ItemEntry._ID,
-            InventoryContract.ItemEntry.COLUMN_BARCODE_ID,
-            InventoryContract.ItemEntry.COLUMN_NAME,
-            InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
-            InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY,
-            InventoryContract.ItemEntry.COLUMN_VALUE,
-            InventoryContract.CategoryEntry.TABLE_NAME + "." + InventoryContract.CategoryEntry._ID,
+            InventoryContract.PastInventoryEntry.COLUMN_NAME,
+            InventoryContract.PastInventoryEntry.COLUMN_DESCRIPTION,
+            InventoryContract.PastInventoryEntry.COLUMN_CATEGORY_KEY,
+            InventoryContract.PastInventoryEntry.COLUMN_VALUE,
+            InventoryContract.CategoryEntry.TABLE_NAME + "." +
+                    InventoryContract.CategoryEntry._ID,
             InventoryContract.CategoryEntry.COLUMN_CATEGORY,
-            InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
+            InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX,
+            InventoryContract.BarcodeEntry.TABLE_NAME + "." +
+                    InventoryContract.BarcodeEntry._ID,
+            InventoryContract.BarcodeEntry.COLUMN_BARCODE_COMPLETE
     };
     private TextView nameView;
     private TextView descriptionView;
@@ -165,7 +165,7 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
             String category = data.getString(COL_CATEGORY_NAME);
             int value = data.getInt(COL_ITEM_VALUE);
             String valueString = "" + value;
-            String barcode = data.getString(COL_ITEM_BARCODE);
+            String barcode = data.getString(COL_BARCODE_COMPLETE);
             int quantity = data.getInt(COL_PAST_QTY);
             String quantityString = "" + quantity;
             String date = data.getString(COL_PAST_DATE_SHIPPED);

@@ -24,8 +24,8 @@
     <string name="content_text">Helping Kids Round First Application</string>
 
     <!-- dialog_add_inventory_item -->
-    <string name="add_inventory_item_title">New Inventory Item</string>
-    <string name="add_inv_name">Item Name</string>
+    <string name="add_inventory_item_title">New Generic Barcode</string>
+    <string name="add_inv_name">Barcode Name</string>
     <string name="add_inv_barcode">XXXX</string>
     <string name="add_inv_desc">Description</string>
     <string name="add_inv_category">Category</string>
@@ -38,7 +38,7 @@
     <string name="choose_inventory_header">Select Table to View/Edit</string>
     <string name="choose_inv_current_button">Current Inventory</string>
     <string name="choose_inv_past_button">Past Inventory</string>
-    <string name="choose_inv_item_button">Barcode Items</string>
+    <string name="choose_inv_item_button">Generic Barcodes</string>
     <string name="choose_inv_category_button">Categories</string>
     <string name="title_activity_view_inventory">ViewInventoryActivity</string>
 
@@ -51,7 +51,7 @@
     <string name="view_inventory_item_detail_category">Category: </string>
     <string name="view_inventory_item_detail_barcode">Barcode: </string>
     <string name="view_inventory_item_detail_value">Value: </string>
-    <string name="view_inventory_item_detail_delete">Delete Inventory Item</string>
+    <string name="view_inventory_item_detail_delete">Delete Generic Barcode</string>
 
     <!-- fragment_view_current_inventory_detail -->
     <string name="view_current_inventory_detail_name">Name: </string>
@@ -103,7 +103,7 @@
     <string name="update_category_ok">OK</string>
 
     <!-- dialog_update_inventory_item -->
-    <string name="update_item_header">Update Barcode Item</string>
+    <string name="update_item_header">Update Generic Barcode</string>
     <string name="update_item_cancel">Cancel</string>
     <string name="update_item_ok">OK</string>
     <string name="update_item_not_updatable">Barcode not updatable</string>
@@ -143,6 +143,10 @@
     <!-- title bar strings -->
     <string name="receive_inventory_title">Receive Inventory</string>
     <string name="ship_inventory_title">Ship Inventory</string>
+    <string name="view_barcode_title">Generic Barcodes</string>
+    <string name="view_current_title">View Current Inventory</string>
+    <string name="view_past_title">View Past Inventory</string>
+    <string name="view_category_title">View Categories</string>
 
     <!-- fragment_receive_inventory -->
     <string name="receive_inventory_header">Select Receive Inventory Action</string>

@@ -69,7 +69,7 @@ public class ViewInventoryActivity extends AppCompatActivity
 
                 //replace fragment
                 startFragment(fragment, "ViewIntermediateListFragment");
-                getSupportActionBar().setTitle("Barcode Items");
+                getSupportActionBar().setTitle(getResources().getString(R.string.view_barcode_title));
                 break;
 
             case ViewInventoryFragment.BUTTON_CURRENT:
@@ -84,7 +84,7 @@ public class ViewInventoryActivity extends AppCompatActivity
 
                 //replace fragment
                 startFragment(fragment, "ViewIntermediateListFragment");
-                getSupportActionBar().setTitle("View Current Inventory");
+                getSupportActionBar().setTitle(getResources().getString(R.string.view_current_title));
                 break;
 
             case ViewInventoryFragment.BUTTON_PAST:
@@ -99,13 +99,13 @@ public class ViewInventoryActivity extends AppCompatActivity
 
                 //replace fragment
                 startFragment(fragment, "ViewIntermediateListFragment");
-                getSupportActionBar().setTitle("View Past Inventory");
+                getSupportActionBar().setTitle(getResources().getString(R.string.view_past_title));
                 break;
 
             case ViewInventoryFragment.BUTTON_CATEGORIES:
                 fragment = new ViewCategoryListFragment();
                 startFragment(fragment, "ViewCategoryListFragment");
-                getSupportActionBar().setTitle("View Categories");
+                getSupportActionBar().setTitle(getResources().getString(R.string.view_category_title));
                 break;
         }
     }

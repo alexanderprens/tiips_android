@@ -21,6 +21,7 @@ public class InventoryContract {
     // Table names
     public static final String PATH_CATEGORY = "categories";
     public static final String PATH_ITEM = "items";
+    public static final String PATH_BARCODE = "barcodes";
     public static final String PATH_CURRENT_INVENTORY = "current_inventory";
     public static final String PATH_PAST_INVENTORY = "past_inventory";
     public static final String PATH_RECEIVE_INVENTORY = "receive_inventory";
@@ -98,6 +99,34 @@ public class InventoryContract {
         }
     }
 
+    /* Define barcode table */
+    public static final class BarcodeEntry implements BaseColumns {
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_BARCODE).build();
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY +
+                        "/" + PATH_BARCODE;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY +
+                        "/" + PATH_BARCODE;
+
+        // Table name
+        public static final String TABLE_NAME = "barcodes";
+
+        // Table columns
+        public static final String COLUMN_BARCODE_COMPLETE = "complete_barcode";
+
+        // Uris
+        public static Uri buildBarcodeUri() {
+            return CONTENT_URI;
+        }
+
+        public static Uri buildBarcodeWithIdUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+    }
+
     /* Define Current Inventory Table */
     public static final class CurrentInventoryEntry implements BaseColumns {
 
@@ -114,7 +143,11 @@ public class InventoryContract {
         public static final String TABLE_NAME = "current_inventory";
 
         // Table columns
-        public static final String COLUMN_ITEM_KEY = "item_id";
+        public static final String COLUMN_BARCODE_KEY = "current_barcode_id";
+        public static final String COLUMN_NAME = "current_name";
+        public static final String COLUMN_DESCRIPTION = "current_description";
+        public static final String COLUMN_CATEGORY_KEY = "current_category_id";
+        public static final String COLUMN_VALUE = "value";
         public static final String COLUMN_QTY = "qty";
         public static final String COLUMN_DATE_RECEIVED = "date_received";
         public static final String COLUMN_DONOR = "donor";
@@ -158,7 +191,11 @@ public class InventoryContract {
         public static final String TABLE_NAME = "receive_inventory";
 
         // Table columns
-        public static final String COLUMN_ITEM_KEY = "receive_item_id";
+        public static final String COLUMN_BARCODE_KEY = "receive_barcode_id";
+        public static final String COLUMN_NAME = "receive_name";
+        public static final String COLUMN_DESCRIPTION = "receive_description";
+        public static final String COLUMN_CATEGORY_KEY = "receive_category_id";
+        public static final String COLUMN_VALUE = "receive_value";
         public static final String COLUMN_QTY = "receive_qty";
         public static final String COLUMN_DATE_RECEIVED = "receive_date_received";
         public static final String COLUMN_DONOR = "receive_donor";
@@ -202,7 +239,11 @@ public class InventoryContract {
         public static final String TABLE_NAME = "past_inventory";
 
         // Table columns
-        public static final String COLUMN_ITEM_KEY = "item_id";
+        public static final String COLUMN_BARCODE_KEY = "past_barcode_id";
+        public static final String COLUMN_NAME = "past_name";
+        public static final String COLUMN_DESCRIPTION = "past_description";
+        public static final String COLUMN_CATEGORY_KEY = "past_category_id";
+        public static final String COLUMN_VALUE = "past_value";
         public static final String COLUMN_QTY = "qty";
         public static final String COLUMN_DATE_SHIPPED = "date_shipped";
         public static final String COLUMN_DONOR = "donor";
@@ -245,7 +286,11 @@ public class InventoryContract {
         public static final String TABLE_NAME = "ship_inventory";
 
         // Table columns
-        public static final String COLUMN_ITEM_KEY = "ship_item_id";
+        public static final String COLUMN_BARCODE_KEY = "ship_barcode_id";
+        public static final String COLUMN_NAME = "ship_name";
+        public static final String COLUMN_DESCRIPTION = "ship_description";
+        public static final String COLUMN_CATEGORY_KEY = "ship_category_id";
+        public static final String COLUMN_VALUE = "ship_value";
         public static final String COLUMN_QTY = "ship_qty";
         public static final String COLUMN_DATE_SHIPPED = "ship_date_shipped";
         public static final String COLUMN_DONOR = "ship_donor";
