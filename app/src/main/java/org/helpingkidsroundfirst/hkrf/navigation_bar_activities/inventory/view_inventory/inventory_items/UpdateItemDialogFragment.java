@@ -3,14 +3,18 @@ package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.helpingkidsroundfirst.hkrf.R;
@@ -28,6 +32,14 @@ public class UpdateItemDialogFragment extends DialogFragment implements
     public static final String DESCRIPTION_KEY = "description_string";
     public static final String VALUE_KEY = "value_int";
     public static final String ID_KEY = "item_id_long";
+    public static final String CATEGORY_KEY = "item_cat_long";
+    // category columns
+    private static final String[] CATEGORY_COLUMNS = {
+            InventoryContract.CategoryEntry.COLUMN_CATEGORY
+    };
+    private static int[] TO_VIEWS = {
+            android.R.id.text1
+    };
     private String nameInput;
     private String descriptionInput;
     private String valueInput;
@@ -35,6 +47,17 @@ public class UpdateItemDialogFragment extends DialogFragment implements
     private long itemId;
     private UpdateItemListener mListener;
     private String error;
+    private long categoryKey;
+
+    public static void selectSpinnerItemByValue(Spinner spnr, long value) {
+        SimpleCursorAdapter adapter = (SimpleCursorAdapter) spnr.getAdapter();
+        for (int position = 0; position < adapter.getCount(); position++) {
+            if (adapter.getItemId(position) == value) {
+                spnr.setSelection(position);
+                return;
+            }
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +90,7 @@ public class UpdateItemDialogFragment extends DialogFragment implements
             valueInt = bundle.getInt(VALUE_KEY);
             itemId = bundle.getLong(ID_KEY);
             valueInput = Integer.toString(valueInt);
+            categoryKey = bundle.getLong(CATEGORY_KEY);
         }
 
         // listen to name input
@@ -126,6 +150,41 @@ public class UpdateItemDialogFragment extends DialogFragment implements
             @Override
             public void afterTextChanged(Editable s) {
                 // required stub
+            }
+        });
+
+        // listen to category input
+        final Spinner categorySpinner = (Spinner) view.findViewById(R.id.update_inventory_item_spinner);
+
+        Cursor cursor = getContext().getContentResolver().query(
+                InventoryContract.CategoryEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                InventoryContract.CategoryEntry.COLUMN_CATEGORY
+        );
+
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+                getContext(),
+                android.R.layout.simple_spinner_item,
+                cursor,
+                CATEGORY_COLUMNS,
+                TO_VIEWS,
+                0
+        );
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(adapter);
+        selectSpinnerItemByValue(categorySpinner, categoryKey);
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                categoryKey = categorySpinner.getItemIdAtPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
@@ -206,6 +265,7 @@ public class UpdateItemDialogFragment extends DialogFragment implements
         updatedItems.put(InventoryContract.ItemEntry.COLUMN_NAME, nameInput);
         updatedItems.put(InventoryContract.ItemEntry.COLUMN_DESCRIPTION, descriptionInput);
         updatedItems.put(InventoryContract.ItemEntry.COLUMN_VALUE, Long.parseLong(valueInput));
+        updatedItems.put(InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY, categoryKey);
 
         rowsUpdate = getContext().getContentResolver().update(
                 itemUri,

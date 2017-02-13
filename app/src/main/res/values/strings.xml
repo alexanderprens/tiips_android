@@ -106,7 +106,7 @@
     <string name="update_item_header">Update Barcode Item</string>
     <string name="update_item_cancel">Cancel</string>
     <string name="update_item_ok">OK</string>
-    <string name="update_item_not_updatable">Category and barcode not updatable</string>
+    <string name="update_item_not_updatable">Barcode not updatable</string>
 
     <!-- input validation strings -->
     <string name="validation_category_empty">Category cannot be empty</string>
@@ -138,6 +138,7 @@
     <string name="current_inventory_delete_success">Current inventory delete successful</string>
     <string name="current_inventory_delete_fail">Current inventory delete failed</string>
     <string name="current_inventory_update_fail">Current inventory updated failed</string>
+    <string name="error_barcode_used">Barcode is in use, cannot delete</string>
 
     <!-- title bar strings -->
     <string name="receive_inventory_title">Receive Inventory</string>

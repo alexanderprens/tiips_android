@@ -62,6 +62,7 @@ public class ViewInventoryItemDetailFragment extends Fragment implements
     private String name;
     private String description;
     private int value;
+    private long categoryKey;
 
     public ViewInventoryItemDetailFragment() {
         // Required empty public constructor
@@ -102,6 +103,7 @@ public class ViewInventoryItemDetailFragment extends Fragment implements
                 dialogInputs.putString(UpdateItemDialogFragment.DESCRIPTION_KEY, description);
                 dialogInputs.putInt(UpdateItemDialogFragment.VALUE_KEY, value);
                 dialogInputs.putLong(UpdateItemDialogFragment.ID_KEY, itemId);
+                dialogInputs.putLong(UpdateItemDialogFragment.CATEGORY_KEY, categoryKey);
                 dialog.setArguments(dialogInputs);
                 dialog.setTargetFragment(ViewInventoryItemDetailFragment.this, 300);
                 dialog.show(fragmentManager, "open update item dialog");
@@ -174,6 +176,7 @@ public class ViewInventoryItemDetailFragment extends Fragment implements
             String valueString = "" + value;
             String barcode = data.getString(COL_ITEM_BARCODE);
             itemId = data.getLong(COL_ITEM_ID);
+            categoryKey = data.getLong(COL_ITEM_CAT_KEY);
 
             //place data into text views
             nameView.setText(name);
@@ -198,21 +201,104 @@ public class ViewInventoryItemDetailFragment extends Fragment implements
         String[] selectionArgs = {Long.toString(itemId)};
         String message = getContext().getResources().getString(R.string.barcode_item_delete_failed);
 
-        if (itemId != -1) {
-            rowDeleted = getContext().getContentResolver().delete(
-                    itemURI,
-                    selection,
-                    selectionArgs
-            );
-        }
+        // check if item is being used in any other table
+        if (itemIsUsed()) {
+            message = getContext().getResources().getString(R.string.error_barcode_used);
+        } else {
+            // attempt delete
+            if (itemId != -1) {
+                rowDeleted = getContext().getContentResolver().delete(
+                        itemURI,
+                        selection,
+                        selectionArgs
+                );
+            }
 
-        if (rowDeleted != 0) {
-            message = getContext().getResources().getString(R.string.barcode_item_delete_success);
-            deleted = true;
+            // check if deletion occurred
+            if (rowDeleted != 0) {
+                message = getContext().getResources().getString(R.string.barcode_item_delete_success);
+                deleted = true;
+            }
         }
 
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         return deleted;
+    }
+
+    private boolean itemIsUsed() {
+        boolean used = false;
+
+        // setup variables
+        Uri uri;
+        String selection;
+        Cursor cursor;
+        String[] selectionArgs = {Long.toString(itemId)};
+
+        // check current inventory
+        uri = InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri();
+        selection = InventoryContract.CurrentInventoryEntry.COLUMN_ITEM_KEY + " = ? ";
+        cursor = getContext().getContentResolver().query(
+                uri,
+                null,
+                selection,
+                selectionArgs,
+                null
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            used = true;
+            cursor.close();
+        }
+
+        // check past inventory
+        uri = InventoryContract.PastInventoryEntry.buildPastInventoryUri();
+        selection = InventoryContract.PastInventoryEntry.COLUMN_ITEM_KEY + " = ? ";
+        cursor = getContext().getContentResolver().query(
+                uri,
+                null,
+                selection,
+                selectionArgs,
+                null
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            used = true;
+            cursor.close();
+        }
+
+        // check receive
+        uri = InventoryContract.ReceiveInventoryEntry.buildReceiveInventoryUri();
+        selection = InventoryContract.ReceiveInventoryEntry.COLUMN_ITEM_KEY + " = ? ";
+        cursor = getContext().getContentResolver().query(
+                uri,
+                null,
+                selection,
+                selectionArgs,
+                null
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            used = true;
+            cursor.close();
+        }
+
+        // check ship
+        uri = InventoryContract.ShipInventoryEntry.buildShipInventoryUri();
+        selection = InventoryContract.ShipInventoryEntry.COLUMN_ITEM_KEY + " = ? ";
+        cursor = getContext().getContentResolver().query(
+                uri,
+                null,
+                selection,
+                selectionArgs,
+                null
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            used = true;
+            cursor.close();
+        }
+
+        return used;
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_
 
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
@@ -161,11 +162,31 @@ public class ViewCategoryDetailFragment extends Fragment implements
 
     private boolean handleCategoryDeletion() {
         boolean deleted = false;
-        int rowDeleted = -1;
-        Uri categoryUri = InventoryContract.CategoryEntry.buildCategoryUri();
-        String selection = InventoryContract.CategoryEntry.TABLE_NAME + "." +
-                InventoryContract.CategoryEntry._ID + " = ? ";
+        int rowDeleted = 0;
+
+        // update category in item table to 0 - uncategorized
+        Uri itemUri = InventoryContract.ItemEntry.buildInventoryItemUri();
+        String selection = InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY + " = ? ";
         String[] selectionArgs = {Long.toString(categoryID)};
+        long uncategorized = 1;
+
+        ContentValues newValues = new ContentValues();
+        newValues.put(InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY, uncategorized);
+
+        if (categoryID != -1) {
+            getContext().getContentResolver().update(
+                    itemUri,
+                    newValues,
+                    selection,
+                    selectionArgs
+            );
+        }
+
+
+        // delete category
+        Uri categoryUri = InventoryContract.CategoryEntry.buildCategoryUri();
+        selection = InventoryContract.CategoryEntry.TABLE_NAME + "." +
+                InventoryContract.CategoryEntry._ID + " = ? ";
         String message = "Category delete failed.";
 
         if (categoryID != -1) {

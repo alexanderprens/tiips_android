@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="@string/add_inv_name"
         android:inputType="textCapWords" />
 
     <EditText
@@ -22,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="@string/add_inv_desc"
         android:inputType="textCapSentences" />
 
     <EditText
@@ -29,7 +31,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="@string/add_inv_value"
         android:inputType="number" />
+
+    <Spinner
+        android:id="@+id/update_inventory_item_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/textView31"
