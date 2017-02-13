@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.receive_inventory.ReceiveInventoryActivity;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.ship_inventory.ShipInventoryActivity;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.ViewInventoryActivity;
 
 // TODO: 2/3/2017 add context to layouts
@@ -95,7 +96,9 @@ public class MainActivity extends AppCompatActivity
 
             // TODO: 1/25/2017 add actions for rest of nav drawer
             case R.id.nav_ship:
-
+                intent = new Intent(MainActivity.this, ShipInventoryActivity.class);
+                startActivity(intent);
+                Log.i(TAG, "Start Ship Inventory Activity");
                 break;
 
             case R.id.nav_receive:

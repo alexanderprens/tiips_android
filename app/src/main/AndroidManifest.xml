@@ -41,6 +41,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.helpingkidsroundfirst.hkrf.MainActivity" />
         </activity>
+        <activity
+            android:name=".navigation_bar_activities.inventory.ship_inventory.ShipInventoryActivity"
+            android:label="@string/title_activity_ship_inventory"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.helpingkidsroundfirst.hkrf.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

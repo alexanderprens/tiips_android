@@ -142,6 +142,7 @@
 
     <!-- title bar strings -->
     <string name="receive_inventory_title">Receive Inventory</string>
+    <string name="ship_inventory_title">Ship Inventory</string>
 
     <!-- fragment_receive_inventory -->
     <string name="receive_inventory_header">Select Receive Inventory Action</string>
@@ -189,5 +190,9 @@
     <string name="update_current_date_temp">YYYY-MM-DD</string>
     <string name="update_current_data_pick">Pick Date Received</string>
     <string name="update_current_successful">Update successful</string>
+    <string name="title_activity_ship_inventory">ShipInventoryActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
