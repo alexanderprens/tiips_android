@@ -192,7 +192,9 @@
     <string name="update_current_successful">Update successful</string>
     <string name="title_activity_ship_inventory">ShipInventoryActivity</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- fragment_ship_inventory -->
+    <string name="ship_inventory_list">Add To Shipment</string>
+    <string name="ship_inventory_submit">Submit Shipment</string>
+    <string name="ship_inventory_header">Create/Submit Shipments</string>
 
 </resources>
