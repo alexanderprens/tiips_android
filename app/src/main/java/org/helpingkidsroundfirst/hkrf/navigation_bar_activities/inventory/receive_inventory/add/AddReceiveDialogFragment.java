@@ -107,7 +107,7 @@ public class AddReceiveDialogFragment extends DialogFragment implements
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 itemId = barcodeView.getSelectedItemId();
-                barcodePrefix = barcodeView.getSelectedItem().toString() + "-";
+                getBarcodePrefix();
                 barcodePreview.setText(barcodePrefix);
             }
 
@@ -315,6 +315,9 @@ public class AddReceiveDialogFragment extends DialogFragment implements
             receiveValues.put(InventoryContract.ReceiveInventoryEntry.COLUMN_BARCODE_ID,
                     barcodeComplete);
 
+            // put qty into content values
+            receiveValues.put(InventoryContract.ReceiveInventoryEntry.COLUMN_QTY, qty);
+
             // insert item into receive
             insertedUri = getContext().getContentResolver().insert(
                     InventoryContract.ReceiveInventoryEntry.CONTENT_URI,
@@ -372,6 +375,25 @@ public class AddReceiveDialogFragment extends DialogFragment implements
         }
 
         return exists;
+    }
+
+    private void getBarcodePrefix() {
+
+        if (itemId != -1) {
+            Cursor cursor = getContext().getContentResolver().query(
+                    InventoryContract.ItemEntry.buildInventoryItemUri(),
+                    new String[]{InventoryContract.ItemEntry.COLUMN_BARCODE_ID},
+                    InventoryContract.ItemEntry.TABLE_NAME + "." + InventoryContract.ItemEntry._ID + " = ? ",
+                    new String[]{Long.toString(itemId)},
+                    null
+            );
+
+            if (cursor != null && cursor.moveToFirst()) {
+                barcodePrefix = cursor.getString(0) + "-";
+
+                cursor.close();
+            }
+        }
     }
 
     public interface AddReceiveDialogListener {

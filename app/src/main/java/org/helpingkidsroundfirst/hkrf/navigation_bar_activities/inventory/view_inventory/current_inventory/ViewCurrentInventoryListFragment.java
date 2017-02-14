@@ -17,7 +17,6 @@ import android.widget.ListView;
 import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.CurrentInventoryEntry;
-import org.helpingkidsroundfirst.hkrf.data.InventoryContract.ItemEntry;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -127,7 +126,7 @@ public class ViewCurrentInventoryListFragment extends Fragment implements
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         if (mUri != null) {
-            String sortOrder = ItemEntry.COLUMN_NAME + " ASC";
+            String sortOrder = CurrentInventoryEntry.COLUMN_NAME + " ASC";
 
             return new CursorLoader(getActivity(),
                     mUri,

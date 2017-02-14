@@ -16,7 +16,6 @@ import android.widget.ListView;
 
 import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
-import org.helpingkidsroundfirst.hkrf.data.InventoryContract.ItemEntry;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.PastInventoryEntry;
 
 /**
@@ -118,7 +117,7 @@ public class ViewPastInventoryListFragment extends Fragment
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         if (mUri != null) {
-            String sortOrder = ItemEntry.COLUMN_NAME + " ASC";
+            String sortOrder = PastInventoryEntry.COLUMN_NAME + " ASC";
 
             return new CursorLoader(getActivity(),
                     mUri,

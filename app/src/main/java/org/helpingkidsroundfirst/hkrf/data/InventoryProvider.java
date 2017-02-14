@@ -59,10 +59,16 @@ public class InventoryProvider extends ContentProvider {
     private static final String sCurrentInventoryIdSelection =
             InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
                     InventoryContract.CurrentInventoryEntry._ID + " = ? ";
+    // current inventory with category
+    private static final String sCurrentInventoryCategorySelection =
+            InventoryContract.CurrentInventoryEntry.COLUMN_CATEGORY_KEY + " = ? ";
     // past inventory with id
     private static final String sPastInventoryIdSelection =
             InventoryContract.PastInventoryEntry.TABLE_NAME + "." +
                     InventoryContract.PastInventoryEntry._ID + " = ? ";
+    // past inventory with category
+    private static final String sPastInventoryCategorySelection =
+            InventoryContract.PastInventoryEntry.COLUMN_CATEGORY_KEY + " = ? ";
     // category with id
     private static final String sCategoryIdSelection =
             InventoryContract.CategoryEntry.TABLE_NAME + "." +
@@ -257,7 +263,7 @@ public class InventoryProvider extends ContentProvider {
 
         return sCurrentInventoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
-                sItemCategorySelection,
+                sCurrentInventoryCategorySelection,
                 new String[]{Long.toString(currentInventoryId)},
                 null,
                 null,
@@ -285,7 +291,7 @@ public class InventoryProvider extends ContentProvider {
 
         return sPastInventoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
-                sItemCategorySelection,
+                sPastInventoryCategorySelection,
                 new String[]{Long.toString(pastInventoryId)},
                 null,
                 null,
