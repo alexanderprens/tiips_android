@@ -147,6 +147,7 @@
     <string name="view_current_title">View Current Inventory</string>
     <string name="view_past_title">View Past Inventory</string>
     <string name="view_category_title">View Categories</string>
+    <string name="view_inventory_title">View Inventory</string>
 
     <!-- fragment_receive_inventory -->
     <string name="receive_inventory_header">Select Receive Inventory Action</string>

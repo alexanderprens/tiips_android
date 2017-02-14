@@ -24,7 +24,7 @@ public class ReceiveInventoryActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
 
         // setup action bar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setTitle(getResources().getString(R.string.receive_inventory_title));
         
         // start initial fragment

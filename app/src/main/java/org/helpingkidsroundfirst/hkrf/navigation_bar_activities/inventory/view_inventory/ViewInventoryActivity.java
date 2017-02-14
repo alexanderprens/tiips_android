@@ -40,8 +40,8 @@ public class ViewInventoryActivity extends AppCompatActivity
         Log.i(TAG, "ViewInventoryActivity created");
 
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("View Inventory");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setTitle(getResources().getString(R.string.view_inventory_title));
 
         // start initial fragment
         Fragment fragment = new ViewInventoryFragment();

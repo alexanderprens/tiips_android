@@ -18,7 +18,7 @@ public class ShipInventoryActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         // setup action bar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setTitle(getResources().getString(R.string.ship_inventory_title));
 
         // start initial fragment
