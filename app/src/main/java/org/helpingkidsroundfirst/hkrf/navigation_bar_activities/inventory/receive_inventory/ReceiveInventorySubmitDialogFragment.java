@@ -36,18 +36,26 @@ public class ReceiveInventorySubmitDialogFragment extends DialogFragment impleme
     private static final String[] RECEIVE_INV_COLUMNS = {
             InventoryContract.ReceiveInventoryEntry.TABLE_NAME + "." +
                     InventoryContract.ReceiveInventoryEntry._ID + " AS _id",
-            InventoryContract.ReceiveInventoryEntry.COLUMN_ITEM_KEY,
             InventoryContract.ReceiveInventoryEntry.COLUMN_QTY,
             InventoryContract.ReceiveInventoryEntry.COLUMN_DONOR,
             InventoryContract.ReceiveInventoryEntry.COLUMN_WAREHOUSE,
-            InventoryContract.ReceiveInventoryEntry.COLUMN_DATE_RECEIVED
+            InventoryContract.ReceiveInventoryEntry.COLUMN_DATE_RECEIVED,
+            InventoryContract.ReceiveInventoryEntry.COLUMN_BARCODE_ID,
+            InventoryContract.ReceiveInventoryEntry.COLUMN_CATEGORY_KEY,
+            InventoryContract.ReceiveInventoryEntry.COLUMN_NAME,
+            InventoryContract.ReceiveInventoryEntry.COLUMN_DESCRIPTION,
+            InventoryContract.ReceiveInventoryEntry.COLUMN_VALUE
     };
     private static final int COL_RECEIVE_ID = 0;
-    private static final int COL_RECEIVE_ITEM_KEY = 1;
-    private static final int COL_RECEIVE_QTY = 2;
-    private static final int COL_RECEIVE_DONOR = 3;
-    private static final int COL_RECEIVE_WAREHOUSE = 4;
-    private static final int COL_RECEIVE_DATE = 5;
+    private static final int COL_RECEIVE_QTY = 1;
+    private static final int COL_RECEIVE_DONOR = 2;
+    private static final int COL_RECEIVE_WAREHOUSE = 3;
+    private static final int COL_RECEIVE_DATE = 4;
+    private static final int COL_RECEIVE_BARCODE = 5;
+    private static final int COL_RECEIVE_CATEGORY = 6;
+    private static final int COL_RECEIVE_NAME = 7;
+    private static final int COL_RECEIVE_DESCRIPTION = 8;
+    private static final int COL_RECEIVE_VALUE = 9;
     // dialog inputs
     private String dateString;
     private String donorInput;
@@ -267,11 +275,8 @@ public class ReceiveInventorySubmitDialogFragment extends DialogFragment impleme
             ArrayList<ContentValues> values = new ArrayList<>();
             do {
                 ContentValues row = new ContentValues();
-                DatabaseUtils.cursorLongToContentValues(receiveCursor,
-                        InventoryContract.ReceiveInventoryEntry.COLUMN_ITEM_KEY,
-                        row,
-                        InventoryContract.CurrentInventoryEntry.COLUMN_ITEM_KEY);
 
+                // get values for row
                 DatabaseUtils.cursorIntToContentValues(receiveCursor,
                         InventoryContract.ReceiveInventoryEntry.COLUMN_QTY,
                         row,
@@ -291,6 +296,32 @@ public class ReceiveInventorySubmitDialogFragment extends DialogFragment impleme
                         InventoryContract.ReceiveInventoryEntry.COLUMN_DATE_RECEIVED,
                         row,
                         InventoryContract.CurrentInventoryEntry.COLUMN_DATE_RECEIVED);
+
+                DatabaseUtils.cursorStringToContentValues(receiveCursor,
+                        InventoryContract.ReceiveInventoryEntry.COLUMN_BARCODE_ID,
+                        row,
+                        InventoryContract.CurrentInventoryEntry.COLUMN_BARCODE_ID);
+
+                DatabaseUtils.cursorLongToContentValues(receiveCursor,
+                        InventoryContract.ReceiveInventoryEntry.COLUMN_CATEGORY_KEY,
+                        row,
+                        InventoryContract.CurrentInventoryEntry.COLUMN_CATEGORY_KEY);
+
+                DatabaseUtils.cursorStringToContentValues(receiveCursor,
+                        InventoryContract.ReceiveInventoryEntry.COLUMN_NAME,
+                        row,
+                        InventoryContract.CurrentInventoryEntry.COLUMN_NAME);
+
+                DatabaseUtils.cursorStringToContentValues(receiveCursor,
+                        InventoryContract.ReceiveInventoryEntry.COLUMN_DESCRIPTION,
+                        row,
+                        InventoryContract.CurrentInventoryEntry.COLUMN_DESCRIPTION);
+
+                DatabaseUtils.cursorIntToContentValues(receiveCursor,
+                        InventoryContract.ReceiveInventoryEntry.COLUMN_VALUE,
+                        row,
+                        InventoryContract.CurrentInventoryEntry.COLUMN_VALUE);
+
                 values.add(row);
             } while (receiveCursor.moveToNext());
             ContentValues[] cv = new ContentValues[values.size()];

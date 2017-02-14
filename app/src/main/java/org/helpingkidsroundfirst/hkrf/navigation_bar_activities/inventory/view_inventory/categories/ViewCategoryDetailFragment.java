@@ -182,7 +182,7 @@ public class ViewCategoryDetailFragment extends Fragment implements
             );
         }
 
-
+        // TODO: 2/13/2017 check in inventory tables for category
         // delete category
         Uri categoryUri = InventoryContract.CategoryEntry.buildCategoryUri();
         selection = InventoryContract.CategoryEntry.TABLE_NAME + "." +

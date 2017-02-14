@@ -39,7 +39,6 @@ public class ViewCurrentInventoryListFragment extends Fragment implements
     public static final int COL_CATEGORY_NAME = 10;
     public static final int COL_CATEGORY_BARCODE_PREFIX = 11;
     public static final int COL_BARCODE_ID = 12;
-    public static final int COL_BARCODE_COMPLETE = 13;
     public static final String CURRENT_URI_KEY = "current_uri_key";
     private static final String SELECTED_KEY = "selected_position";
     private static final int CURRENT_INVENTORY_LOADER = 1;
@@ -59,9 +58,7 @@ public class ViewCurrentInventoryListFragment extends Fragment implements
                     InventoryContract.CategoryEntry._ID,
             InventoryContract.CategoryEntry.COLUMN_CATEGORY,
             InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX,
-            InventoryContract.BarcodeEntry.TABLE_NAME + "." +
-                    InventoryContract.BarcodeEntry._ID,
-            InventoryContract.BarcodeEntry.COLUMN_BARCODE_COMPLETE
+            CurrentInventoryEntry.COLUMN_BARCODE_ID
     };
     private ViewCurrentInventoryAdapter mViewCurrentInventoryAdapter;
     private ListView mListView;

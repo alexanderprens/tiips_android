@@ -33,36 +33,32 @@ public class ReceiveInventoryDetailFragment extends Fragment implements
 
     // Current inventory column indices
     public static final int COL_RECEIVE_ID = 0;
-    public static final int COL_RECEIVE_ITEM_KEY = 1;
-    public static final int COL_RECEIVE_QTY = 2;
-    public static final int COL_RECEIVE_DATE_RECEIVED = 3;
-    public static final int COL_RECEIVE_DONOR = 4;
-    public static final int COL_RECEIVE_WAREHOUSE = 5;
-    public static final int COL_ITEM_ID = 6;
-    public static final int COL_ITEM_BARCODE = 7;
-    public static final int COL_ITEM_NAME = 8;
-    public static final int COL_ITEM_DESCRIPTION = 9;
-    public static final int COL_ITEM_CATEGORY_KEY = 10;
-    public static final int COL_ITEM_VALUE = 11;
-    public static final int COL_CATEGORY_ID = 12;
-    public static final int COL_CATEGORY_NAME = 13;
-    public static final int COL_CATEGORY_BARCODE_PREFIX = 14;
+    public static final int COL_RECEIVE_QTY = 1;
+    public static final int COL_RECEIVE_DATE_RECEIVED = 2;
+    public static final int COL_RECEIVE_DONOR = 3;
+    public static final int COL_RECEIVE_WAREHOUSE = 4;
+    public static final int COL_ITEM_BARCODE_KEY = 5;
+    public static final int COL_ITEM_NAME = 6;
+    public static final int COL_ITEM_DESCRIPTION = 7;
+    public static final int COL_ITEM_CATEGORY_KEY = 8;
+    public static final int COL_ITEM_VALUE = 9;
+    public static final int COL_CATEGORY_ID = 10;
+    public static final int COL_CATEGORY_NAME = 11;
+    public static final int COL_CATEGORY_BARCODE_PREFIX = 12;
     public static final String DETAILED_RECEIVE_KEY = "RECEIVE_URI";
     public static final int RECEIVE_DETAIL_LOADER = 10;
     private static final String[] RECEIVE_DETAIL_COLUMNS = {
             InventoryContract.ReceiveInventoryEntry.TABLE_NAME + "." +
                     InventoryContract.ReceiveInventoryEntry._ID + " AS _id",
-            InventoryContract.ReceiveInventoryEntry.COLUMN_ITEM_KEY,
             InventoryContract.ReceiveInventoryEntry.COLUMN_QTY,
             InventoryContract.ReceiveInventoryEntry.COLUMN_DONOR,
             InventoryContract.ReceiveInventoryEntry.COLUMN_DATE_RECEIVED,
             InventoryContract.ReceiveInventoryEntry.COLUMN_WAREHOUSE,
-            InventoryContract.ItemEntry.TABLE_NAME + "." + InventoryContract.ItemEntry._ID,
-            InventoryContract.ItemEntry.COLUMN_BARCODE_ID,
-            InventoryContract.ItemEntry.COLUMN_NAME,
-            InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
-            InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY,
-            InventoryContract.ItemEntry.COLUMN_VALUE,
+            InventoryContract.ReceiveInventoryEntry.COLUMN_BARCODE_ID,
+            InventoryContract.ReceiveInventoryEntry.COLUMN_NAME,
+            InventoryContract.ReceiveInventoryEntry.COLUMN_DESCRIPTION,
+            InventoryContract.ReceiveInventoryEntry.COLUMN_CATEGORY_KEY,
+            InventoryContract.ReceiveInventoryEntry.COLUMN_VALUE,
             InventoryContract.CategoryEntry.TABLE_NAME + "." + InventoryContract.CategoryEntry._ID,
             InventoryContract.CategoryEntry.COLUMN_CATEGORY,
             InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
@@ -233,7 +229,7 @@ public class ReceiveInventoryDetailFragment extends Fragment implements
             String category = data.getString(COL_CATEGORY_NAME);
             int value = data.getInt(COL_ITEM_VALUE);
             String valueString = "" + value;
-            String barcode = data.getString(COL_ITEM_BARCODE);
+            String barcode = data.getString(COL_ITEM_BARCODE_KEY);
             currentQty = data.getInt(COL_RECEIVE_QTY);
             String quantityString = "" + currentQty;
             receiveInventoryId = data.getLong(COL_RECEIVE_ID);

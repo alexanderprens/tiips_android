@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import org.helpingkidsroundfirst.hkrf.data.InventoryContract.BarcodeEntry;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.CategoryEntry;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.CurrentInventoryEntry;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.ItemEntry;
@@ -52,17 +51,11 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY (" + ItemEntry.COLUMN_CATEGORY_KEY + ") REFERENCES " +
                 CategoryEntry.TABLE_NAME + " (" + CategoryEntry._ID + "));";
 
-        // create barcode table
-        final String SQL_CREATE_BARCODE_TABLE = "CREATE TABLE " +
-                BarcodeEntry.TABLE_NAME + " (" +
-                BarcodeEntry._ID + " INTEGER PRIMARY KEY, " +
-                BarcodeEntry.COLUMN_BARCODE_COMPLETE + " TEXT UNIQUE NOT NULL);";
-
         // create current inventory table
         final String SQL_CREATE_CURRENT_INVENTORY_TABLE = "CREATE TABLE " + 
                 CurrentInventoryEntry.TABLE_NAME + " (" +
                 CurrentInventoryEntry._ID + " INTEGER PRIMARY KEY, " +
-                CurrentInventoryEntry.COLUMN_BARCODE_KEY + " INTEGER NOT NULL, " +
+                CurrentInventoryEntry.COLUMN_BARCODE_ID + " TEXT NOT NULL, " +
                 CurrentInventoryEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                 CurrentInventoryEntry.COLUMN_DESCRIPTION + " TEXT, " +
                 CurrentInventoryEntry.COLUMN_CATEGORY_KEY + " TEXT, " +
@@ -74,17 +67,13 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
                 // set up foreign key for category
                 "FOREIGN KEY (" + CurrentInventoryEntry.COLUMN_CATEGORY_KEY + ") REFERENCES " +
-                CategoryEntry.TABLE_NAME + " (" + CategoryEntry._ID + "), " +
-
-                //set up foreign key for item
-                "FOREIGN KEY (" + CurrentInventoryEntry.COLUMN_BARCODE_KEY + ") REFERENCES " +
-                BarcodeEntry.TABLE_NAME + " (" + BarcodeEntry._ID + "));";
+                CategoryEntry.TABLE_NAME + " (" + CategoryEntry._ID + "));";
 
         // create receive inventory table
         final String SQL_CREATE_RECEIVE_INVENTORY_TABLE = "CREATE TABLE " +
                 ReceiveInventoryEntry.TABLE_NAME + " (" +
                 ReceiveInventoryEntry._ID + " INTEGER PRIMARY KEY, " +
-                ReceiveInventoryEntry.COLUMN_BARCODE_KEY + " TEXT UNIQUE NOT NULL, " +
+                ReceiveInventoryEntry.COLUMN_BARCODE_ID + " TEXT UNIQUE NOT NULL, " +
                 ReceiveInventoryEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                 ReceiveInventoryEntry.COLUMN_DESCRIPTION + " TEXT, " +
                 ReceiveInventoryEntry.COLUMN_CATEGORY_KEY + " TEXT, " +
@@ -96,17 +85,13 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
                 // set up foreign key for category
                 "FOREIGN KEY (" + ReceiveInventoryEntry.COLUMN_CATEGORY_KEY + ") REFERENCES " +
-                CategoryEntry.TABLE_NAME + " (" + CategoryEntry._ID + "), " +
-
-                //set up foreign key for item
-                "FOREIGN KEY (" + ReceiveInventoryEntry.COLUMN_BARCODE_KEY + ") REFERENCES " +
-                BarcodeEntry.TABLE_NAME + " (" + BarcodeEntry._ID + "));";
+                CategoryEntry.TABLE_NAME + " (" + CategoryEntry._ID + "));";
         
         // create past inventory table
         final String SQL_CREATE_PAST_INVENTORY_TABLE = "CREATE TABLE " +
                 PastInventoryEntry.TABLE_NAME + " (" +
                 PastInventoryEntry._ID + " INTEGER PRIMARY KEY, " +
-                PastInventoryEntry.COLUMN_BARCODE_KEY + " TEXT UNIQUE NOT NULL, " +
+                PastInventoryEntry.COLUMN_BARCODE_ID + " TEXT NOT NULL, " +
                 PastInventoryEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                 PastInventoryEntry.COLUMN_DESCRIPTION + " TEXT, " +
                 PastInventoryEntry.COLUMN_CATEGORY_KEY + " TEXT, " +
@@ -117,17 +102,13 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
                 // set up foreign key for category
                 "FOREIGN KEY (" + PastInventoryEntry.COLUMN_CATEGORY_KEY + ") REFERENCES " +
-                CategoryEntry.TABLE_NAME + " (" + CategoryEntry._ID + "), " +
-
-                //set up foreign key for item
-                "FOREIGN KEY (" + PastInventoryEntry.COLUMN_BARCODE_KEY + ") REFERENCES " +
-                BarcodeEntry.TABLE_NAME + " (" + BarcodeEntry._ID + "));";
+                CategoryEntry.TABLE_NAME + " (" + CategoryEntry._ID + "));";
 
         // create ship inventory table
         final String SQL_CREATE_SHIP_INVENTORY_TABLE = "CREATE TABLE " +
                 ShipInventoryEntry.TABLE_NAME + " (" +
                 ShipInventoryEntry._ID + " INTEGER PRIMARY KEY, " +
-                ShipInventoryEntry.COLUMN_BARCODE_KEY + " TEXT UNIQUE NOT NULL, " +
+                ShipInventoryEntry.COLUMN_BARCODE_ID + " TEXT NOT NULL, " +
                 ShipInventoryEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                 ShipInventoryEntry.COLUMN_DESCRIPTION + " TEXT, " +
                 ShipInventoryEntry.COLUMN_CATEGORY_KEY + " TEXT, " +
@@ -138,16 +119,11 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
                 // set up foreign key for category
                 "FOREIGN KEY (" + ShipInventoryEntry.COLUMN_CATEGORY_KEY + ") REFERENCES " +
-                CategoryEntry.TABLE_NAME + " (" + CategoryEntry._ID + "), " +
-
-                //set up foreign key for item
-                "FOREIGN KEY (" + ShipInventoryEntry.COLUMN_BARCODE_KEY + ") REFERENCES " +
-                BarcodeEntry.TABLE_NAME + " (" + BarcodeEntry._ID + "));";
+                CategoryEntry.TABLE_NAME + " (" + CategoryEntry._ID + "));";
 
         // execute SQL commands
         sqLiteDatabase.execSQL(SQL_CREATE_CATEGORY_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_ITEM_TABLE);
-        sqLiteDatabase.execSQL(SQL_CREATE_BARCODE_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_CURRENT_INVENTORY_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PAST_INVENTORY_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_RECEIVE_INVENTORY_TABLE);

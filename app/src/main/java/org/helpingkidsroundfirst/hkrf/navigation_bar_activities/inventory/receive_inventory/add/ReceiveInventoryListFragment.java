@@ -28,32 +28,28 @@ public class ReceiveInventoryListFragment extends Fragment implements
 
     // column indices
     public static final int COL_RECEIVE_ID = 0;
-    public static final int COL_RECEIVE_ITEM_KEY = 1;
-    public static final int COL_RECEIVE_QTY = 2;
+    public static final int COL_RECEIVE_QTY = 1;
+    public static final int COL_RECEIVE_DONOR = 2;
     public static final int COL_RECEIVE_DATE_RECEIVED = 3;
-    public static final int COL_RECEIVE_DONOR = 4;
-    public static final int COL_RECEIVE_WAREHOUSE = 5;
-    public static final int COL_ITEM_BARCODE = 6;
-    public static final int COL_ITEM_NAME = 7;
-    public static final int COL_ITEM_DESCRIPTION = 8;
-    public static final int COL_ITEM_CATEGORY_KEY = 9;
-    public static final int COL_ITEM_VALUE = 10;
-    public static final int COL_CATEGORY_NAME = 11;
-    public static final int COL_CATEGORY_BARCODE_PREFIX = 12;
+    public static final int COL_RECEIVE_WAREHOUSE = 4;
+    public static final int COL_ITEM_NAME = 5;
+    public static final int COL_ITEM_DESCRIPTION = 6;
+    public static final int COL_ITEM_CATEGORY_KEY = 7;
+    public static final int COL_ITEM_VALUE = 8;
+    public static final int COL_CATEGORY_NAME = 9;
+    public static final int COL_CATEGORY_BARCODE_PREFIX = 10;
     // Current inventory columns
     private static final String[] RECEIVE_INVENTORY_COLUMNS = {
             InventoryContract.ReceiveInventoryEntry.TABLE_NAME + "." +
                     InventoryContract.ReceiveInventoryEntry._ID + " AS _id",
-            InventoryContract.ReceiveInventoryEntry.COLUMN_ITEM_KEY,
             InventoryContract.ReceiveInventoryEntry.COLUMN_QTY,
             InventoryContract.ReceiveInventoryEntry.COLUMN_DONOR,
             InventoryContract.ReceiveInventoryEntry.COLUMN_DATE_RECEIVED,
             InventoryContract.ReceiveInventoryEntry.COLUMN_WAREHOUSE,
-            InventoryContract.ItemEntry.COLUMN_BARCODE_ID,
-            InventoryContract.ItemEntry.COLUMN_NAME,
-            InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
-            InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY,
-            InventoryContract.ItemEntry.COLUMN_VALUE,
+            InventoryContract.ReceiveInventoryEntry.COLUMN_NAME,
+            InventoryContract.ReceiveInventoryEntry.COLUMN_DESCRIPTION,
+            InventoryContract.ReceiveInventoryEntry.COLUMN_CATEGORY_KEY,
+            InventoryContract.ReceiveInventoryEntry.COLUMN_VALUE,
             InventoryContract.CategoryEntry.COLUMN_CATEGORY,
             InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
     };

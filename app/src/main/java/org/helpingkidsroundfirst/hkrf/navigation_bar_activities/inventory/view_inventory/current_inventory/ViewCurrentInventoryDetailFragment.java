@@ -41,8 +41,7 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
     public static final int COL_CATEGORY_ID = 9;
     public static final int COL_CATEGORY_NAME = 10;
     public static final int COL_CATEGORY_BARCODE_PREFIX = 11;
-    public static final int COL_BARCODE_ID = 12;
-    public static final int COL_BARCODE_COMPLETE = 13;
+    public static final int COL_BARCODE_COMPLETE = 12;
     public static final String DETAILED_CURRENT_KEY = "CURRENT_URI";
     public static final int CURRENT_DETAIL_LOADER = 5;
     private static final String[] CURRENT_DETAIL_COLUMNS = {
@@ -60,9 +59,7 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
                     InventoryContract.CategoryEntry._ID,
             InventoryContract.CategoryEntry.COLUMN_CATEGORY,
             InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX,
-            InventoryContract.BarcodeEntry.TABLE_NAME + "." +
-                    InventoryContract.BarcodeEntry._ID,
-            InventoryContract.BarcodeEntry.COLUMN_BARCODE_COMPLETE
+            InventoryContract.CurrentInventoryEntry.COLUMN_BARCODE_ID
     };
     private TextView nameView;
     private TextView descriptionView;

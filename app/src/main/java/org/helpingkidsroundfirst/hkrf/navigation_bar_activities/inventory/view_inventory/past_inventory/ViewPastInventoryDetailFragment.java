@@ -38,7 +38,6 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
     public static final int COL_CATEGORY_NAME = 9;
     public static final int COL_CATEGORY_BARCODE = 10;
     public static final int COL_BARCODE_ID = 11;
-    public static final int COL_BARCODE_COMPLETE = 12;
     public static final String DETAILED_PAST_KEY = "PAST_URI";
     public static final int PAST_DETAIL_LOADER = 6;
     private static final String[] PAST_DETAIL_COLUMNS = {
@@ -54,9 +53,7 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
                     InventoryContract.CategoryEntry._ID,
             InventoryContract.CategoryEntry.COLUMN_CATEGORY,
             InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX,
-            InventoryContract.BarcodeEntry.TABLE_NAME + "." +
-                    InventoryContract.BarcodeEntry._ID,
-            InventoryContract.BarcodeEntry.COLUMN_BARCODE_COMPLETE
+            InventoryContract.PastInventoryEntry.COLUMN_BARCODE_ID
     };
     private TextView nameView;
     private TextView descriptionView;
@@ -165,7 +162,7 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
             String category = data.getString(COL_CATEGORY_NAME);
             int value = data.getInt(COL_ITEM_VALUE);
             String valueString = "" + value;
-            String barcode = data.getString(COL_BARCODE_COMPLETE);
+            String barcode = data.getString(COL_BARCODE_ID);
             int quantity = data.getInt(COL_PAST_QTY);
             String quantityString = "" + quantity;
             String date = data.getString(COL_PAST_DATE_SHIPPED);

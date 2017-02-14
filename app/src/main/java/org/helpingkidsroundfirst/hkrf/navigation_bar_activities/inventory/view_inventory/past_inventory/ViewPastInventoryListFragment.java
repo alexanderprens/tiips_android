@@ -37,7 +37,6 @@ public class ViewPastInventoryListFragment extends Fragment
     public static final int COL_CATEGORY_NAME = 9;
     public static final int COL_CATEGORY_BARCODE = 10;
     public static final int COL_BARCODE_ID = 11;
-    public static final int COL_BARCODE_COMPLETE = 12;
     public static final String PAST_URI_KEY = "past_uri_key";
     private static final String SELECTED_KEY = "selected_position";
     private static final int PAST_INVENTORY_LOADER = 2;
@@ -55,9 +54,7 @@ public class ViewPastInventoryListFragment extends Fragment
                     InventoryContract.CategoryEntry._ID,
             InventoryContract.CategoryEntry.COLUMN_CATEGORY,
             InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX,
-            InventoryContract.BarcodeEntry.TABLE_NAME + "." +
-                    InventoryContract.BarcodeEntry._ID,
-            InventoryContract.BarcodeEntry.COLUMN_BARCODE_COMPLETE
+            PastInventoryEntry.COLUMN_BARCODE_ID
     };
     private ViewPastInventoryAdapter mViewPastInventoryAdapter;
     private ListView mListView;
