@@ -115,7 +115,6 @@ public class InventoryContract {
 
         // Table columns
         public static final String COLUMN_ITEM_KEY = "current_item_key";
-        public static final String COLUMN_VALUE = "value";
         public static final String COLUMN_QTY = "qty";
         public static final String COLUMN_DATE_RECEIVED = "date_received";
         public static final String COLUMN_DONOR = "donor";
@@ -160,7 +159,6 @@ public class InventoryContract {
 
         // Table columns
         public static final String COLUMN_ITEM_KEY = "receive_item_key";
-        public static final String COLUMN_VALUE = "receive_value";
         public static final String COLUMN_QTY = "receive_qty";
         public static final String COLUMN_DATE_RECEIVED = "receive_date_received";
         public static final String COLUMN_DONOR = "receive_donor";

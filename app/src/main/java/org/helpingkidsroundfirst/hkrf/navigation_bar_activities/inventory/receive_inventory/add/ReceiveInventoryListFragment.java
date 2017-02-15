@@ -49,9 +49,11 @@ public class ReceiveInventoryListFragment extends Fragment implements
             InventoryContract.ItemEntry.COLUMN_NAME,
             InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
             InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY,
-            InventoryContract.ReceiveInventoryEntry.COLUMN_VALUE,
+            InventoryContract.ItemEntry.COLUMN_VALUE,
             InventoryContract.CategoryEntry.COLUMN_CATEGORY,
-            InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
+            InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX,
+            InventoryContract.ItemEntry.TABLE_NAME + "." + InventoryContract.ItemEntry._ID,
+            InventoryContract.CategoryEntry.TABLE_NAME + "." + InventoryContract.CategoryEntry._ID
     };
     private static final String SELECTED_KEY = "receive_selected_position";
     private static final int RECEIVE_INVENTORY_LOADER = 9;

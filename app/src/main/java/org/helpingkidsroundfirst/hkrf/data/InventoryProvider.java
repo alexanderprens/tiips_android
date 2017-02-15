@@ -97,8 +97,8 @@ public class InventoryProvider extends ContentProvider {
 
         // Inner join item on current inventory
         sCurrentInventoryQueryBuilder.setTables(
-                InventoryContract.CurrentInventoryEntry.TABLE_NAME + " INNER JOIN " +
-                        "(" + InventoryContract.ItemEntry.TABLE_NAME + " INNER JOIN " +
+                InventoryContract.CurrentInventoryEntry.TABLE_NAME + " INNER JOIN (" +
+                        InventoryContract.ItemEntry.TABLE_NAME + " INNER JOIN " +
                         InventoryContract.CategoryEntry.TABLE_NAME +
                         " ON " + InventoryContract.ItemEntry.TABLE_NAME +
                         "." + InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY +
@@ -129,16 +129,16 @@ public class InventoryProvider extends ContentProvider {
     static {
         sReceiveInventoryQueryBuilder = new SQLiteQueryBuilder();
 
-        // Inner join item on current inventory
+        // Inner join item on receive inventory
         sReceiveInventoryQueryBuilder.setTables(
-                InventoryContract.ReceiveInventoryEntry.TABLE_NAME + " INNER JOIN " +
-                        "(" + InventoryContract.ItemEntry.TABLE_NAME + " INNER JOIN " +
+                InventoryContract.ReceiveInventoryEntry.TABLE_NAME + " INNER JOIN (" +
+                        InventoryContract.ItemEntry.TABLE_NAME + " INNER JOIN " +
                         InventoryContract.CategoryEntry.TABLE_NAME +
                         " ON " + InventoryContract.ItemEntry.TABLE_NAME +
                         "." + InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY +
                         " = " + InventoryContract.CategoryEntry.TABLE_NAME +
                         "." + InventoryContract.CategoryEntry._ID + ") " +
-                        InventoryContract.ReceiveInventoryEntry.TABLE_NAME +
+                        InventoryContract.ItemEntry.TABLE_NAME +
                         " ON " + InventoryContract.ReceiveInventoryEntry.TABLE_NAME +
                         "." + InventoryContract.ReceiveInventoryEntry.COLUMN_ITEM_KEY +
                         " = " + InventoryContract.ItemEntry.TABLE_NAME +
@@ -149,7 +149,7 @@ public class InventoryProvider extends ContentProvider {
     static {
         sShipInventoryQueryBuilder = new SQLiteQueryBuilder();
 
-        // Inner join item on current inventory
+        // Inner join item on ship inventory
         sShipInventoryQueryBuilder.setTables(
                 InventoryContract.ShipInventoryEntry.TABLE_NAME + " INNER JOIN " +
                         InventoryContract.CategoryEntry.TABLE_NAME +

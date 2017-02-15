@@ -58,7 +58,8 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
             InventoryContract.CategoryEntry.TABLE_NAME + "." +
                     InventoryContract.CategoryEntry._ID,
             InventoryContract.CategoryEntry.COLUMN_CATEGORY,
-            InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
+            InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX,
+            InventoryContract.ItemEntry.TABLE_NAME + "." + InventoryContract.ItemEntry._ID
     };
     private TextView nameView;
     private TextView descriptionView;

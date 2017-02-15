@@ -21,7 +21,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
     static final String DATABASE_NAME = "inventory.db";
     //change when database changes
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 13;
 
     public InventoryDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -56,7 +56,6 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
                 CurrentInventoryEntry.TABLE_NAME + " (" +
                 CurrentInventoryEntry._ID + " INTEGER PRIMARY KEY, " +
                 CurrentInventoryEntry.COLUMN_ITEM_KEY + " INTEGER NOT NULL, " +
-                CurrentInventoryEntry.COLUMN_VALUE + " REAL NOT NULL, " +
                 CurrentInventoryEntry.COLUMN_QTY + " INTEGER NOT NULL, " +
                 CurrentInventoryEntry.COLUMN_DATE_RECEIVED + " TEXT NOT NULL, " +
                 CurrentInventoryEntry.COLUMN_DONOR + " TEXT NOT NULL, " +
@@ -71,7 +70,6 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
                 ReceiveInventoryEntry.TABLE_NAME + " (" +
                 ReceiveInventoryEntry._ID + " INTEGER PRIMARY KEY, " +
                 ReceiveInventoryEntry.COLUMN_ITEM_KEY + " INTEGER NOT NULL, " +
-                ReceiveInventoryEntry.COLUMN_VALUE + " REAL NOT NULL, " +
                 ReceiveInventoryEntry.COLUMN_QTY + " INTEGER, " +
                 ReceiveInventoryEntry.COLUMN_DATE_RECEIVED + " TEXT, " +
                 ReceiveInventoryEntry.COLUMN_DONOR + " TEXT, " +
@@ -135,7 +133,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
         // If different version table, handle changes
 
         // For this database revision (x to 9) drop old tables
-        if (oldVersion <= 11) {
+        if (oldVersion <= 12) {
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + CurrentInventoryEntry.TABLE_NAME);
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + PastInventoryEntry.TABLE_NAME);
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ItemEntry.TABLE_NAME);

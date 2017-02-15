@@ -58,10 +58,11 @@ public class ReceiveInventoryDetailFragment extends Fragment implements
             InventoryContract.ItemEntry.COLUMN_NAME,
             InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
             InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY,
-            InventoryContract.ReceiveInventoryEntry.COLUMN_VALUE,
+            InventoryContract.ItemEntry.COLUMN_VALUE,
             InventoryContract.CategoryEntry.TABLE_NAME + "." + InventoryContract.CategoryEntry._ID,
             InventoryContract.CategoryEntry.COLUMN_CATEGORY,
-            InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
+            InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX,
+            InventoryContract.ItemEntry.TABLE_NAME + "." + InventoryContract.ItemEntry._ID
     };
     private TextView nameView;
     private TextView descriptionView;

@@ -40,11 +40,7 @@ public class ReceiveInventorySubmitDialogFragment extends DialogFragment impleme
             InventoryContract.ReceiveInventoryEntry.COLUMN_DONOR,
             InventoryContract.ReceiveInventoryEntry.COLUMN_WAREHOUSE,
             InventoryContract.ReceiveInventoryEntry.COLUMN_DATE_RECEIVED,
-            InventoryContract.ItemEntry.COLUMN_BARCODE_ID,
-            InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY,
-            InventoryContract.ItemEntry.COLUMN_NAME,
-            InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
-            InventoryContract.ReceiveInventoryEntry.COLUMN_VALUE
+            InventoryContract.ReceiveInventoryEntry.COLUMN_ITEM_KEY
     };
     // dialog inputs
     private String dateString;
@@ -286,11 +282,6 @@ public class ReceiveInventorySubmitDialogFragment extends DialogFragment impleme
                         InventoryContract.ReceiveInventoryEntry.COLUMN_DATE_RECEIVED,
                         row,
                         InventoryContract.CurrentInventoryEntry.COLUMN_DATE_RECEIVED);
-
-                DatabaseUtils.cursorIntToContentValues(receiveCursor,
-                        InventoryContract.ReceiveInventoryEntry.COLUMN_VALUE,
-                        row,
-                        InventoryContract.CurrentInventoryEntry.COLUMN_VALUE);
 
                 DatabaseUtils.cursorLongToContentValues(receiveCursor,
                         InventoryContract.ReceiveInventoryEntry.COLUMN_ITEM_KEY,
