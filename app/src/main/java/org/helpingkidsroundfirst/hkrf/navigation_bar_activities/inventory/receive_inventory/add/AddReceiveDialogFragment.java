@@ -188,12 +188,20 @@ public class AddReceiveDialogFragment extends DialogFragment implements
             Toast.makeText(getContext(), getContext().getResources()
                     .getString(R.string.validation_qty_null), Toast.LENGTH_SHORT).show();
         } else {
-            qty = Integer.parseInt(qtyString);
+            try {
+                qty = Integer.parseInt(qtyString);
 
-            if (qty < 1) {
+                if (qty < 1) {
+                    check = false;
+                    Toast.makeText(getContext(), getContext().getResources()
+                            .getString(R.string.validation_qty_zero), Toast.LENGTH_SHORT).show();
+                }
+            } catch (NumberFormatException e) {
                 check = false;
                 Toast.makeText(getContext(), getContext().getResources()
                         .getString(R.string.validation_qty_zero), Toast.LENGTH_SHORT).show();
+                qty = 1;
+                qtyString = Integer.toString(qty);
             }
         }
 

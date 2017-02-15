@@ -241,13 +241,21 @@ public class UpdateItemDialogFragment extends DialogFragment implements
         }
 
         // check if value is above zero
-        if (valueInput.isEmpty()) {
-            valueInt = Integer.parseInt(valueInput);
+        if (!valueInput.isEmpty()) {
+            try {
+                valueInt = Integer.parseInt(valueInput);
 
-            if (valueInt < 1) {
+                if (valueInt < 1) {
+                    check = false;
+                    Toast.makeText(getContext(), getContext().getResources()
+                            .getString(R.string.validation_value_negative), Toast.LENGTH_SHORT).show();
+                }
+            } catch (NumberFormatException e) {
                 check = false;
                 Toast.makeText(getContext(), getContext().getResources()
                         .getString(R.string.validation_value_negative), Toast.LENGTH_SHORT).show();
+                valueInt = 1;
+                valueInput = Integer.toString(valueInt);
             }
         }
 
@@ -264,7 +272,7 @@ public class UpdateItemDialogFragment extends DialogFragment implements
         ContentValues updatedItems = new ContentValues();
         updatedItems.put(InventoryContract.ItemEntry.COLUMN_NAME, nameInput);
         updatedItems.put(InventoryContract.ItemEntry.COLUMN_DESCRIPTION, descriptionInput);
-        updatedItems.put(InventoryContract.ItemEntry.COLUMN_VALUE, Long.parseLong(valueInput));
+        updatedItems.put(InventoryContract.ItemEntry.COLUMN_VALUE, valueInt);
         updatedItems.put(InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY, categoryKey);
 
         rowsUpdate = getContext().getContentResolver().update(

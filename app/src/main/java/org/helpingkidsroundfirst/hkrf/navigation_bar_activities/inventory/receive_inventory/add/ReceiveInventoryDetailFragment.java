@@ -118,7 +118,12 @@ public class ReceiveInventoryDetailFragment extends Fragment implements
                 if (tempStr.isEmpty()) {
                     newQty = 0;
                 } else {
-                    newQty = Integer.parseInt(tempStr);
+                    try {
+                        newQty = Integer.parseInt(tempStr);
+                    } catch (NumberFormatException e) {
+                        newQty = 1;
+                        qtyEditText.setText(Integer.toString(newQty));
+                    }
                 }
             }
 
@@ -258,7 +263,7 @@ public class ReceiveInventoryDetailFragment extends Fragment implements
     private boolean handleReceiveInventoryDeletion() {
         boolean deleted = false;
         int rowDeleted = 0;
-        Uri receiveInvenotryUri = InventoryContract.ReceiveInventoryEntry.buildReceiveInventoryUri();
+        Uri receiveInventoryUri = InventoryContract.ReceiveInventoryEntry.buildReceiveInventoryUri();
         String selection = InventoryContract.ReceiveInventoryEntry.TABLE_NAME + "." +
                 InventoryContract.ReceiveInventoryEntry._ID + " = ? ";
         String[] selectionArgs = {Long.toString(receiveInventoryId)};
@@ -266,7 +271,7 @@ public class ReceiveInventoryDetailFragment extends Fragment implements
 
         if (receiveInventoryId != -1) {
             rowDeleted = getContext().getContentResolver().delete(
-                    receiveInvenotryUri,
+                    receiveInventoryUri,
                     selection,
                     selectionArgs
             );

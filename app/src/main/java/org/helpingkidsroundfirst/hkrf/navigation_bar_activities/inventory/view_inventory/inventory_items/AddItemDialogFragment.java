@@ -256,12 +256,21 @@ public class AddItemDialogFragment extends DialogFragment implements
         }
 
         if(!valueInString.isEmpty()) {
-            valueInput = Integer.parseInt(valueInString);
 
-            if(valueInput < 1) {
+            try {
+                valueInput = Integer.parseInt(valueInString);
+
+                if (valueInput < 1) {
+                    check = false;
+                    Toast.makeText(getContext(), getContext().getResources()
+                            .getString(R.string.validation_value_negative), Toast.LENGTH_SHORT).show();
+                }
+            } catch (NumberFormatException e) {
                 check = false;
                 Toast.makeText(getContext(), getContext().getResources()
                         .getString(R.string.validation_value_negative), Toast.LENGTH_SHORT).show();
+                valueInput = 1;
+                valueInString = Integer.toString(valueInput);
             }
         }
 
