@@ -15,31 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/add_receive_barcode_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="HKRF-XX-XXXX-"
-            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
-
-        <EditText
-            android:id="@+id/add_receive_barcode_end"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="XXXX"
-            android:inputType="number"
-            android:maxLength="4" />
-    </LinearLayout>
-
     <EditText
         android:id="@+id/add_receive_qty"
         android:layout_width="match_parent"
