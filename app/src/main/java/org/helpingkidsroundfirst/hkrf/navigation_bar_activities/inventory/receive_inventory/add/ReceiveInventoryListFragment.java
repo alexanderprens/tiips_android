@@ -46,9 +46,9 @@ public class ReceiveInventoryListFragment extends Fragment implements
             InventoryContract.ReceiveInventoryEntry.COLUMN_DONOR,
             InventoryContract.ReceiveInventoryEntry.COLUMN_DATE_RECEIVED,
             InventoryContract.ReceiveInventoryEntry.COLUMN_WAREHOUSE,
-            InventoryContract.ReceiveInventoryEntry.COLUMN_NAME,
-            InventoryContract.ReceiveInventoryEntry.COLUMN_DESCRIPTION,
-            InventoryContract.ReceiveInventoryEntry.COLUMN_CATEGORY_KEY,
+            InventoryContract.ItemEntry.COLUMN_NAME,
+            InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
+            InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY,
             InventoryContract.ReceiveInventoryEntry.COLUMN_VALUE,
             InventoryContract.CategoryEntry.COLUMN_CATEGORY,
             InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
@@ -133,7 +133,7 @@ public class ReceiveInventoryListFragment extends Fragment implements
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        String sortOrder = InventoryContract.ReceiveInventoryEntry.COLUMN_NAME + " ASC";
+        String sortOrder = InventoryContract.ItemEntry.COLUMN_NAME + " ASC";
         Uri uri = InventoryContract.ReceiveInventoryEntry.buildReceiveInventoryUri();
 
         return new CursorLoader(

@@ -51,15 +51,14 @@ public class ViewCurrentInventoryDetailFragment extends Fragment implements
             InventoryContract.CurrentInventoryEntry.COLUMN_DONOR,
             InventoryContract.CurrentInventoryEntry.COLUMN_DATE_RECEIVED,
             InventoryContract.CurrentInventoryEntry.COLUMN_WAREHOUSE,
-            InventoryContract.CurrentInventoryEntry.COLUMN_NAME,
-            InventoryContract.CurrentInventoryEntry.COLUMN_DESCRIPTION,
-            InventoryContract.CurrentInventoryEntry.COLUMN_CATEGORY_KEY,
-            InventoryContract.CurrentInventoryEntry.COLUMN_VALUE,
+            InventoryContract.ItemEntry.COLUMN_NAME,
+            InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
+            InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY,
+            InventoryContract.ItemEntry.COLUMN_VALUE,
             InventoryContract.CategoryEntry.TABLE_NAME + "." +
                     InventoryContract.CategoryEntry._ID,
             InventoryContract.CategoryEntry.COLUMN_CATEGORY,
-            InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX,
-            InventoryContract.CurrentInventoryEntry.COLUMN_BARCODE_ID
+            InventoryContract.CategoryEntry.COLUMN_BARCODE_PREFIX
     };
     private TextView nameView;
     private TextView descriptionView;

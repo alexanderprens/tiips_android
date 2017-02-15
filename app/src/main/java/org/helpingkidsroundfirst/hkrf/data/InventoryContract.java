@@ -114,10 +114,7 @@ public class InventoryContract {
         public static final String TABLE_NAME = "current_inventory";
 
         // Table columns
-        public static final String COLUMN_BARCODE_ID = "current_barcode_id";
-        public static final String COLUMN_NAME = "current_name";
-        public static final String COLUMN_DESCRIPTION = "current_description";
-        public static final String COLUMN_CATEGORY_KEY = "current_category_id";
+        public static final String COLUMN_ITEM_KEY = "current_item_key";
         public static final String COLUMN_VALUE = "value";
         public static final String COLUMN_QTY = "qty";
         public static final String COLUMN_DATE_RECEIVED = "date_received";
@@ -162,10 +159,7 @@ public class InventoryContract {
         public static final String TABLE_NAME = "receive_inventory";
 
         // Table columns
-        public static final String COLUMN_BARCODE_ID = "receive_barcode_id";
-        public static final String COLUMN_NAME = "receive_name";
-        public static final String COLUMN_DESCRIPTION = "receive_description";
-        public static final String COLUMN_CATEGORY_KEY = "receive_category_id";
+        public static final String COLUMN_ITEM_KEY = "receive_item_key";
         public static final String COLUMN_VALUE = "receive_value";
         public static final String COLUMN_QTY = "receive_qty";
         public static final String COLUMN_DATE_RECEIVED = "receive_date_received";

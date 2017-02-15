@@ -59,9 +59,6 @@ public class InventoryProvider extends ContentProvider {
     private static final String sCurrentInventoryIdSelection =
             InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
                     InventoryContract.CurrentInventoryEntry._ID + " = ? ";
-    // current inventory with category
-    private static final String sCurrentInventoryCategorySelection =
-            InventoryContract.CurrentInventoryEntry.COLUMN_CATEGORY_KEY + " = ? ";
     // past inventory with id
     private static final String sPastInventoryIdSelection =
             InventoryContract.PastInventoryEntry.TABLE_NAME + "." +
@@ -101,11 +98,17 @@ public class InventoryProvider extends ContentProvider {
         // Inner join item on current inventory
         sCurrentInventoryQueryBuilder.setTables(
                 InventoryContract.CurrentInventoryEntry.TABLE_NAME + " INNER JOIN " +
+                        "(" + InventoryContract.ItemEntry.TABLE_NAME + " INNER JOIN " +
                         InventoryContract.CategoryEntry.TABLE_NAME +
-                        " ON " + InventoryContract.CurrentInventoryEntry.TABLE_NAME +
-                        "." + InventoryContract.CurrentInventoryEntry.COLUMN_CATEGORY_KEY +
+                        " ON " + InventoryContract.ItemEntry.TABLE_NAME +
+                        "." + InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY +
                         " = " + InventoryContract.CategoryEntry.TABLE_NAME +
-                        "." + InventoryContract.CategoryEntry._ID
+                        "." + InventoryContract.CategoryEntry._ID + ") " +
+                        InventoryContract.ItemEntry.TABLE_NAME +
+                        " ON " + InventoryContract.CurrentInventoryEntry.TABLE_NAME +
+                        "." + InventoryContract.CurrentInventoryEntry.COLUMN_ITEM_KEY +
+                        " = " + InventoryContract.ItemEntry.TABLE_NAME +
+                        "." + InventoryContract.ItemEntry._ID
         );
     }
 
@@ -129,11 +132,17 @@ public class InventoryProvider extends ContentProvider {
         // Inner join item on current inventory
         sReceiveInventoryQueryBuilder.setTables(
                 InventoryContract.ReceiveInventoryEntry.TABLE_NAME + " INNER JOIN " +
+                        "(" + InventoryContract.ItemEntry.TABLE_NAME + " INNER JOIN " +
                         InventoryContract.CategoryEntry.TABLE_NAME +
-                        " ON " + InventoryContract.ReceiveInventoryEntry.TABLE_NAME +
-                        "." + InventoryContract.ReceiveInventoryEntry.COLUMN_CATEGORY_KEY +
+                        " ON " + InventoryContract.ItemEntry.TABLE_NAME +
+                        "." + InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY +
                         " = " + InventoryContract.CategoryEntry.TABLE_NAME +
-                        "." + InventoryContract.CategoryEntry._ID
+                        "." + InventoryContract.CategoryEntry._ID + ") " +
+                        InventoryContract.ReceiveInventoryEntry.TABLE_NAME +
+                        " ON " + InventoryContract.ReceiveInventoryEntry.TABLE_NAME +
+                        "." + InventoryContract.ReceiveInventoryEntry.COLUMN_ITEM_KEY +
+                        " = " + InventoryContract.ItemEntry.TABLE_NAME +
+                        "." + InventoryContract.ItemEntry._ID
         );
     }
 
@@ -263,7 +272,7 @@ public class InventoryProvider extends ContentProvider {
 
         return sCurrentInventoryQueryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
-                sCurrentInventoryCategorySelection,
+                sItemCategorySelection,
                 new String[]{Long.toString(currentInventoryId)},
                 null,
                 null,
