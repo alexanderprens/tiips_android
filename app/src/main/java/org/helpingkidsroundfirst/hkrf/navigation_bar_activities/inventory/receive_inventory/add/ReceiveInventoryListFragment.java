@@ -38,7 +38,7 @@ public class ReceiveInventoryListFragment extends Fragment implements
     public static final int COL_ITEM_VALUE = 8;
     public static final int COL_CATEGORY_NAME = 9;
     public static final int COL_CATEGORY_BARCODE_PREFIX = 10;
-    // Current inventory columns
+    // Receive inventory columns
     private static final String[] RECEIVE_INVENTORY_COLUMNS = {
             InventoryContract.ReceiveInventoryEntry.TABLE_NAME + "." +
                     InventoryContract.ReceiveInventoryEntry._ID + " AS _id",

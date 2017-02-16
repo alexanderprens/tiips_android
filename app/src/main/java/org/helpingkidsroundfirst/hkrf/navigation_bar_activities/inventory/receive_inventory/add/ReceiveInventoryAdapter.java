@@ -24,14 +24,14 @@ public class ReceiveInventoryAdapter extends CursorAdapter {
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         int layoutID = R.layout.fragment_receive_inventory_item;
         View view = LayoutInflater.from(context).inflate(layoutID, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        view.setTag(viewHolder);
+        ReceiveViewHolder receiveViewHolder = new ReceiveViewHolder(view);
+        view.setTag(receiveViewHolder);
         return view;
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        ViewHolder viewHolder = (ViewHolder) view.getTag();
+        ReceiveViewHolder receiveViewHolder = (ReceiveViewHolder) view.getTag();
 
         //get data from cursor
         String name = cursor.getString(ReceiveInventoryListFragment.COL_ITEM_NAME);
@@ -41,21 +41,21 @@ public class ReceiveInventoryAdapter extends CursorAdapter {
         String qty_str = "" + qty;
 
         //place cursor data into view
-        viewHolder.nameView.setText(name);
-        viewHolder.descView.setText(description);
-        viewHolder.catView.setText(category);
-        viewHolder.qtyView.setText(qty_str);
+        receiveViewHolder.nameView.setText(name);
+        receiveViewHolder.descView.setText(description);
+        receiveViewHolder.catView.setText(category);
+        receiveViewHolder.qtyView.setText(qty_str);
     }
 
     // Cache of the children views
-    public static class ViewHolder {
+    public static class ReceiveViewHolder {
         public final TextView nameView;
         public final TextView descView;
         public final TextView catView;
         public final TextView qtyView;
 
         // View ids for holder
-        public ViewHolder(View view) {
+        public ReceiveViewHolder(View view) {
             nameView = (TextView) view.findViewById(R.id.receive_inventory_list_name);
             descView = (TextView) view.findViewById(R.id.receive_inventory_list_desc);
             catView = (TextView) view.findViewById(R.id.receive_inventory_list_cat);

@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     tools:context="org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.ship_inventory.ShipInventoryFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,13 +16,13 @@
             android:text="@string/ship_inventory_header" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/ship_inventory_button_add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/ship_inventory_list" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/ship_inventory_button_submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/ship_inventory_submit" />

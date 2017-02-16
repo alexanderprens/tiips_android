@@ -44,7 +44,7 @@ public class ReceiveInventoryActivity extends AppCompatActivity implements
                 //create fragment
                 fragment = new ReceiveInventoryListFragment();
                 //replace fragment
-                startFragment(fragment, "ViewIntermediateListFragment");
+                startFragment(fragment, "ReceiveInventoryListFragment");
                 break;
 
             case ReceiveInventoryFragment.BUTTON_SUBMIT_RECEPTION:
