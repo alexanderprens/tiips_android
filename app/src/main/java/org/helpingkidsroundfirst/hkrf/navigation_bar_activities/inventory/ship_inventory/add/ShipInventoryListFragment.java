@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -22,7 +23,8 @@ import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
  */
 
 public class ShipInventoryListFragment extends Fragment implements
-        LoaderManager.LoaderCallbacks<Cursor> {
+        LoaderManager.LoaderCallbacks<Cursor>,
+        AddShipInventoryDialogFragment.AddShipDialogListener {
 
     // column indices
     public static final int COL_SHIP_ID = 0;
@@ -96,6 +98,10 @@ public class ShipInventoryListFragment extends Fragment implements
             @Override
             public void onClick(View v) {
                 // implement add dialog
+                FragmentManager fragmentManager = getFragmentManager();
+                AddShipInventoryDialogFragment dialog = new AddShipInventoryDialogFragment();
+                dialog.setTargetFragment(ShipInventoryListFragment.this, 300);
+                dialog.show(fragmentManager, "open add ship dialog");
             }
         });
 
@@ -151,6 +157,11 @@ public class ShipInventoryListFragment extends Fragment implements
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         shipInventoryAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void onButtonOK() {
+
     }
 
     public interface ShipInventoryListListener {

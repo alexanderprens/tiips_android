@@ -202,4 +202,7 @@
     <string name="ship_inventory_submit">Submit Shipment</string>
     <string name="ship_inventory_header">Create/Submit Shipments</string>
 
+    <!-- dialog_add_ship_inventory -->
+    <string name="add_ship_inventory_header">Add Item to Shipment</string>
+
 </resources>
