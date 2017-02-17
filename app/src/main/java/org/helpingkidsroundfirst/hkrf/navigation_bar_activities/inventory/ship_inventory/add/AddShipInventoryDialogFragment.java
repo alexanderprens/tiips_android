@@ -2,7 +2,12 @@ package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.ship_
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.SimpleCursorAdapter;
@@ -28,6 +33,24 @@ public class AddShipInventoryDialogFragment extends DialogFragment implements
     private static final String[] BARCODE_AUTOCOMPLETE = {
             InventoryContract.ItemEntry.COLUMN_BARCODE_ID
     };
+    private static final String[] projection = {InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
+            InventoryContract.CurrentInventoryEntry._ID + " AS _id",
+            InventoryContract.CurrentInventoryEntry.COLUMN_QTY,
+            InventoryContract.CurrentInventoryEntry.COLUMN_DONOR,
+            InventoryContract.ItemEntry.COLUMN_BARCODE_ID,
+            InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
+            InventoryContract.ItemEntry.COLUMN_NAME,
+            InventoryContract.ItemEntry.COLUMN_VALUE,
+            InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY
+    };
+    private static final int COL_CURRENT_ID = 0;
+    private static final int COL_CURRENT_QTY = 1;
+    private static final int COL_CURRENT_DONOR = 2;
+    private static final int COL_BARCODE_ID = 3;
+    private static final int COL_DESCRIPTION = 4;
+    private static final int COL_NAME = 5;
+    private static final int COL_VALUE = 6;
+    private static final int COL_CATEGORY_KEY = 7;
     private static int[] BARCODE_TO_VIEW = {
             android.R.id.text1
     };
@@ -37,7 +60,7 @@ public class AddShipInventoryDialogFragment extends DialogFragment implements
     private String error;
     private AddShipDialogListener caller;
     private Spinner barcodeSpinner;
-    private int quantityAvailable;
+    private boolean override;
 
 
     @Override
@@ -61,6 +84,7 @@ public class AddShipInventoryDialogFragment extends DialogFragment implements
         // set click listeners on buttons
         view.findViewById(R.id.add_ship_button_ok).setOnClickListener(this);
         view.findViewById(R.id.add_ship_button_cancel).setOnClickListener(this);
+        override = false;
 
         // listen to barcode input
         barcodeSpinner = (Spinner) view.findViewById(R.id.add_ship_barcode_spinner);
@@ -125,7 +149,16 @@ public class AddShipInventoryDialogFragment extends DialogFragment implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.add_ship_button_ok:
+                if (addShipInventory()) {
+                    caller.onButtonOK();
+                    // toast successful
+                    Toast.makeText(getContext(), getContext().getResources()
+                            .getString(R.string.add_ship_inventory_success), Toast.LENGTH_SHORT).show();
+                    this.dismiss();
 
+                } else {
+                    Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+                }
                 break;
 
             case R.id.add_ship_button_cancel:
@@ -145,14 +178,8 @@ public class AddShipInventoryDialogFragment extends DialogFragment implements
 
                 // attempt to pull item from current inventory
                 if (checkQtyInCurrentInventory()) {
+                    added = true;
 
-                    // attempt to add to ship inventoriy table
-                    if (attemptAddToShipDb() != -1) {
-                        added = true;
-
-                    } else {
-                        error = getContext().getResources().getString(R.string.error_adding_receive);
-                    }
                 } else {
                     error = getContext().getResources().getString(R.string.not_enough_qty);
                 }
@@ -229,16 +256,440 @@ public class AddShipInventoryDialogFragment extends DialogFragment implements
 
     private boolean checkQtyInCurrentInventory() {
         boolean canAdd = false;
-        quantityAvailable = 0;
+        int quantityAvailable;
+        int quantityNeeded = quantity;
 
+        // build query
+        Uri uri = InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri();
+        String selection = InventoryContract.CurrentInventoryEntry.COLUMN_ITEM_KEY + " = ? ";
+        String[] selectionArgs = {Long.toString(itemId)};
+        String sortOrder = InventoryContract.CurrentInventoryEntry.COLUMN_DATE_RECEIVED + " DESC";
 
+        Cursor currentInventoryCursor = getContext().getContentResolver().query(
+                uri,
+                projection,
+                selection,
+                selectionArgs,
+                sortOrder
+        );
+
+        // add up quantity available
+        if (currentInventoryCursor != null && currentInventoryCursor.moveToFirst()) {
+            quantityAvailable = 0;
+
+            // loop through current inventory results
+            do {
+                // add quantity
+                quantityAvailable += currentInventoryCursor.getInt(COL_CURRENT_QTY);
+
+            } while (currentInventoryCursor.moveToNext());
+
+            if (quantityAvailable < quantityNeeded) {
+
+                // not enough quantity in current inventory
+                if (override) {
+
+                    // can pull quantity from current inventory
+                    currentInventoryCursor.moveToFirst();
+
+                    // pull quantity from current inventory
+                    do {
+                        int rowQty = currentInventoryCursor.getInt(COL_CURRENT_QTY);
+
+                        if (!addCurrentInventoryRowToShip(currentInventoryCursor, rowQty)) {
+                            return false;
+                        }
+                        quantityNeeded -= rowQty;
+
+                    } while (currentInventoryCursor.moveToNext());
+
+                    // add what's left of needed quantity in with blank donor
+                    canAdd = addShipWithoutCurrentToDb(quantityNeeded);
+                } else {
+                    overrideDialog();
+                }
+
+            } else {
+                // can pull quantity from current inventory
+                currentInventoryCursor.moveToFirst();
+
+                // pull quantity from current inventory
+                do {
+                    int rowQty = currentInventoryCursor.getInt(COL_CURRENT_QTY);
+
+                    if (rowQty <= quantityNeeded) {
+                        if (!addCurrentInventoryRowToShip(currentInventoryCursor, rowQty)) {
+                            return false;
+                        }
+                        quantityNeeded -= rowQty;
+
+                    } else {
+                        int shipQty = rowQty - quantityNeeded;
+
+                        if (!moveQtyFromCurrentToShip(currentInventoryCursor, shipQty, quantityNeeded)) {
+                            return false;
+                        }
+
+                        quantityNeeded = 0;
+                    }
+
+                    if (quantityNeeded == 0) {
+                        canAdd = true;
+                        break;
+                    }
+                } while (currentInventoryCursor.moveToNext());
+            }
+            currentInventoryCursor.close();
+        } else {
+
+            // does not exist in current inventory
+            if (override) {
+                canAdd = addShipWithoutCurrentToDb(quantityNeeded);
+            } else {
+                overrideDialog();
+            }
+        }
+
+        error = getContext().getResources().getString(R.string.error_adding_receive);
         return canAdd;
     }
 
-    private long attemptAddToShipDb() {
-        long shipId = -1;
+    private boolean addCurrentInventoryRowToShip(Cursor cursor, int shipQty) {
+        boolean shipped = false;
 
-        return shipId;
+        // get content values for ship inventory
+        ContentValues contentValues = new ContentValues();
+        DatabaseUtils.cursorStringToContentValues(
+                cursor,
+                InventoryContract.ItemEntry.COLUMN_BARCODE_ID,
+                contentValues,
+                InventoryContract.ShipInventoryEntry.COLUMN_BARCODE_ID
+        );
+
+        DatabaseUtils.cursorStringToContentValues(
+                cursor,
+                InventoryContract.ItemEntry.COLUMN_NAME,
+                contentValues,
+                InventoryContract.ShipInventoryEntry.COLUMN_NAME
+        );
+
+        DatabaseUtils.cursorStringToContentValues(
+                cursor,
+                InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
+                contentValues,
+                InventoryContract.ShipInventoryEntry.COLUMN_DESCRIPTION
+        );
+
+        DatabaseUtils.cursorLongToContentValues(
+                cursor,
+                InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY,
+                contentValues,
+                InventoryContract.ShipInventoryEntry.COLUMN_CATEGORY_KEY
+        );
+
+        DatabaseUtils.cursorIntToContentValues(
+                cursor,
+                InventoryContract.ItemEntry.COLUMN_VALUE,
+                contentValues,
+                InventoryContract.ShipInventoryEntry.COLUMN_VALUE
+        );
+
+        DatabaseUtils.cursorStringToContentValues(
+                cursor,
+                InventoryContract.CurrentInventoryEntry.COLUMN_DONOR,
+                contentValues,
+                InventoryContract.ShipInventoryEntry.COLUMN_DONOR
+        );
+
+        contentValues.put(InventoryContract.ShipInventoryEntry.COLUMN_QTY, shipQty);
+
+        // attempt to insert into ship inventory
+        Uri uri = InventoryContract.ShipInventoryEntry.buildShipInventoryUri();
+        Uri insertedUri;
+
+        insertedUri = getContext().getContentResolver().insert(
+                uri,
+                contentValues
+        );
+
+        if (ContentUris.parseId(insertedUri) != -1) {
+
+            // now delete current inventory from database
+            int rowsDeleted;
+            uri = InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri();
+            String selection = InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
+                    InventoryContract.CurrentInventoryEntry._ID + " = ? ";
+            String[] selectionArgs = {Long.toString(cursor.getLong(COL_CURRENT_ID))};
+
+            rowsDeleted = getContext().getContentResolver().delete(
+                    uri,
+                    selection,
+                    selectionArgs
+            );
+
+            if (rowsDeleted > 0) {
+                shipped = true;
+            }
+        }
+
+        return shipped;
+    }
+
+    private boolean moveQtyFromCurrentToShip(Cursor cursor, int currentQty, int shipQty) {
+        boolean shipped = false;
+
+        // get content values for ship inventory
+        ContentValues contentValues = new ContentValues();
+        DatabaseUtils.cursorStringToContentValues(
+                cursor,
+                InventoryContract.ItemEntry.COLUMN_BARCODE_ID,
+                contentValues,
+                InventoryContract.ShipInventoryEntry.COLUMN_BARCODE_ID
+        );
+
+        DatabaseUtils.cursorStringToContentValues(
+                cursor,
+                InventoryContract.ItemEntry.COLUMN_NAME,
+                contentValues,
+                InventoryContract.ShipInventoryEntry.COLUMN_NAME
+        );
+
+        DatabaseUtils.cursorStringToContentValues(
+                cursor,
+                InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
+                contentValues,
+                InventoryContract.ShipInventoryEntry.COLUMN_DESCRIPTION
+        );
+
+        DatabaseUtils.cursorLongToContentValues(
+                cursor,
+                InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY,
+                contentValues,
+                InventoryContract.ShipInventoryEntry.COLUMN_CATEGORY_KEY
+        );
+
+        DatabaseUtils.cursorIntToContentValues(
+                cursor,
+                InventoryContract.ItemEntry.COLUMN_VALUE,
+                contentValues,
+                InventoryContract.ShipInventoryEntry.COLUMN_VALUE
+        );
+
+        DatabaseUtils.cursorStringToContentValues(
+                cursor,
+                InventoryContract.CurrentInventoryEntry.COLUMN_DONOR,
+                contentValues,
+                InventoryContract.ShipInventoryEntry.COLUMN_DONOR
+        );
+
+        contentValues.put(InventoryContract.ShipInventoryEntry.COLUMN_QTY, shipQty);
+
+        // attempt to insert into ship inventory
+        Uri uri = InventoryContract.ShipInventoryEntry.buildShipInventoryUri();
+        Uri insertedUri;
+
+        insertedUri = getContext().getContentResolver().insert(
+                uri,
+                contentValues
+        );
+
+        if (ContentUris.parseId(insertedUri) != -1) {
+
+            // now delete current inventory from database
+            int rowsUpdated;
+            uri = InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri();
+            String selection = InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
+                    InventoryContract.CurrentInventoryEntry._ID + " = ? ";
+            String[] selectionArgs = {Long.toString(cursor.getLong(COL_CURRENT_ID))};
+
+            // new quantity
+            ContentValues currentValues = new ContentValues();
+            currentValues.put(InventoryContract.CurrentInventoryEntry.COLUMN_QTY, currentQty);
+
+            rowsUpdated = getContext().getContentResolver().update(
+                    uri,
+                    currentValues,
+                    selection,
+                    selectionArgs
+            );
+
+            if (rowsUpdated > 0) {
+                shipped = true;
+            }
+        }
+
+        return shipped;
+    }
+
+    private boolean addShipWithoutCurrentToDb(int shipQty) {
+        boolean added = false;
+
+        // get cursor of item
+        Uri itemUri = InventoryContract.ItemEntry.buildInventoryItemUri();
+        String selection = InventoryContract.ItemEntry.TABLE_NAME + "." +
+                InventoryContract.ItemEntry._ID + " = ? ";
+        String[] selectionArgs = {Long.toString(itemId)};
+
+        Cursor itemCursor = getContext().getContentResolver().query(
+                itemUri,
+                null,
+                selection,
+                selectionArgs,
+                null
+        );
+
+        if (itemCursor != null && itemCursor.moveToFirst()) {
+
+            // get values from item
+            ContentValues contentValues = new ContentValues();
+            DatabaseUtils.cursorStringToContentValues(
+                    itemCursor,
+                    InventoryContract.ItemEntry.COLUMN_BARCODE_ID,
+                    contentValues,
+                    InventoryContract.ShipInventoryEntry.COLUMN_BARCODE_ID
+            );
+
+            DatabaseUtils.cursorStringToContentValues(
+                    itemCursor,
+                    InventoryContract.ItemEntry.COLUMN_NAME,
+                    contentValues,
+                    InventoryContract.ShipInventoryEntry.COLUMN_NAME
+            );
+
+            DatabaseUtils.cursorStringToContentValues(
+                    itemCursor,
+                    InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
+                    contentValues,
+                    InventoryContract.ShipInventoryEntry.COLUMN_DESCRIPTION
+            );
+
+            DatabaseUtils.cursorLongToContentValues(
+                    itemCursor,
+                    InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY,
+                    contentValues,
+                    InventoryContract.ShipInventoryEntry.COLUMN_CATEGORY_KEY
+            );
+
+            DatabaseUtils.cursorIntToContentValues(
+                    itemCursor,
+                    InventoryContract.ItemEntry.COLUMN_VALUE,
+                    contentValues,
+                    InventoryContract.ShipInventoryEntry.COLUMN_VALUE
+            );
+
+            contentValues.put(InventoryContract.ShipInventoryEntry.COLUMN_QTY, shipQty);
+            contentValues.put(InventoryContract.ShipInventoryEntry.COLUMN_DONOR, "Unknown");
+
+            // attempt to insert into ship inventory
+            if (insertShipInventory(contentValues, shipQty)) {
+                added = true;
+            }
+
+            itemCursor.close();
+        }
+
+        return added;
+    }
+
+    private boolean insertShipInventory(ContentValues inputValues, int shipQty) {
+        boolean inserted = false;
+
+        // check if already in current inventory
+        Uri shipUri = InventoryContract.ShipInventoryEntry.buildShipInventoryUri();
+        String[] projection = {InventoryContract.ShipInventoryEntry.TABLE_NAME + "." +
+                InventoryContract.ShipInventoryEntry._ID + " AS _id",
+                InventoryContract.ShipInventoryEntry.COLUMN_QTY
+        };
+        String selection = InventoryContract.ShipInventoryEntry.COLUMN_BARCODE_ID + " = ? " +
+                "AND " + InventoryContract.ShipInventoryEntry.COLUMN_DONOR + " = ? ";
+        String[] selectionArgs = {
+                inputValues.getAsString(InventoryContract.ShipInventoryEntry.COLUMN_BARCODE_ID),
+                inputValues.getAsString(InventoryContract.ShipInventoryEntry.COLUMN_DONOR)
+        };
+
+        Cursor shipCursor = getContext().getContentResolver().query(
+                shipUri,
+                projection,
+                selection,
+                selectionArgs,
+                null
+        );
+
+        if (shipCursor != null && shipCursor.moveToFirst()) {
+
+            // get old qty
+            int newQty = shipCursor.getInt(1) + shipQty;
+
+            // make new qty
+            ContentValues newValues = new ContentValues();
+            newValues.put(InventoryContract.ShipInventoryEntry.COLUMN_QTY, newQty);
+
+            // update ship entry
+            selection = InventoryContract.ShipInventoryEntry.TABLE_NAME + "." +
+                    InventoryContract.ShipInventoryEntry._ID + " = ? ";
+            String[] selectionArgs2 = {Long.toString(shipCursor.getLong(0))};
+
+            // attempt insert
+            int rowsUpdated = getContext().getContentResolver().update(
+                    shipUri,
+                    newValues,
+                    selection,
+                    selectionArgs2
+            );
+
+            // check if updated
+            if (rowsUpdated > 0) {
+                inserted = true;
+            }
+
+            shipCursor.close();
+
+        } else {
+
+            // attempt to insert into ship inventory
+            Uri uri = InventoryContract.ShipInventoryEntry.buildShipInventoryUri();
+            Uri insertedUri;
+
+            insertedUri = getContext().getContentResolver().insert(
+                    uri,
+                    inputValues
+            );
+
+            if (ContentUris.parseId(insertedUri) != -1) {
+                inserted = true;
+            }
+        }
+
+        return inserted;
+    }
+
+    private void overrideDialog() {
+
+        final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        setOverride(true);
+                        //dialog.dismiss();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        setOverride(false);
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(R.string.override_current_inventory)
+                .setPositiveButton(R.string.are_you_sure_yes, dialogClickListener)
+                .setNegativeButton(R.string.are_you_sure_no, dialogClickListener)
+                .show();
+    }
+
+    private void setOverride(boolean bool) {
+        override = bool;
     }
 
     public interface AddShipDialogListener {

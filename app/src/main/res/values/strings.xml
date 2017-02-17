@@ -205,5 +205,7 @@
 
     <!-- dialog_add_ship_inventory -->
     <string name="add_ship_inventory_header">Add Item to Shipment</string>
+    <string name="add_ship_inventory_success">Ship inventory success</string>
+    <string name="override_current_inventory">Not enough quantity in current inventory. Override?</string>
 
 </resources>
