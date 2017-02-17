@@ -13,7 +13,8 @@ import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.ship_i
 
 public class ShipInventoryActivity extends AppCompatActivity implements
         ShipInventoryFragment.onShipInventoryButtonListener,
-        ShipInventoryListFragment.ShipInventoryListListener {
+        ShipInventoryListFragment.ShipInventoryListListener,
+        ShipInventorySubmitDialogFragment.SubmitShipListListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,6 @@ public class ShipInventoryActivity extends AppCompatActivity implements
     @Override
     public void onShipInventoryButtonClicked(int button) {
         Fragment fragment;
-        Bundle bundle = new Bundle();
 
         switch (button) {
             case ShipInventoryFragment.BUTTON_ADD:
@@ -48,7 +48,10 @@ public class ShipInventoryActivity extends AppCompatActivity implements
                 break;
 
             case ShipInventoryFragment.BUTTON_SUBMIT:
-
+                // make dialog
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                ShipInventorySubmitDialogFragment dialog = new ShipInventorySubmitDialogFragment();
+                dialog.show(fragmentManager, "open submit ship dialog");
                 break;
         }
     }
@@ -71,5 +74,10 @@ public class ShipInventoryActivity extends AppCompatActivity implements
         bundle.putParcelable(ShipInventoryDetailFragment.DETAILED_SHIP_KEY, uri);
         fragment.setArguments(bundle);
         startFragment(fragment, "ShipInventoryDetailFragment");
+    }
+
+    @Override
+    public void onSubmitButtonClick() {
+
     }
 }

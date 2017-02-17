@@ -95,8 +95,6 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
         dateView = (TextView) rootView.findViewById(R.id.past_inventory_detail_text_date);
         donorView = (TextView) rootView.findViewById(R.id.past_inventory_detail_text_donor);
 
-        // implement fab
-
         // implement delete button
         final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
@@ -191,8 +189,11 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
         int rowDeleted = -1;
         Uri pastInventoryUri = InventoryContract.PastInventoryEntry.buildPastInventoryUri();
         String selection = InventoryContract.PastInventoryEntry.TABLE_NAME + "." +
-                InventoryContract.PastInventoryEntry._ID + " = ? ";
-        String[] selectionArgs = {Long.toString(pastInventoryId)};
+                InventoryContract.PastInventoryEntry._ID + " = ? AND " +
+                InventoryContract.PastInventoryEntry.COLUMN_DONOR + " = ? ";
+        String[] selectionArgs = {Long.toString(pastInventoryId),
+                "SDSU"
+        };
         String message = "Past Inventory delete failed.";
 
         if (pastInventoryId != -1) {

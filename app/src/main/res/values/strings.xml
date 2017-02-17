@@ -140,6 +140,9 @@
     <string name="current_inventory_update_fail">Current inventory updated failed</string>
     <string name="error_barcode_used">Barcode is in use, cannot delete</string>
     <string name="not_enough_qty">Not enough quantity in Current Inventory</string>
+    <string name="error_updating_shipment">Error updating ship inventory</string>
+    <string name="error_inserting_past">Error inserting into past inventory</string>
+    <string name="error_deleting_ship">Error deleting shipment</string>
 
     <!-- title bar strings -->
     <string name="receive_inventory_title">Receive Inventory</string>
@@ -213,5 +216,9 @@
     <string name="ship_inv_delete_fail">Delete ship inventory failed</string>
     <string name="ship_inv_delete_success">Delete ship inventory successful</string>
     <string name="donor_detail">Donor:</string>
+
+    <!-- dialog_ship_inventory_submit -->
+    <string name="ship_inventory_submit_header">Submit Shipment List</string>
+    <string name="ship_inventory_submit_success">Shipment submitted successfully</string>
 
 </resources>
