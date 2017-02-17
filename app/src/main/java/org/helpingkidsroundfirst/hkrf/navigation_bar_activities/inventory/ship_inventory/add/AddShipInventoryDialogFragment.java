@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
@@ -36,6 +37,7 @@ public class AddShipInventoryDialogFragment extends DialogFragment implements
     private String error;
     private AddShipDialogListener caller;
     private Spinner barcodeSpinner;
+    private int quantityAvailable;
 
 
     @Override
@@ -130,6 +132,113 @@ public class AddShipInventoryDialogFragment extends DialogFragment implements
                 this.dismiss();
                 break;
         }
+    }
+
+    private boolean addShipInventory() {
+        boolean added = false;
+
+        // validates inputs
+        if (dialogValidation()) {
+
+            // check if item exists
+            if (checkIfItemExists()) {
+
+                // attempt to pull item from current inventory
+                if (checkQtyInCurrentInventory()) {
+
+                    // attempt to add to ship inventoriy table
+                    if (attemptAddToShipDb() != -1) {
+                        added = true;
+
+                    } else {
+                        error = getContext().getResources().getString(R.string.error_adding_receive);
+                    }
+                } else {
+                    error = getContext().getResources().getString(R.string.not_enough_qty);
+                }
+            } else {
+                error = getContext().getResources().getString(R.string.error_barcode_nonexistant);
+            }
+        } else {
+            error = getContext().getResources().getString(R.string.validation_error);
+        }
+
+        return added;
+    }
+
+    private boolean dialogValidation() {
+        boolean check = true;
+
+        // check quantity
+        if (qtyString.isEmpty()) {
+            check = false;
+            Toast.makeText(getContext(), getContext().getResources()
+                    .getString(R.string.validation_qty_null), Toast.LENGTH_SHORT).show();
+        } else {
+            try {
+                quantity = Integer.parseInt(qtyString);
+
+                if (quantity < 1) {
+                    check = false;
+                    Toast.makeText(getContext(), getContext().getResources()
+                            .getString(R.string.validation_qty_zero), Toast.LENGTH_SHORT).show();
+                }
+            } catch (NumberFormatException e) {
+                check = false;
+                Toast.makeText(getContext(), getContext().getResources()
+                        .getString(R.string.validation_qty_zero), Toast.LENGTH_SHORT).show();
+                quantity = 1;
+                qtyString = Integer.toString(quantity);
+            }
+        }
+
+        return check;
+    }
+
+    // checks if item already exists by looking at the barcode string
+    private boolean checkIfItemExists() {
+
+        boolean exists;
+
+        // Check if barcode id already exists in the db
+        Cursor itemCursor = getContext().getContentResolver().query(
+                InventoryContract.ItemEntry.CONTENT_URI,
+                new String[]{InventoryContract.ItemEntry.TABLE_NAME + "." +
+                        InventoryContract.ItemEntry._ID},
+                InventoryContract.ItemEntry.TABLE_NAME + "." +
+                        InventoryContract.ItemEntry._ID + " = ?",
+                new String[]{Long.toString(itemId)},
+                null
+        );
+
+        // if barcode exists, return true
+        if (itemCursor != null) {
+            exists = itemCursor.moveToFirst();
+
+            if (exists) {
+                itemId = itemCursor.getLong(0);
+            }
+
+            itemCursor.close();
+        } else {
+            exists = false;
+        }
+
+        return exists;
+    }
+
+    private boolean checkQtyInCurrentInventory() {
+        boolean canAdd = false;
+        quantityAvailable = 0;
+
+
+        return canAdd;
+    }
+
+    private long attemptAddToShipDb() {
+        long shipId = -1;
+
+        return shipId;
     }
 
     public interface AddShipDialogListener {

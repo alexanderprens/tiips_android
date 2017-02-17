@@ -225,13 +225,18 @@ public class AddReceiveDialogFragment extends DialogFragment implements
         );
 
         // if barcode exists, return true
-        exists = itemCursor.moveToFirst();
+        if (itemCursor != null) {
+            exists = itemCursor.moveToFirst();
 
-        if (exists) {
-            itemId = itemCursor.getLong(0);
+            if (exists) {
+                itemId = itemCursor.getLong(0);
+            }
+
+            itemCursor.close();
+        } else {
+            exists = false;
         }
 
-        itemCursor.close();
         return exists;
     }
 

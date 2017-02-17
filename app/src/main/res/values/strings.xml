@@ -139,6 +139,7 @@
     <string name="current_inventory_delete_fail">Current inventory delete failed</string>
     <string name="current_inventory_update_fail">Current inventory updated failed</string>
     <string name="error_barcode_used">Barcode is in use, cannot delete</string>
+    <string name="not_enough_qty">Not enough quantity in Current Inventory</string>
 
     <!-- title bar strings -->
     <string name="receive_inventory_title">Receive Inventory</string>
