@@ -208,4 +208,10 @@
     <string name="add_ship_inventory_success">Ship inventory success</string>
     <string name="override_current_inventory">Not enough quantity in current inventory. Override?</string>
 
+    <!-- fragment_ship_inventory_detail -->
+    <string name="ship_inventory_detail_delete">Delete ship inventory record</string>
+    <string name="ship_inv_delete_fail">Delete ship inventory failed</string>
+    <string name="ship_inv_delete_success">Delete ship inventory successful</string>
+    <string name="donor_detail">Donor:</string>
+
 </resources>

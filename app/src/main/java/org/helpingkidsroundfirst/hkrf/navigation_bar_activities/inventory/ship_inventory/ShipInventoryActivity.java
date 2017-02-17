@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import org.helpingkidsroundfirst.hkrf.R;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.ship_inventory.add.ShipInventoryDetailFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.ship_inventory.add.ShipInventoryListFragment;
 
 public class ShipInventoryActivity extends AppCompatActivity implements
@@ -66,5 +67,9 @@ public class ShipInventoryActivity extends AppCompatActivity implements
         Bundle bundle = new Bundle();
 
         // start detail fragment
+        fragment = new ShipInventoryDetailFragment();
+        bundle.putParcelable(ShipInventoryDetailFragment.DETAILED_SHIP_KEY, uri);
+        fragment.setArguments(bundle);
+        startFragment(fragment, "ShipInventoryDetailFragment");
     }
 }

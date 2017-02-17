@@ -404,19 +404,11 @@ public class AddShipInventoryDialogFragment extends DialogFragment implements
         contentValues.put(InventoryContract.ShipInventoryEntry.COLUMN_QTY, shipQty);
 
         // attempt to insert into ship inventory
-        Uri uri = InventoryContract.ShipInventoryEntry.buildShipInventoryUri();
-        Uri insertedUri;
-
-        insertedUri = getContext().getContentResolver().insert(
-                uri,
-                contentValues
-        );
-
-        if (ContentUris.parseId(insertedUri) != -1) {
+        if (insertShipInventory(contentValues, shipQty)) {
 
             // now delete current inventory from database
             int rowsDeleted;
-            uri = InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri();
+            Uri uri = InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri();
             String selection = InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
                     InventoryContract.CurrentInventoryEntry._ID + " = ? ";
             String[] selectionArgs = {Long.toString(cursor.getLong(COL_CURRENT_ID))};
@@ -484,20 +476,12 @@ public class AddShipInventoryDialogFragment extends DialogFragment implements
 
         contentValues.put(InventoryContract.ShipInventoryEntry.COLUMN_QTY, shipQty);
 
-        // attempt to insert into ship inventory
-        Uri uri = InventoryContract.ShipInventoryEntry.buildShipInventoryUri();
-        Uri insertedUri;
-
-        insertedUri = getContext().getContentResolver().insert(
-                uri,
-                contentValues
-        );
-
-        if (ContentUris.parseId(insertedUri) != -1) {
+        // attempt to ship inventory
+        if (insertShipInventory(contentValues, shipQty)) {
 
             // now delete current inventory from database
             int rowsUpdated;
-            uri = InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri();
+            Uri uri = InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri();
             String selection = InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
                     InventoryContract.CurrentInventoryEntry._ID + " = ? ";
             String[] selectionArgs = {Long.toString(cursor.getLong(COL_CURRENT_ID))};
