@@ -104,6 +104,8 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
                         if (handlePastInventoryDelete()) {
                             FragmentManager manager = getActivity().getSupportFragmentManager();
                             manager.popBackStack();
+                            manager.popBackStack();
+                            manager.popBackStack();
                         }
                         break;
                 }

@@ -41,7 +41,9 @@ public class AddShipInventoryDialogFragment extends DialogFragment implements
             InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
             InventoryContract.ItemEntry.COLUMN_NAME,
             InventoryContract.ItemEntry.COLUMN_VALUE,
-            InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY
+            InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY,
+            InventoryContract.CurrentInventoryEntry.COLUMN_DATE_RECEIVED,
+            InventoryContract.CurrentInventoryEntry.COLUMN_WAREHOUSE
     };
     private static final int COL_CURRENT_ID = 0;
     private static final int COL_CURRENT_QTY = 1;
@@ -472,6 +474,20 @@ public class AddShipInventoryDialogFragment extends DialogFragment implements
                 InventoryContract.CurrentInventoryEntry.COLUMN_DONOR,
                 contentValues,
                 InventoryContract.ShipInventoryEntry.COLUMN_DONOR
+        );
+
+        DatabaseUtils.cursorStringToContentValues(
+                cursor,
+                InventoryContract.CurrentInventoryEntry.COLUMN_DATE_RECEIVED,
+                contentValues,
+                InventoryContract.ShipInventoryEntry.COLUMN_DATE_RECEIVED
+        );
+
+        DatabaseUtils.cursorStringToContentValues(
+                cursor,
+                InventoryContract.CurrentInventoryEntry.COLUMN_WAREHOUSE,
+                contentValues,
+                InventoryContract.ShipInventoryEntry.COLUMN_WAREHOUSE
         );
 
         contentValues.put(InventoryContract.ShipInventoryEntry.COLUMN_QTY, shipQty);

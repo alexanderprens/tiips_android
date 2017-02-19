@@ -21,7 +21,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
     static final String DATABASE_NAME = "inventory.db";
     //change when database changes
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 14;
 
     public InventoryDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -108,6 +108,8 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
                 ShipInventoryEntry.COLUMN_QTY + " INTEGER, " +
                 ShipInventoryEntry.COLUMN_DATE_SHIPPED + " TEXT, " +
                 ShipInventoryEntry.COLUMN_DONOR + " TEXT, " +
+                ShipInventoryEntry.COLUMN_DATE_RECEIVED + " TEXT, " +
+                ShipInventoryEntry.COLUMN_WAREHOUSE + " TEXT, " +
 
                 // set up foreign key for category
                 "FOREIGN KEY (" + ShipInventoryEntry.COLUMN_CATEGORY_KEY + ") REFERENCES " +
@@ -132,8 +134,8 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         // If different version table, handle changes
 
-        // For this database revision (x to 9) drop old tables
-        if (oldVersion <= 12) {
+        // For this database revision (x to 13) drop old tables and re-create
+        if (oldVersion <= 13) {
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + CurrentInventoryEntry.TABLE_NAME);
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + PastInventoryEntry.TABLE_NAME);
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ItemEntry.TABLE_NAME);

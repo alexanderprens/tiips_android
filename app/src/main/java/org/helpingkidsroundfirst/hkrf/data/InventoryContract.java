@@ -257,6 +257,8 @@ public class InventoryContract {
         public static final String COLUMN_QTY = "ship_qty";
         public static final String COLUMN_DATE_SHIPPED = "ship_date_shipped";
         public static final String COLUMN_DONOR = "ship_donor";
+        public static final String COLUMN_DATE_RECEIVED = "ship_date_received";
+        public static final String COLUMN_WAREHOUSE = "ship_warehouse";
 
         public static Uri buildShipInventoryUri() {
             return CONTENT_URI;

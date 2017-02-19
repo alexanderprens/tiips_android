@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity
                 Log.i(TAG, "Start View Inventory Activity");
                 break;
 
-            // TODO: 1/25/2017 add actions for rest of nav drawer
             case R.id.nav_ship:
                 intent = new Intent(MainActivity.this, ShipInventoryActivity.class);
                 startActivity(intent);

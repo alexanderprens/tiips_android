@@ -212,7 +212,7 @@
     <string name="override_current_inventory">Not enough quantity in current inventory. Override?</string>
 
     <!-- fragment_ship_inventory_detail -->
-    <string name="ship_inventory_detail_delete">Delete ship inventory record</string>
+    <string name="ship_inventory_detail_delete">Remove ship inventory record</string>
     <string name="ship_inv_delete_fail">Delete ship inventory failed</string>
     <string name="ship_inv_delete_success">Delete ship inventory successful</string>
     <string name="donor_detail">Donor:</string>
@@ -220,5 +220,6 @@
     <!-- dialog_ship_inventory_submit -->
     <string name="ship_inventory_submit_header">Submit Shipment List</string>
     <string name="ship_inventory_submit_success">Shipment submitted successfully</string>
+    <string name="submit_button">Submit</string>
 
 </resources>
