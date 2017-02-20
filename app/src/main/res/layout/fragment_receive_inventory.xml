@@ -8,7 +8,9 @@
         android:id="@+id/textView33"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/receive_inventory_header" />
+        android:text="@string/receive_inventory_header"
+        android:textAlignment="center"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
     <Button
         android:id="@+id/receive_inventory_button_add"

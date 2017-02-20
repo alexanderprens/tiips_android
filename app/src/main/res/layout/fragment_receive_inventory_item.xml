@@ -8,19 +8,20 @@
         android:id="@+id/receive_inventory_list_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="@string/dialog_name"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
 
     <TextView
         android:id="@+id/receive_inventory_list_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="TextView" />
+        android:text="@string/dialog_description"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:orientation="horizontal">
 
         <TextView
@@ -28,14 +29,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="TextView" />
+            android:text="@string/dialog_category"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />
 
         <TextView
             android:id="@+id/receive_inventory_list_qty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="TextView" />
+            android:text="@string/dialog_quantity"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small" />
     </LinearLayout>
 
 </LinearLayout>
