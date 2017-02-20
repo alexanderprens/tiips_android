@@ -80,7 +80,11 @@ public class UpdateCurrentDialogFragment extends DialogFragment implements
                 if (tempStr.isEmpty()) {
                     quantityInput = 0;
                 } else {
-                    quantityInput = Integer.parseInt(tempStr);
+                    try {
+                        quantityInput = Integer.parseInt(tempStr);
+                    } catch (NumberFormatException e) {
+                        quantityInput = 0;
+                    }
                 }
             }
 
