@@ -1,17 +1,18 @@
 <resources>
     <!-- app name -->
-    <string name="app_name">TIIPS</string>
+    <string name="app_name" translatable="false">TIIPS</string>
 
+    <!-- Main Activity strings _________________________________________________________________-->
     <!-- MainActivity -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
 
     <!--activity_name_drawer -->
-    <string name="nav_header_main_text">TIIPS Menu</string>
-    <string name="nav_header_sub_text">Inventory and Indoor Positioning System</string>
+    <string name="nav_header_main_text" translatable="false">TIIPS Menu</string>
+    <string name="nav_header_sub_text" translatable="false">HKRF Application</string>
     <string name="nav_group_inventory">Inventory</string>
-    <string name="nav_group_indoor">IPS</string>
+    <string name="nav_group_indoor" translatable="false">IPS</string>
     <string name="nav_option_inventory">View Inventory</string>
     <string name="nav_option_reports">View Reports</string>
     <string name="nav_option_receive">Receive Inventory</string>
@@ -19,130 +20,6 @@
     <string name="nav_option_locate">Locate Item</string>
     <string name="nav_option_add">Add/Remove Tags</string>
     <string name="nav_option_messages">Tag Messages</string>
-
-    <!-- content_main -->
-    <string name="content_text">Helping Kids Round First Application</string>
-
-    <!-- dialog_add_inventory_item -->
-    <string name="add_inventory_item_title">New Generic Barcode</string>
-    <string name="add_inv_name">Barcode Name</string>
-    <string name="add_inv_barcode">XXXX</string>
-    <string name="add_inv_desc">Description</string>
-    <string name="add_inv_category">Category</string>
-    <string name="add_inv_value">Value</string>
-    <string name="add_inv_cancel">Cancel</string>
-    <string name="add_inv_ok">OK</string>
-    <string name="add_inv_hkrf">HKRF-XX-</string>
-
-    <!-- fragment_view_inventory -->
-    <string name="choose_inventory_header">Select Table to View/Edit</string>
-    <string name="choose_inv_current_button">Current Inventory</string>
-    <string name="choose_inv_past_button">Past Inventory</string>
-    <string name="choose_inv_item_button">Generic Barcodes</string>
-    <string name="choose_inv_category_button">Categories</string>
-    <string name="title_activity_view_inventory">ViewInventoryActivity</string>
-
-    <!-- content_main_home -->
-    <string name="home_header">Welcome to TIIPS!</string>
-
-    <!-- fragment_view_inventory_item_detail -->
-    <string name="view_inventory_item_detail_name">Name: </string>
-    <string name="view_inventory_item_detail_description">Description: </string>
-    <string name="view_inventory_item_detail_category">Category: </string>
-    <string name="view_inventory_item_detail_barcode">Barcode: </string>
-    <string name="view_inventory_item_detail_value">Value: </string>
-    <string name="view_inventory_item_detail_delete">Delete Generic Barcode</string>
-
-    <!-- fragment_view_current_inventory_detail -->
-    <string name="view_current_inventory_detail_name">Name: </string>
-    <string name="view_current_inventory_detail_description">Description: </string>
-    <string name="view_current_inventory_detail_category">Category: </string>
-    <string name="view_current_inventory_detail_barcode">Barcode: </string>
-    <string name="view_current_inventory_detail_value">Value: </string>
-    <string name="view_current_inventory_detail_qty">Quantity: </string>
-    <string name="view_current_inventory_detail_date">Date Received:</string>
-    <string name="view_current_inventory_detail_donor">Donor: </string>
-    <string name="view_current_inventory_detail_warehouse">Warehouse: </string>
-    <string name="view_current_inventory_detail_delete">Delete Current Inventory Record</string>
-
-    <!-- fragment_view_past_inventory_detail -->
-    <string name="view_past_inventory_detail_name">Name: </string>
-    <string name="view_past_inventory_detail_description">Description: </string>
-    <string name="view_past_inventory_detail_category">Category: </string>
-    <string name="view_past_inventory_detail_barcode">Barcode: </string>
-    <string name="view_past_inventory_detail_value">Value: </string>
-    <string name="view_past_inventory_detail_qty">Quantity: </string>
-    <string name="view_past_inventory_detail_date">Date Shipped:</string>
-    <string name="view_past_inventory_detail_donor">Donor: </string>
-    <string name="view_past_inventory_detail_delete">Delete Past Inventory Record</string>
-
-    <!-- activity_receive_inventory -->
-    <string name="title_activity_receive_inventory">ReceiveInventoryActivity</string>
-
-    <!-- dialog_add_category -->
-    <string name="add_category_header">Add Category</string>
-    <string name="add_category_hint">Category</string>
-    <string name="add_category_barcode_hint">Barcode Prefix</string>
-    <string name="add_category_ok">OK</string>
-    <string name="add_category_cancel">Cancel</string>
-
-    <!-- fragment_view_category_detail -->
-    <string name="view_category_detail_name">Name: </string>
-    <string name="view_category_detail_barcode">Barcode Prefix: </string>
-    <string name="view_category_delete">Delete Category</string>
-
-    <!-- generic yes/no dialog box -->
-    <string name="are_you_sure_message">Are you sure?</string>
-    <string name="are_you_sure_yes">Yes</string>
-    <string name="are_you_sure_no">No</string>
-
-    <!-- dialog_update_category -->
-    <string name="update_category_header">Update Category</string>
-    <string name="update_category_barcode">Barcode Prefix Cannot be Changed</string>
-    <string name="update_category_cancel">Cancel</string>
-    <string name="update_category_ok">OK</string>
-
-    <!-- dialog_update_inventory_item -->
-    <string name="update_item_header">Update Generic Barcode</string>
-    <string name="update_item_cancel">Cancel</string>
-    <string name="update_item_ok">OK</string>
-    <string name="update_item_not_updatable">Barcode not updatable</string>
-
-    <!-- input validation strings -->
-    <string name="validation_category_empty">Category cannot be empty</string>
-    <string name="validation_error">Validation error</string>
-    <string name="validation_category_exists">Category already exists in database</string>
-    <string name="validation_name_empty">Name cannot be empty</string>
-    <string name="validation_value_negative">Value must be above zero</string>
-    <string name="validation_barcode_empty">Barcode cannot be empty</string>
-    <string name="validation_barcode_long">Barcode must be 4 characters</string>
-    <string name="validation_barcode_exists">Barcode already exists</string>
-    <string name="validation_qty_zero">Quantity must be greater than zero</string>
-    <string name="validation_qty_null">Quantity cannot be empty</string>
-    <string name="update_receive_successful">Quantity updated</string>
-    <string name="validation_donor_empty">Donor cannot be empty</string>
-    <string name="validation_warehouse_empty">Warehouse cannot be empty</string>
-    <string name="validation_date_invalid">Date must be picked</string>
-
-    <!-- error messages -->
-    <string name="error_receive_inventory_not_updated">Receive inventory not updated</string>
-    <string name="error_inserted_into_current">Error inserting into current inventory</string>
-    <string name="error_barcode_nonexistant">Barcode does not exist</string>
-    <string name="error_adding_receive">Error adding to database</string>
-    <string name="error_updating_receive">Error updating quantity</string>
-    <string name="error_adding_item">Error adding item to database</string>
-    <string name="error_updating_item">Error updating barcode item</string>
-    <string name="error_updating_category">Error updating category</string>
-    <string name="barcode_item_delete_success">Barcode item delete successful</string>
-    <string name="barcode_item_delete_failed">Barcode item delete failed</string>
-    <string name="current_inventory_delete_success">Current inventory delete successful</string>
-    <string name="current_inventory_delete_fail">Current inventory delete failed</string>
-    <string name="current_inventory_update_fail">Current inventory updated failed</string>
-    <string name="error_barcode_used">Barcode is in use, cannot delete</string>
-    <string name="not_enough_qty">Not enough quantity in Current Inventory</string>
-    <string name="error_updating_shipment">Error updating ship inventory</string>
-    <string name="error_inserting_past">Error inserting into past inventory</string>
-    <string name="error_deleting_ship">Error deleting shipment</string>
 
     <!-- title bar strings -->
     <string name="receive_inventory_title">Receive Inventory</string>
@@ -153,6 +30,71 @@
     <string name="view_category_title">View Categories</string>
     <string name="view_inventory_title">View Inventory</string>
 
+    <!-- content_main -->
+    <string name="content_text" translatable="false">Helping Kids Round First Application</string>
+
+    <!-- content_main_home -->
+    <string name="home_header" translatable="false">Welcome to TIIPS!</string>
+
+    <!-- view inventory strings _______________________________________________________________-->
+    <!-- fragment_view_inventory -->
+    <string name="choose_inventory_header">Select Table to View/Edit</string>
+    <string name="choose_inv_current_button">Current Inventory</string>
+    <string name="choose_inv_past_button">Past Inventory</string>
+    <string name="choose_inv_item_button">Barcode Items</string>
+    <string name="choose_inv_category_button">Categories</string>
+    <string name="title_activity_view_inventory">ViewInventoryActivity</string>
+
+    <!-- dialog_add_category -->
+    <string name="add_category_header">Add Category</string>
+    <string name="add_category_barcode_hint">Barcode Prefix</string>
+
+    <!-- fragment_view_category_detail -->
+    <string name="view_category_detail_barcode">Barcode Prefix: </string>
+    <string name="view_category_delete">Delete Category</string>
+
+    <!-- dialog_update_category -->
+    <string name="update_category_header">Update Category</string>
+    <string name="update_category_barcode">Barcode Prefix Cannot be Changed</string>
+
+    <!-- view category detail -->
+    <string name="category_delete_fail">Category delete failed</string>
+    <string name="category_delete_success">Category delete successful</string>
+
+    <!-- fragment_view_inventory_item_detail -->
+    <string name="view_inventory_item_detail_delete">Delete Generic Barcode</string>
+    <string name="barcode_item_delete_success">Barcode item delete successful</string>
+    <string name="barcode_item_delete_failed">Barcode item delete failed</string>
+
+    <!-- dialog_add_inventory_item -->
+    <string name="add_inventory_item_title">New Generic Barcode</string>
+    <string name="add_inv_barcode" translatable="false">XXXX</string>
+    <string name="add_inv_hkrf" translatable="false">HKRF-XX-</string>
+
+    <!-- dialog_update_inventory_item -->
+    <string name="update_item_header">Update Generic Barcode</string>
+    <string name="update_item_not_updatable">Barcode not updatable</string>
+
+    <!-- fragment_view_current_inventory_detail -->
+    <string name="view_current_inventory_detail_delete">Delete Current Inventory Record</string>
+    <string name="current_inventory_delete_fail">Current inventory delete failed</string>
+    <string name="current_inventory_update_fail">Current inventory updated failed</string>
+    <string name="current_inventory_delete_success">Current inventory delete successful</string>
+
+    <!-- dialog_update_current -->
+    <string name="update_current_header">Update Current Inv. Record</string>
+    <string name="update_current_data_pick">Pick Date Received</string>
+    <string name="update_current_successful">Update successful</string>
+
+    <!-- fragment_view_past_inventory_detail -->
+    <string name="view_past_inventory_detail_delete">Delete Past Inventory Record</string>
+    <string name="past_inventory_delete_fail">Past inventory delete failed</string>
+    <string name="past_inventory_delete_success">Past inventory delete success</string>
+
+    <!-- Receive inventory acitivity ___________________________________________________________-->
+    <!-- activity_receive_inventory -->
+    <string name="title_activity_receive_inventory">ReceiveInventoryActivity</string>
+
     <!-- fragment_receive_inventory -->
     <string name="receive_inventory_header">Select Receive Inventory Action</string>
     <string name="receive_inventory_button_add">Add Inventory</string>
@@ -160,45 +102,24 @@
 
     <!-- dialog_add_receive_inventory -->
     <string name="add_receive_header">Receive Inventory Dialog</string>
-    <string name="add_receive_barcode_hint">Barcode #</string>
-    <string name="add_receive_barcode_text">HKRF-</string>
-    <string name="add_receive_qty">Quantity</string>
-    <string name="updated_qty">Quantity updated</string>
-
-    <!-- generic strings -->
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
+    <string name="add_receive_barcode_text" translatable="false">HKRF-</string>
+    <string name="update_quantity_successful">Quantity updated</string>
 
     <!-- fragment_view_receive_inventory_detail -->
-    <string name="view_receive_inventory_detail_name">Name: </string>
-    <string name="view_receive_inventory_detail_description">Description: </string>
-    <string name="view_receive_inventory_detail_category">Category: </string>
-    <string name="view_receive_inventory_detail_barcode">Barcode: </string>
-    <string name="view_receive_inventory_detail_value">Value: </string>
-    <string name="view_receive_inventory_detail_qty">Quantity: </string>
     <string name="view_receive_inventory_detail_delete">Delete Receive Inventory Record</string>
     <string name="error_receive_not_deleted">Receive inventory delete failed</string>
     <string name="message_receive_deleted">Receive inventory delete successful</string>
-    <string name="receive_detail_subtract">-</string>
-    <string name="receive_detail_add">+</string>
+    <string name="receive_detail_subtract" translatable="false">-</string>
+    <string name="receive_detail_add" translatable="false">+</string>
     <string name="receive_detail_update">Update</string>
 
     <!-- dialog_submit_receive_list -->
-    <string name="submit_receive_donor">Donor</string>
-    <string name="submit_receive_warehouse">Warehouse</string>
     <string name="submit_receive_date">Pick Date</string>
-    <string name="submit_receive_date_default">YYYY-MM-DD</string>
     <string name="submit_receive_header">Submit Received Inventory</string>
     <string name="message_submit_successful">Submit successful</string>
 
-    <!-- dialog_update_current -->
-    <string name="update_current_qty">Quantity</string>
-    <string name="update_current_donor">Donor</string>
-    <string name="update_current_warehouse">Warehouse</string>
-    <string name="update_current_header">Update Current Inv. Record</string>
-    <string name="update_current_date_temp">YYYY-MM-DD</string>
-    <string name="update_current_data_pick">Pick Date Received</string>
-    <string name="update_current_successful">Update successful</string>
+    <!-- Ship Inventory Activity _______________________________________________________________-->
+    <!-- Ship inventory activity -->
     <string name="title_activity_ship_inventory">ShipInventoryActivity</string>
 
     <!-- fragment_ship_inventory -->
@@ -210,16 +131,86 @@
     <string name="add_ship_inventory_header">Add Item to Shipment</string>
     <string name="add_ship_inventory_success">Ship inventory success</string>
     <string name="override_current_inventory">Not enough quantity in current inventory. Override?</string>
+    <string name="not_enough_qty">Not enough quantity in Current Inventory</string>
 
     <!-- fragment_ship_inventory_detail -->
     <string name="ship_inventory_detail_delete">Remove ship inventory record</string>
     <string name="ship_inv_delete_fail">Delete ship inventory failed</string>
     <string name="ship_inv_delete_success">Delete ship inventory successful</string>
-    <string name="donor_detail">Donor:</string>
 
     <!-- dialog_ship_inventory_submit -->
     <string name="ship_inventory_submit_header">Submit Shipment List</string>
     <string name="ship_inventory_submit_success">Shipment submitted successfully</string>
-    <string name="submit_button">Submit</string>
+
+    <!-- Generic Strings _______________________________________________________________________-->
+    <!-- generic button strings -->
+    <string name="button_ok">OK</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_submit">Submit</string>
+
+    <!-- generic yes/no dialog box -->
+    <string name="are_you_sure_message">Are you sure?</string>
+    <string name="are_you_sure_yes">Yes</string>
+    <string name="are_you_sure_no">No</string>
+
+    <!-- generic dialog strings -->
+    <string name="dialog_name">Name</string>
+    <string name="dialog_description">Description</string>
+    <string name="dialog_category">Category</string>
+    <string name="dialog_value">Value</string>
+    <string name="dialog_quantity">Quantity</string>
+    <string name="dialog_barcode">Barcode #</string>
+    <string name="dialog_donor">Donor</string>
+    <string name="dialog_warehouse">Warehouse</string>
+    <string name="dialog_date_temp" translatable="false">YYYY-MM-DD</string>
+
+    <!-- generic detail strings -->
+    <string name="detail_name">Name: </string>
+    <string name="detail_description">Description: </string>
+    <string name="detail_category">Category: </string>
+    <string name="detail_barcode">Barcode: </string>
+    <string name="detail_value">Value: </string>
+    <string name="detail_quantity">Quantity: </string>
+    <string name="detail_date_received">Date Received:</string>
+    <string name="detail_donor">Donor: </string>
+    <string name="detail_warehouse">Warehouse: </string>
+    <string name="detail_date_shipped">Date Shipped:</string>
+
+    <!-- Error and Validation ___________________________________________________________________-->
+    <!-- input validation strings -->
+    <string name="validation_category_empty">Category cannot be empty</string>
+    <string name="validation_error">Validation error</string>
+    <string name="validation_category_exists">Category already exists in database</string>
+    <string name="validation_name_empty">Name cannot be empty</string>
+    <string name="validation_value_negative">Value must be above zero</string>
+    <string name="validation_barcode_empty">Barcode cannot be empty</string>
+    <string name="validation_barcode_long">Barcode must be 4 characters</string>
+    <string name="validation_barcode_exists">Barcode already exists</string>
+    <string name="validation_qty_zero">Quantity must be greater than zero</string>
+    <string name="validation_qty_null">Quantity cannot be empty</string>
+    <string name="validation_donor_empty">Donor cannot be empty</string>
+    <string name="validation_warehouse_empty">Warehouse cannot be empty</string>
+    <string name="validation_date_invalid">Date must be picked</string>
+
+    <!-- error messages -->
+    <string name="error_receive_inventory_not_updated">Receive inventory not updated</string>
+    <string name="error_inserted_into_current">Error inserting into current inventory</string>
+    <string name="error_barcode_non_existant">Barcode does not exist</string>
+    <string name="error_adding_receive">Error adding to database</string>
+    <string name="error_updating_receive">Error updating quantity</string>
+    <string name="error_adding_item">Error adding item to database</string>
+    <string name="error_updating_item">Error updating barcode item</string>
+    <string name="error_updating_category">Error updating category</string>
+    <string name="error_barcode_used">Barcode is in use, cannot delete</string>
+    <string name="error_updating_shipment">Error updating ship inventory</string>
+    <string name="error_inserting_past">Error inserting into past inventory</string>
+    <string name="error_deleting_ship">Error deleting shipment</string>
+    <string name="error_adding_category">Error adding category to database</string>
+    <string name="error_category_empty">Category cannot be empty</string>
+    <string name="error_category_prefix_empty">Barcode prefix cannot be empty</string>
+    <string name="error_prefix_not_two">Barcode prefix must be 2 characters</string>
+    <string name="error_cat_and_prefix_exists">Category and Prefix already exist</string>
+    <string name="error_category_exists">Category already exists in database</string>
+    <string name="error_prefix_exists">Prefix already exists in database</string>
 
 </resources>

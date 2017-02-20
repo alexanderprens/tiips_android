@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/update_current_qty"
+        android:hint="@string/dialog_quantity"
         android:inputType="number" />
 
     <EditText
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/update_current_donor"
+        android:hint="@string/dialog_donor"
         android:inputType="textCapWords" />
 
     <EditText
@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/update_current_warehouse"
+        android:hint="@string/dialog_warehouse"
         android:inputType="textPersonName" />
 
     <Button
@@ -44,7 +44,7 @@
         android:id="@+id/update_current_date_string"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/update_current_date_temp" />
+        android:text="@string/dialog_date_temp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -56,14 +56,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/cancel" />
+            android:text="@string/button_cancel" />
 
         <Button
             android:id="@+id/update_current_button_ok"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/ok" />
+            android:text="@string/button_ok" />
     </LinearLayout>
 
 </LinearLayout>

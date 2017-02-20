@@ -169,7 +169,7 @@ public class AddReceiveDialogFragment extends DialogFragment implements
                     }
                 }
             } else {
-                error = getContext().getResources().getString(R.string.error_barcode_nonexistant);
+                error = getContext().getResources().getString(R.string.error_barcode_non_existant);
             }
 
         } else {
@@ -303,7 +303,7 @@ public class AddReceiveDialogFragment extends DialogFragment implements
 
             if (rowsUpdated != 0) {
                 Toast.makeText(getContext(), getContext().getResources()
-                        .getString(R.string.updated_qty), Toast.LENGTH_SHORT).show();
+                        .getString(R.string.update_quantity_successful), Toast.LENGTH_SHORT).show();
             }
 
             cursor.close();

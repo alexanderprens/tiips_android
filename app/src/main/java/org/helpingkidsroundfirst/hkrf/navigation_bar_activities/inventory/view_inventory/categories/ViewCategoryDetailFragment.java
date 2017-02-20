@@ -164,7 +164,7 @@ public class ViewCategoryDetailFragment extends Fragment implements
         boolean deleted = false;
         int rowDeleted = 0;
 
-        // update category in item table to 0 - uncategorized
+        // update category in item table to uncategorized
         Uri itemUri = InventoryContract.ItemEntry.buildInventoryItemUri();
         String selection = InventoryContract.ItemEntry.COLUMN_CATEGORY_KEY + " = ? ";
         String[] selectionArgs = {Long.toString(categoryID)};
@@ -182,12 +182,37 @@ public class ViewCategoryDetailFragment extends Fragment implements
             );
         }
 
-        // TODO: 2/13/2017 check in inventory tables for category
+        // update category in ship inventory to uncategorized
+        Uri shipUri = InventoryContract.ShipInventoryEntry.buildShipInventoryUri();
+        selection = InventoryContract.ShipInventoryEntry.COLUMN_CATEGORY_KEY + " = ? ";
+
+        if (categoryID != -1) {
+            getContext().getContentResolver().update(
+                    shipUri,
+                    newValues,
+                    selection,
+                    selectionArgs
+            );
+        }
+
+        // update category in past inventory table to uncategorized
+        Uri pastUri = InventoryContract.PastInventoryEntry.buildPastInventoryUri();
+        selection = InventoryContract.PastInventoryEntry.COLUMN_CATEGORY_KEY + " = ? ";
+
+        if (categoryID != -1) {
+            getContext().getContentResolver().update(
+                    pastUri,
+                    newValues,
+                    selection,
+                    selectionArgs
+            );
+        }
+
         // delete category
         Uri categoryUri = InventoryContract.CategoryEntry.buildCategoryUri();
         selection = InventoryContract.CategoryEntry.TABLE_NAME + "." +
                 InventoryContract.CategoryEntry._ID + " = ? ";
-        String message = "Category delete failed.";
+        String message = getContext().getResources().getString(R.string.category_delete_fail);
 
         if (categoryID != -1) {
             rowDeleted = getContext().getContentResolver().delete(
@@ -198,7 +223,7 @@ public class ViewCategoryDetailFragment extends Fragment implements
         }
 
         if (rowDeleted != 0) {
-            message = "Category delete successful";
+            message = getContext().getResources().getString(R.string.category_delete_success);
             deleted = true;
         }
 

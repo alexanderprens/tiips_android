@@ -15,7 +15,7 @@
             android:id="@+id/textView17"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/view_current_inventory_detail_name" />
+            android:text="@string/detail_name" />
 
         <TextView
             android:id="@+id/current_inventory_detail_text_name"
@@ -27,7 +27,7 @@
             android:id="@+id/textView15"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/view_inventory_item_detail_description" />
+            android:text="@string/detail_description" />
 
         <TextView
             android:id="@+id/current_inventory_detail_text_description"
@@ -39,7 +39,7 @@
             android:id="@+id/textView13"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/view_inventory_item_detail_category" />
+            android:text="@string/detail_category" />
 
         <TextView
             android:id="@+id/current_inventory_detail_text_category"
@@ -51,7 +51,7 @@
             android:id="@+id/textView8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/view_inventory_item_detail_barcode" />
+            android:text="@string/detail_barcode" />
 
         <TextView
             android:id="@+id/current_inventory_detail_text_barcode"
@@ -63,7 +63,7 @@
             android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/view_current_inventory_detail_value" />
+            android:text="@string/detail_value" />
 
         <TextView
             android:id="@+id/current_inventory_detail_text_value"
@@ -75,7 +75,7 @@
             android:id="@+id/textView19"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/view_current_inventory_detail_qty" />
+            android:text="@string/detail_quantity" />
 
         <TextView
             android:id="@+id/current_inventory_detail_text_qty"
@@ -87,7 +87,7 @@
             android:id="@+id/textView21"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/view_current_inventory_detail_date" />
+            android:text="@string/detail_date_received" />
 
         <TextView
             android:id="@+id/current_inventory_detail_text_date"
@@ -99,7 +99,7 @@
             android:id="@+id/textView23"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/view_current_inventory_detail_donor" />
+            android:text="@string/detail_donor" />
 
         <TextView
             android:id="@+id/current_inventory_detail_text_donor"
@@ -111,7 +111,7 @@
             android:id="@+id/textView25"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/view_current_inventory_detail_warehouse" />
+            android:text="@string/detail_warehouse" />
 
         <TextView
             android:id="@+id/current_inventory_detail_text_warehouse"

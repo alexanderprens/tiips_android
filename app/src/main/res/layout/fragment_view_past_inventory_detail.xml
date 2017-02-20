@@ -13,7 +13,7 @@
             android:id="@+id/textView6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/view_past_inventory_detail_name" />
+            android:text="@string/detail_name" />
 
         <TextView
             android:id="@+id/past_inventory_detail_text_name"
@@ -25,7 +25,7 @@
             android:id="@+id/textView14"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/view_past_inventory_detail_description" />
+            android:text="@string/detail_description" />
 
         <TextView
             android:id="@+id/past_inventory_detail_text_description"
@@ -37,7 +37,7 @@
             android:id="@+id/textView18"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/view_past_inventory_detail_category" />
+            android:text="@string/detail_category" />
 
         <TextView
             android:id="@+id/past_inventory_detail_text_category"
@@ -49,7 +49,7 @@
             android:id="@+id/textView22"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/view_past_inventory_detail_barcode" />
+            android:text="@string/detail_barcode" />
 
         <TextView
             android:id="@+id/past_inventory_detail_text_barcode"
@@ -61,7 +61,7 @@
             android:id="@+id/textView26"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/view_inventory_item_detail_value" />
+            android:text="@string/detail_value" />
 
         <TextView
             android:id="@+id/past_inventory_detail_text_value"
@@ -73,7 +73,7 @@
             android:id="@+id/textView28"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/view_past_inventory_detail_qty" />
+            android:text="@string/detail_quantity" />
 
         <TextView
             android:id="@+id/past_inventory_detail_text_qty"
@@ -85,7 +85,7 @@
             android:id="@+id/textView30"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/view_past_inventory_detail_date" />
+            android:text="@string/detail_date_shipped" />
 
         <TextView
             android:id="@+id/past_inventory_detail_text_date"
@@ -97,7 +97,7 @@
             android:id="@+id/textView32"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/view_past_inventory_detail_donor" />
+            android:text="@string/detail_donor" />
 
         <TextView
             android:id="@+id/past_inventory_detail_text_donor"

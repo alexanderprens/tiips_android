@@ -8,7 +8,7 @@
         android:id="@+id/textView17"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/view_receive_inventory_detail_name" />
+        android:text="@string/detail_name" />
 
     <TextView
         android:id="@+id/ship_inventory_detail_name"
@@ -19,7 +19,7 @@
         android:id="@+id/textView15"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/view_receive_inventory_detail_description" />
+        android:text="@string/detail_description" />
 
     <TextView
         android:id="@+id/ship_inventory_detail_description"
@@ -30,7 +30,7 @@
         android:id="@+id/textView13"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/view_receive_inventory_detail_category" />
+        android:text="@string/detail_category" />
 
     <TextView
         android:id="@+id/ship_inventory_detail_category"
@@ -41,7 +41,7 @@
         android:id="@+id/textView8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/view_inventory_item_detail_barcode" />
+        android:text="@string/detail_barcode" />
 
     <TextView
         android:id="@+id/ship_inventory_detail_barcode"
@@ -52,7 +52,7 @@
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/view_receive_inventory_detail_value" />
+        android:text="@string/detail_value" />
 
     <TextView
         android:id="@+id/ship_inventory_detail_value"
@@ -63,7 +63,7 @@
         android:id="@+id/textView19"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/view_receive_inventory_detail_qty" />
+        android:text="@string/detail_quantity" />
 
     <TextView
         android:id="@+id/ship_inventory_detail_qty"
@@ -74,7 +74,7 @@
         android:id="@+id/textView40"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/view_past_inventory_detail_donor" />
+        android:text="@string/detail_donor" />
 
     <TextView
         android:id="@+id/ship_inventory_detail_donor"

@@ -136,14 +136,14 @@ public class AddCategoryDialogFragment extends DialogFragment implements
                 if (addCategoryToDB() != -1) {
                     added = true;
                 } else {
-                    error = "Error adding category to database";
+                    error = getContext().getResources().getString(R.string.error_adding_category);
                 }
 
             } else {
                 //
             }
         } else {
-            error = "Validation Error";
+            error = getContext().getResources().getString(R.string.validation_error);
         }
 
         return added;
@@ -156,13 +156,14 @@ public class AddCategoryDialogFragment extends DialogFragment implements
         // check if category is empty
         if (categoryInput.isEmpty()) {
             check = false;
-            Toast.makeText(getActivity(), "Category cannot be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getContext().getResources().getString(
+                    R.string.error_category_empty), Toast.LENGTH_SHORT).show();
         }
 
         // check if barcode prefix is empty or greater than
         if (barcodeInput.isEmpty()) {
             check = false;
-            Toast.makeText(getContext(), "Barcode prefix cannot be empty",
+            Toast.makeText(getContext(), getContext().getResources().getString(R.string.error_category_prefix_empty),
                     Toast.LENGTH_SHORT).show();
 
         } else {
@@ -170,7 +171,7 @@ public class AddCategoryDialogFragment extends DialogFragment implements
             // check if barcode prefix is two letters
             if (barcodeInput.length() != 2) {
                 check = false;
-                Toast.makeText(getContext(), "Barcode prefix must be 2 characters",
+                Toast.makeText(getContext(), getContext().getResources().getString(R.string.error_prefix_not_two),
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -208,11 +209,11 @@ public class AddCategoryDialogFragment extends DialogFragment implements
 
         // set error message
         if (prefix && category) {
-            error = "Category and Prefix already exist";
+            error = getContext().getResources().getString(R.string.error_cat_and_prefix_exists);
         } else if (category) {
-            error = "Category already exists in database";
+            error = getContext().getResources().getString(R.string.error_category_exists);
         } else if (prefix) {
-            error = "Prefix already exists in database";
+            error = getContext().getResources().getString(R.string.error_prefix_exists);
         }
 
         catCursor.close();

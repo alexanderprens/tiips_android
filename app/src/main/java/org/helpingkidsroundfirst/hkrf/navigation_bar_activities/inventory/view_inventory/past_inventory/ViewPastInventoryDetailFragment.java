@@ -196,7 +196,7 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
         String[] selectionArgs = {Long.toString(pastInventoryId),
                 "SDSU"
         };
-        String message = "Past Inventory delete failed.";
+        String message = getContext().getResources().getString(R.string.past_inventory_delete_fail);
 
         if (pastInventoryId != -1) {
             rowDeleted = getContext().getContentResolver().delete(
@@ -207,7 +207,7 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
         }
 
         if (rowDeleted != 0) {
-            message = "Past Inventory delete successful";
+            message = getContext().getResources().getString(R.string.past_inventory_delete_success);
             deleted = true;
         }
 

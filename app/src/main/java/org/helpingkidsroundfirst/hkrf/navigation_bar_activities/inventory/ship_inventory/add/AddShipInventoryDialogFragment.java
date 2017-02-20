@@ -186,7 +186,7 @@ public class AddShipInventoryDialogFragment extends DialogFragment implements
                     error = getContext().getResources().getString(R.string.not_enough_qty);
                 }
             } else {
-                error = getContext().getResources().getString(R.string.error_barcode_nonexistant);
+                error = getContext().getResources().getString(R.string.error_barcode_non_existant);
             }
         } else {
             error = getContext().getResources().getString(R.string.validation_error);

@@ -13,14 +13,14 @@
         android:id="@+id/new_item_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/add_inv_name"
+        android:hint="@string/dialog_name"
         android:inputType="textCapWords" />
 
     <EditText
         android:id="@+id/new_item_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/add_inv_desc"
+        android:hint="@string/dialog_description"
         android:inputType="textCapSentences" />
 
     <EditText
@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/add_inv_value"
+        android:hint="@string/dialog_value"
         android:inputType="number" />
 
     <Spinner
@@ -72,14 +72,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/add_inv_cancel" />
+            android:text="@string/button_cancel" />
 
         <Button
             android:id="@+id/new_item_ok"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/add_inv_ok" />
+            android:text="@string/button_ok" />
     </LinearLayout>
 
 </LinearLayout>

@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="@string/add_receive_qty"
+        android:hint="@string/dialog_quantity"
         android:inputType="number" />
 
     <LinearLayout
@@ -33,13 +33,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/cancel" />
+            android:text="@string/button_cancel" />
 
         <Button
             android:id="@+id/add_ship_button_ok"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/ok" />
+            android:text="@string/button_ok" />
     </LinearLayout>
 </LinearLayout>

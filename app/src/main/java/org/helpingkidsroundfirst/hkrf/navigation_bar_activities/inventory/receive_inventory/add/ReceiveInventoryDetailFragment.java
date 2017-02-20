@@ -310,7 +310,7 @@ public class ReceiveInventoryDetailFragment extends Fragment implements
         }
 
         if (rowUpdated != 0) {
-            message = getContext().getResources().getString(R.string.update_receive_successful);
+            message = getContext().getResources().getString(R.string.update_quantity_successful);
         }
 
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();

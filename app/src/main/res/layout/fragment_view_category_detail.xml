@@ -24,7 +24,7 @@
             android:id="@+id/textView27"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/view_category_detail_name" />
+            android:text="@string/detail_name" />
 
         <TextView
             android:id="@+id/category_detail_name"

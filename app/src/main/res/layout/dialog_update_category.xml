@@ -33,14 +33,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/update_category_cancel" />
+            android:text="@string/button_cancel" />
 
         <Button
             android:id="@+id/update_category_button_ok"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/update_category_ok" />
+            android:text="@string/button_ok" />
     </LinearLayout>
 
 </LinearLayout>
