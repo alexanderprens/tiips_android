@@ -6,17 +6,17 @@
     tools:context=".navigation_bar_activities.inventory.view_inventory.inventory_items.ViewInventoryItemListFragment">
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/inventory_item_list_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
         android:clickable="true"
         app:fabSize="normal"
-        app:srcCompat="@android:drawable/ic_input_add"
-        android:id="@+id/inventory_item_list_fab"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"/>
+        app:srcCompat="@mipmap/ic_note_add_black_36dp" />
 
     <ListView
+        android:id="@+id/inventory_item_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/inventory_item_list" />
+        android:layout_height="match_parent" />
 </FrameLayout>

@@ -52,6 +52,7 @@
     <!-- fragment_view_category_detail -->
     <string name="view_category_detail_barcode">Barcode Prefix: </string>
     <string name="view_category_delete">Delete Category</string>
+    <string name="barcode_prefix_general">XX</string>
 
     <!-- dialog_update_category -->
     <string name="update_category_header">Update Category</string>

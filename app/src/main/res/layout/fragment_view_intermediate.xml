@@ -8,5 +8,6 @@
         android:id="@+id/view_intermediate_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="@string/dialog_category"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 </LinearLayout>

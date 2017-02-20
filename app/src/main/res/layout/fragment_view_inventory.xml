@@ -11,7 +11,7 @@
             android:layout_height="wrap_content"
             android:text="@string/choose_inventory_header"
             android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
         <Button
             android:id="@+id/choose_inv_butt_current"

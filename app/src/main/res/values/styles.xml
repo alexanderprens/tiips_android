@@ -17,11 +17,4 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="DialogHeader" parent="TextAppearance.AppCompat.Large">
-        <item name="background">@color/colorPrimaryDark</item>
-        <item name="textAlignment">center</item>
-        <item name="textColor">@android:color/white</item>
-        <item name="lineSpacingExtra">24sp</item>
-    </style>
-
 </resources>
