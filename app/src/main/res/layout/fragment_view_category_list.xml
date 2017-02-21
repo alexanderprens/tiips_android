@@ -12,7 +12,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:clickable="true"
         app:fabSize="normal"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@mipmap/ic_note_add_black_36dp" />
 
     <ListView
         android:id="@+id/view_category_list"
