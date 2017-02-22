@@ -177,7 +177,7 @@ public class AddReceiveDialogFragment extends DialogFragment implements
 
                 // check if barcode exists
                 long id = checkIfItemExistsGivenString(contents);
-                if (checkIfItemExistsGivenString(contents) != -1) {
+                if (id != -1) {
 
                     // if barcode exists, set new id
                     itemId = id;

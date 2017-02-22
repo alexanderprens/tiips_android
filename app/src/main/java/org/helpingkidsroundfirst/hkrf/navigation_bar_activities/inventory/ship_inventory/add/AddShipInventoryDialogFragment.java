@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.net.Uri;
@@ -16,12 +17,18 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.zxing.client.android.CaptureActivity;
+
 import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by alexa on 2/15/2017.
@@ -63,6 +70,7 @@ public class AddShipInventoryDialogFragment extends DialogFragment implements
     private AddShipDialogListener caller;
     private Spinner barcodeSpinner;
     private boolean override;
+    private Cursor cursor;
 
 
     @Override
@@ -88,10 +96,23 @@ public class AddShipInventoryDialogFragment extends DialogFragment implements
         view.findViewById(R.id.add_ship_button_cancel).setOnClickListener(this);
         override = false;
 
-        // listen to barcode input
+        // get barcode scanner working
+        Button buttonScan = (Button) view.findViewById(R.id.add_ship_scan_button);
+        buttonScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // scan barcodes
+                Intent intent = new Intent(getActivity(), CaptureActivity.class);
+                intent.setAction("com.google.zxing.client.android.SCAN")
+                        .putExtra("SAVE_HISTORY", false);
+                startActivityForResult(intent, 0);
+            }
+        });
+
+        // listen to barcode spinner
         barcodeSpinner = (Spinner) view.findViewById(R.id.add_ship_barcode_spinner);
 
-        Cursor cursor = getContext().getContentResolver().query(
+        cursor = getContext().getContentResolver().query(
                 InventoryContract.ItemEntry.CONTENT_URI,
                 new String[]{InventoryContract.ItemEntry.TABLE_NAME + "." +
                         InventoryContract.ItemEntry._ID + " AS _id",
@@ -166,6 +187,43 @@ public class AddShipInventoryDialogFragment extends DialogFragment implements
             case R.id.add_ship_button_cancel:
                 this.dismiss();
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                // get barcode from scanner
+                String contents = data.getStringExtra("SCAN_RESULT");
+
+                // check if barcode exists
+                long id = checkIfItemExistsGivenString(contents);
+                if (id != -1) {
+
+                    // if barcode exists, set new id
+                    itemId = id;
+                    int position = -1;
+
+                    // find position in cursor
+                    for (int i = 0; i < cursor.getCount(); i++) {
+                        cursor.moveToPosition(i);
+                        String temp = cursor.getString(1);
+                        if (temp.contentEquals(contents)) {
+                            position = i;
+                            break;
+                        }
+                    }
+                    if (position != -1) {
+                        barcodeSpinner.setSelection(position);
+                    }
+                } else {
+                    Toast.makeText(getContext(), getContext().getResources().getString(
+                            R.string.error_barcode_non_existant), Toast.LENGTH_SHORT).show();
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(getContext(), "RESULT_CANCELED", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -686,6 +744,31 @@ public class AddShipInventoryDialogFragment extends DialogFragment implements
                 .setPositiveButton(R.string.are_you_sure_yes, dialogClickListener)
                 .setNegativeButton(R.string.are_you_sure_no, dialogClickListener)
                 .show();
+    }
+
+    // checks if item already exists by looking at the barcode string
+    private long checkIfItemExistsGivenString(String barcodeString) {
+
+        long barcodeId = -1;
+
+        // Check if barcode id already exists in the db
+        Cursor itemCursor = getContext().getContentResolver().query(
+                InventoryContract.ItemEntry.CONTENT_URI,
+                new String[]{InventoryContract.ItemEntry.TABLE_NAME + "." +
+                        InventoryContract.ItemEntry._ID},
+                InventoryContract.ItemEntry.COLUMN_BARCODE_ID + " = ?",
+                new String[]{barcodeString},
+                null
+        );
+
+        // if barcode exists, return true
+        if (itemCursor != null && itemCursor.moveToFirst()) {
+
+            barcodeId = itemCursor.getLong(0);
+            itemCursor.close();
+        }
+
+        return barcodeId;
     }
 
     private void setOverride(boolean bool) {
