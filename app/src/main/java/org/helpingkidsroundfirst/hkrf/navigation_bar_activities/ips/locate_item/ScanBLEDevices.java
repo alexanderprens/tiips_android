@@ -43,14 +43,14 @@ public class ScanBLEDevices extends Fragment {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
-            mLeDeviceListAdapter.addDevice(result.getDevice());
+            mLeDeviceListAdapter.addResult(result);
             mLeDeviceListAdapter.notifyDataSetChanged();
         }
 
         @Override
         public void onBatchScanResults(List<ScanResult> results) {
             for (ScanResult sr : results) {
-                mLeDeviceListAdapter.addDevice(sr.getDevice());
+                mLeDeviceListAdapter.addResult(sr);
                 mLeDeviceListAdapter.notifyDataSetChanged();
             }
         }
@@ -158,12 +158,13 @@ public class ScanBLEDevices extends Fragment {
     static class ViewHolder {
         TextView deviceName;
         TextView deviceAddress;
+        TextView deviceRSSI;
     }
 
     // Adapter for holding devices found through scanning.
     private class LeDeviceListAdapter extends BaseAdapter {
         private Context context;
-        private ArrayList<BluetoothDevice> mLeDevices;
+        private ArrayList<ScanResult> mLeDevices;
         private LayoutInflater inflater;
 
         public LeDeviceListAdapter(Context c) {
@@ -173,13 +174,25 @@ public class ScanBLEDevices extends Fragment {
             inflater = (LayoutInflater.from(context));
         }
 
-        public void addDevice(BluetoothDevice device) {
-            if (!mLeDevices.contains(device)) {
-                mLeDevices.add(device);
+        public void addResult(ScanResult result) {
+
+            boolean exists = false;
+            BluetoothDevice device = result.getDevice();
+
+            for (ScanResult sr : mLeDevices) {
+                if (device.equals(sr.getDevice())) {
+                    exists = true;
+                    mLeDevices.remove(sr);
+                    mLeDevices.add(result);
+                    break;
+                }
+            }
+            if (!exists) {
+                mLeDevices.add(result);
             }
         }
 
-        public BluetoothDevice getDevice(int position) {
+        public ScanResult getScanResult(int position) {
             return mLeDevices.get(position);
         }
 
@@ -211,12 +224,13 @@ public class ScanBLEDevices extends Fragment {
                 viewHolder = new ViewHolder();
                 viewHolder.deviceAddress = (TextView) view.findViewById(R.id.scan_ble_adress);
                 viewHolder.deviceName = (TextView) view.findViewById(R.id.scan_ble_name);
+                viewHolder.deviceRSSI = (TextView) view.findViewById(R.id.scan_ble_rssi);
                 view.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) view.getTag();
             }
 
-            BluetoothDevice device = mLeDevices.get(i);
+            BluetoothDevice device = mLeDevices.get(i).getDevice();
             final String deviceName = device.getName();
             if (deviceName != null && deviceName.length() > 0)
                 viewHolder.deviceName.setText(deviceName);
@@ -224,6 +238,8 @@ public class ScanBLEDevices extends Fragment {
                 viewHolder.deviceName.setText(R.string.unknown_device);
             }
             viewHolder.deviceAddress.setText(device.getAddress());
+            String rssi = "" + mLeDevices.get(i).getRssi();
+            viewHolder.deviceRSSI.setText(rssi);
 
             return view;
         }
