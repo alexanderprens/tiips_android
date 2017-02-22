@@ -24,14 +24,13 @@ import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.ship_i
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.ViewInventoryActivity;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.LocateItemActivity;
 
-import static android.media.MediaRecorder.VideoSource.CAMERA;
-
 // TODO: 2/3/2017 add context to layouts
 
 public class MainActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "MainActivity";
+    private static final int PERMISSION_REQUEST = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +60,15 @@ public class MainActivity extends AppCompatActivity
 
             ActivityCompat.requestPermissions(MainActivity.this,
                     new String[]{Manifest.permission.CAMERA},
-                    CAMERA);
+                    PERMISSION_REQUEST);
+        }
+
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSION_REQUEST + 1);
         }
     }
 
@@ -151,7 +158,7 @@ public class MainActivity extends AppCompatActivity
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case CAMERA:
+            case PERMISSION_REQUEST:
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -166,8 +173,17 @@ public class MainActivity extends AppCompatActivity
 
                 break;
 
-            // other 'case' lines to check for other
-            // permissions this app might request
+            case PERMISSION_REQUEST + 1:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay
+
+                } else {
+
+                    // permission denied, boo
+                    Toast.makeText(this, getString(R.string.need_camera_permission), Toast.LENGTH_SHORT).show();
+                }
 
             default:
                 // do nothing

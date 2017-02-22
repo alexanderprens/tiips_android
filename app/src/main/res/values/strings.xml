@@ -149,7 +149,7 @@
     <string name="ble_not_enabled">BLE not enabled</string>
 
     <!-- fragment_locate_item_activity -->
-    <string name="choose_item_locate">Choose Item</string>
+    <string name="choose_item_locate">Scan BLE Devices</string>
 
     <!-- fragment_scan_ble_devices -->
     <string name="unknown_device">Unknown device</string>

@@ -5,6 +5,9 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,6 +24,7 @@ import android.widget.TextView;
 import org.helpingkidsroundfirst.hkrf.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,24 +36,31 @@ public class ScanBLEDevices extends Fragment {
     private ListView listView;
     private LeDeviceListAdapter mLeDeviceListAdapter;
     private BluetoothAdapter mBluetoothAdapter;
-    private boolean mScanning;
+    private BluetoothLeScanner mBluetoothLeScanner;
     private Handler mHandler;
     // Device scan callback.
-    private BluetoothAdapter.LeScanCallback mLeScanCallback =
-            new BluetoothAdapter.LeScanCallback() {
+    private ScanCallback mScanCallback = new ScanCallback() {
+        @Override
+        public void onScanResult(int callbackType, ScanResult result) {
+            super.onScanResult(callbackType, result);
+            mLeDeviceListAdapter.addDevice(result.getDevice());
+            mLeDeviceListAdapter.notifyDataSetChanged();
+        }
 
-                @Override
-                public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mLeDeviceListAdapter.addDevice(device);
-                            mLeDeviceListAdapter.notifyDataSetChanged();
-                        }
-                    });
-                }
-            };
+        @Override
+        public void onBatchScanResults(List<ScanResult> results) {
+            for (ScanResult sr : results) {
+                mLeDeviceListAdapter.addDevice(sr.getDevice());
+                mLeDeviceListAdapter.notifyDataSetChanged();
+            }
+        }
 
+        @Override
+        public void onScanFailed(int errorCode) {
+            //Toast.makeText(getContext(), "FUCK", Toast.LENGTH_SHORT).show();
+        }
+
+    };
 
     public ScanBLEDevices() {
         // Required empty public constructor
@@ -63,6 +75,17 @@ public class ScanBLEDevices extends Fragment {
         mHandler = new Handler();
 
         listView = (ListView) rootView.findViewById(R.id.choose_locate_item_list);
+        listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         final BluetoothManager bluetoothManager = (BluetoothManager)
                 getContext().getSystemService(Context.BLUETOOTH_SERVICE);
@@ -84,10 +107,14 @@ public class ScanBLEDevices extends Fragment {
             if (!mBluetoothAdapter.isEnabled()) {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            } else {
+                mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
             }
+        } else {
+            mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
         }
         // Initializes list view adapter.
-        mLeDeviceListAdapter = new LeDeviceListAdapter();
+        mLeDeviceListAdapter = new LeDeviceListAdapter(getActivity());
         listView.setAdapter(mLeDeviceListAdapter);
         scanLeDevice(true);
     }
@@ -115,15 +142,12 @@ public class ScanBLEDevices extends Fragment {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mScanning = false;
-                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                    mBluetoothLeScanner.startScan(mScanCallback);
                 }
             }, SCAN_PERIOD);
-            mScanning = true;
-            mBluetoothAdapter.startLeScan(mLeScanCallback);
+            //mBluetoothLeScanner.startScan(mScanCallback);
         } else {
-            mScanning = false;
-            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+            mBluetoothLeScanner.stopScan(mScanCallback);
         }
     }
 
@@ -138,13 +162,15 @@ public class ScanBLEDevices extends Fragment {
 
     // Adapter for holding devices found through scanning.
     private class LeDeviceListAdapter extends BaseAdapter {
+        private Context context;
         private ArrayList<BluetoothDevice> mLeDevices;
-        private LayoutInflater mInflator;
+        private LayoutInflater inflater;
 
-        public LeDeviceListAdapter() {
+        public LeDeviceListAdapter(Context c) {
             super();
+            context = c;
             mLeDevices = new ArrayList<>();
-            mInflator = getActivity().getLayoutInflater();
+            inflater = (LayoutInflater.from(context));
         }
 
         public void addDevice(BluetoothDevice device) {
@@ -181,7 +207,7 @@ public class ScanBLEDevices extends Fragment {
             ViewHolder viewHolder;
             // General ListView optimization code.
             if (view == null) {
-                view = mInflator.inflate(R.layout.fragment_scan_ble_device_item, null);
+                view = inflater.inflate(R.layout.fragment_scan_ble_device_item, null);
                 viewHolder = new ViewHolder();
                 viewHolder.deviceAddress = (TextView) view.findViewById(R.id.scan_ble_adress);
                 viewHolder.deviceName = (TextView) view.findViewById(R.id.scan_ble_name);
