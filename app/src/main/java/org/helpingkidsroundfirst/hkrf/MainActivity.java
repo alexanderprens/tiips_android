@@ -22,6 +22,7 @@ import android.widget.Toast;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.receive_inventory.ReceiveInventoryActivity;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.ship_inventory.ShipInventoryActivity;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.ViewInventoryActivity;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_tag.LocateItemActivity;
 
 import static android.media.MediaRecorder.VideoSource.CAMERA;
 
@@ -127,7 +128,9 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_locate:
-
+                intent = new Intent(MainActivity.this, LocateItemActivity.class);
+                startActivity(intent);
+                Log.i(TAG, "Start Locate Item Activity");
                 break;
 
             case R.id.nav_add:

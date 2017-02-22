@@ -144,6 +144,9 @@
     <string name="ship_inventory_submit_header">Submit Shipment List</string>
     <string name="ship_inventory_submit_success">Shipment submitted successfully</string>
 
+    <!-- Locate Item Activity __________________________________________________________________-->
+    <string name="title_activity_locate_item">LocateItemActivity</string>
+
     <!-- Generic Strings _______________________________________________________________________-->
     <!-- generic button strings -->
     <string name="button_ok">OK</string>

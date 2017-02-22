@@ -73,5 +73,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.helpingkidsroundfirst.hkrf.MainActivity" />
         </activity>
+        <activity
+            android:name=".navigation_bar_activities.ips.locate_tag.LocateItemActivity"
+            android:label="@string/title_activity_locate_item"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.helpingkidsroundfirst.hkrf.MainActivity" />
+        </activity>
     </application>
+
 </manifest>
