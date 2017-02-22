@@ -27,12 +27,14 @@ public class ShipInventoryActivity extends AppCompatActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setTitle(getResources().getString(R.string.ship_inventory_title));
 
-        // start initial fragment
-        Fragment fragment = new ShipInventoryFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_ship_inventory, fragment)
-                .commit();
+        if (savedInstanceState == null) {
+            // start initial fragment
+            Fragment fragment = new ShipInventoryFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_ship_inventory, fragment)
+                    .commit();
+        }
     }
 
     @Override

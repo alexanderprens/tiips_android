@@ -26,13 +26,15 @@ public class ReceiveInventoryActivity extends AppCompatActivity implements
         // setup action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setTitle(getResources().getString(R.string.receive_inventory_title));
-        
-        // start initial fragment
-        Fragment fragment = new ReceiveInventoryFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_recieve_inventory, fragment)
-                .commit();
+
+        if (savedInstanceState == null) {
+            // start initial fragment if saved instance is null
+            Fragment fragment = new ReceiveInventoryFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_recieve_inventory, fragment)
+                    .commit();
+        }
     }
 
     @Override

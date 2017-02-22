@@ -43,12 +43,14 @@ public class ViewInventoryActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setTitle(getResources().getString(R.string.view_inventory_title));
 
-        // start initial fragment
-        Fragment fragment = new ViewInventoryFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_view_inventory, fragment)
-                .commit();
+        if (savedInstanceState == null) {
+            // start initial fragment
+            Fragment fragment = new ViewInventoryFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_view_inventory, fragment)
+                    .commit();
+        }
     }
 
     // View inventory button listener

@@ -1,4 +1,4 @@
-package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_tag;
+package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

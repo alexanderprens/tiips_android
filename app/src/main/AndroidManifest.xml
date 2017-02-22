@@ -74,7 +74,7 @@
                 android:value="org.helpingkidsroundfirst.hkrf.MainActivity" />
         </activity>
         <activity
-            android:name=".navigation_bar_activities.ips.locate_tag.LocateItemActivity"
+            android:name=".navigation_bar_activities.ips.locate_item.LocateItemActivity"
             android:label="@string/title_activity_locate_item"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">

@@ -22,7 +22,7 @@ import android.widget.Toast;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.receive_inventory.ReceiveInventoryActivity;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.ship_inventory.ShipInventoryActivity;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.ViewInventoryActivity;
-import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_tag.LocateItemActivity;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.LocateItemActivity;
 
 import static android.media.MediaRecorder.VideoSource.CAMERA;
 
