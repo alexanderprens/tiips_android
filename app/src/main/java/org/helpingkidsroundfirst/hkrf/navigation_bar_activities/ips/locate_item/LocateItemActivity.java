@@ -1,5 +1,6 @@
 package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item;
 
+import android.bluetooth.le.ScanResult;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,10 +9,11 @@ import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import org.helpingkidsroundfirst.hkrf.R;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.scan_devices.ScanBLEDevicesFragment;
 
 public class LocateItemActivity extends AppCompatActivity implements
         LocateItemActivityFragment.LocateItemListener,
-        ScanBLEDevices.ScanBLEListener {
+        ScanBLEDevicesFragment.ScanBLEListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +40,8 @@ public class LocateItemActivity extends AppCompatActivity implements
 
         switch (button) {
             case LocateItemActivityFragment.BUTTON_CHOOSE:
-                fragment = new ScanBLEDevices();
-                startFragment(fragment, "ScanBLEDevices");
+                fragment = new ScanBLEDevicesFragment();
+                startFragment(fragment, "ScanBLEDevicesFragment");
                 break;
         }
     }
@@ -56,5 +58,10 @@ public class LocateItemActivity extends AppCompatActivity implements
     public void BTNotEnabled() {
         getSupportFragmentManager().popBackStack();
         Toast.makeText(this, getString(R.string.ble_not_enabled), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onResultSelected(ScanResult result) {
+        // result detail fragment
     }
 }

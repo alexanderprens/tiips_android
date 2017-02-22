@@ -1,4 +1,4 @@
-package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item;
+package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.scan_devices;
 
 
 import android.app.Activity;
@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ScanBLEDevices extends Fragment {
+public class ScanBLEDevicesFragment extends Fragment {
 
     private final static int REQUEST_ENABLE_BT = 10;
     private static final long SCAN_PERIOD = 10000;
@@ -62,7 +62,7 @@ public class ScanBLEDevices extends Fragment {
 
     };
 
-    public ScanBLEDevices() {
+    public ScanBLEDevicesFragment() {
         // Required empty public constructor
     }
 
@@ -78,7 +78,8 @@ public class ScanBLEDevices extends Fragment {
         listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                ((ScanBLEListener) getActivity()).onResultSelected(
+                        mLeDeviceListAdapter.getScanResult(position));
             }
 
             @Override
@@ -153,6 +154,8 @@ public class ScanBLEDevices extends Fragment {
 
     public interface ScanBLEListener {
         void BTNotEnabled();
+
+        void onResultSelected(ScanResult result);
     }
 
     static class ViewHolder {
