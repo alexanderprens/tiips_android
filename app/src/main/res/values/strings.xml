@@ -145,7 +145,14 @@
     <string name="ship_inventory_submit_success">Shipment submitted successfully</string>
 
     <!-- Locate Item Activity __________________________________________________________________-->
-    <string name="title_activity_locate_item">LocateItemActivity</string>
+    <string name="title_activity_locate_item">Locate Item</string>
+    <string name="ble_not_enabled">BLE not enabled</string>
+
+    <!-- fragment_locate_item_activity -->
+    <string name="choose_item_locate">Choose Item</string>
+
+    <!-- fragment_scan_ble_devices -->
+    <string name="unknown_device">Unknown device</string>
 
     <!-- Generic Strings _______________________________________________________________________-->
     <!-- generic button strings -->
@@ -218,5 +225,8 @@
     <string name="error_cat_and_prefix_exists">Category and Prefix already exist</string>
     <string name="error_category_exists">Category already exists in database</string>
     <string name="error_prefix_exists">Prefix already exists in database</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

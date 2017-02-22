@@ -1,0 +1,13 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.LocateItemActivityFragment">
+
+    <Button
+        android:id="@+id/locate_button_choose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/choose_item_locate" />
+</LinearLayout>
