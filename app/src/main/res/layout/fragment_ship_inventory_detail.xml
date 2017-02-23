@@ -1,103 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView17"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/detail_name"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/ship_inventory_detail_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/detail_name"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
 
-    <TextView
-        android:id="@+id/textView15"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/detail_description"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
+        <TextView
+            android:id="@+id/ship_inventory_detail_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
-    <TextView
-        android:id="@+id/ship_inventory_detail_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/detail_description"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
 
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/detail_category"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
+        <TextView
+            android:id="@+id/ship_inventory_detail_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
-    <TextView
-        android:id="@+id/ship_inventory_detail_category"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/detail_category"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
 
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/detail_barcode"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
+        <TextView
+            android:id="@+id/ship_inventory_detail_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
-    <TextView
-        android:id="@+id/ship_inventory_detail_barcode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/detail_barcode"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/detail_value"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
+        <TextView
+            android:id="@+id/ship_inventory_detail_barcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
-    <TextView
-        android:id="@+id/ship_inventory_detail_value"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/detail_value"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
 
-    <TextView
-        android:id="@+id/textView19"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/detail_quantity"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
+        <TextView
+            android:id="@+id/ship_inventory_detail_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
-    <TextView
-        android:id="@+id/ship_inventory_detail_qty"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
+        <TextView
+            android:id="@+id/textView19"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/detail_quantity"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
 
-    <TextView
-        android:id="@+id/textView40"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/detail_donor"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
+        <TextView
+            android:id="@+id/ship_inventory_detail_qty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
-    <TextView
-        android:id="@+id/ship_inventory_detail_donor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
+        <TextView
+            android:id="@+id/textView40"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/detail_donor"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
 
-    <Button
-        android:id="@+id/ship_inventory_detail_delete"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/ship_inventory_detail_delete" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/ship_inventory_detail_donor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
+
+        <Button
+            android:id="@+id/ship_inventory_detail_delete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ship_inventory_detail_delete" />
+
+    </LinearLayout>
+</ScrollView>
