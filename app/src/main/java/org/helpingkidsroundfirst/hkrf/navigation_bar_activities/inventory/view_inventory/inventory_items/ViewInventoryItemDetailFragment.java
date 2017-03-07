@@ -194,26 +194,64 @@ public class ViewInventoryItemDetailFragment extends Fragment implements
 
     private boolean handleItemDeletion() {
         boolean deleted = false;
+        boolean used = false;
         int rowDeleted = -1;
         Uri itemURI = InventoryContract.ItemEntry.buildInventoryItemUri();
-        String selection = InventoryContract.ItemEntry.TABLE_NAME + "." +
-                InventoryContract.ItemEntry._ID + " = ? ";
         String[] selectionArgs = {Long.toString(itemId)};
         String message = getContext().getResources().getString(R.string.barcode_item_delete_failed);
 
-        // attempt delete
-        if (itemId != -1) {
-            rowDeleted = getContext().getContentResolver().delete(
-                    itemURI,
-                    selection,
-                    selectionArgs
-            );
+        // check if item is being used in current inventory
+        String selection = InventoryContract.CurrentInventoryEntry.COLUMN_ITEM_KEY + " = ? ";
+        Cursor cursor = getContext().getContentResolver().query(
+                InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri(),
+                null,
+                selection,
+                selectionArgs,
+                null,
+                null
+        );
+
+        // check if cursor returns anything
+        if (cursor != null && cursor.moveToFirst()) {
+            used = true;
+            cursor.close();
         }
 
-        // check if deletion occurred
-        if (rowDeleted != 0) {
-            message = getContext().getResources().getString(R.string.barcode_item_delete_success);
-            deleted = true;
+        // check if item is being used in receive inventory
+        selection = InventoryContract.ReceiveInventoryEntry.COLUMN_ITEM_KEY + " = ? ";
+        cursor = getContext().getContentResolver().query(
+                InventoryContract.ReceiveInventoryEntry.buildReceiveInventoryUri(),
+                null,
+                selection,
+                selectionArgs,
+                null,
+                null
+        );
+
+        // check if cursor returns anything
+        if (cursor != null && cursor.moveToFirst()) {
+            used = true;
+            cursor.close();
+        }
+
+        selection = InventoryContract.ItemEntry.TABLE_NAME + "." +
+                InventoryContract.ItemEntry._ID + " = ? ";
+        if (!used) {
+
+            // attempt delete
+            if (itemId != -1) {
+                rowDeleted = getContext().getContentResolver().delete(
+                        itemURI,
+                        selection,
+                        selectionArgs
+                );
+            }
+
+            // check if deletion occurred
+            if (rowDeleted != 0) {
+                message = getContext().getResources().getString(R.string.barcode_item_delete_success);
+                deleted = true;
+            }
         }
 
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();

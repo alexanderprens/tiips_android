@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/HKRF.iml" filepath="$PROJECT_DIR$/HKRF.iml" />
       <module fileurl="file://$PROJECT_DIR$/TIIPS.iml" filepath="$PROJECT_DIR$/TIIPS.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ZXing/ZXing.iml" filepath="$PROJECT_DIR$/ZXing/ZXing.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/zxing/zxing.iml" filepath="$PROJECT_DIR$/zxing/zxing.iml" />
     </modules>
