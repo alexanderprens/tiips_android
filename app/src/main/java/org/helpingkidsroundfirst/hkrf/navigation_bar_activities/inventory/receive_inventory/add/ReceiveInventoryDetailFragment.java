@@ -151,8 +151,8 @@ public class ReceiveInventoryDetailFragment extends Fragment implements
             public void onClick(View v) {
                 // subtract one from qty
                 newQty--;
-                if (newQty < 0) {
-                    newQty = 0;
+                if (newQty < 1) {
+                    newQty = 1;
                 }
 
                 qtyEditText.setText(Integer.toString(newQty));
