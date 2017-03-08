@@ -88,6 +88,17 @@
     <string name="update_current_data_pick">Pick Date Received</string>
     <string name="update_current_successful">Update successful</string>
 
+    <!-- fragment_view_current_search -->
+    <string name="current_search_header">Search Current Inventory</string>
+    <string name="current_search_description">Fill in any search criteria next to the fields shown below.</string>
+    <string name="current_search_name">Name: enter item name search below</string>
+    <string name="current_search_category">Search Category? Use drop-down box to select</string>
+    <string name="current_search_date">Search Date? Use drop-down box to select</string>
+    <string name="current_search_donor">Search Donor? Use drop-down box to select</string>
+    <string name="current_search_warehouse">Search Warehouse? Use drop-down box to select</string>
+    <string name="current_search_button">Search Current Inventory</string>
+    <string name="current_search_no_results">No results found</string>
+
     <!-- fragment_view_past_inventory_detail -->
     <string name="view_past_inventory_detail_delete">Delete Past Inventory Record</string>
     <string name="past_inventory_delete_fail">Past inventory delete failed</string>

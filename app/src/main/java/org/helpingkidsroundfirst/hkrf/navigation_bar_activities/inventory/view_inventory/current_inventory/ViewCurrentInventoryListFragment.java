@@ -39,6 +39,8 @@ public class ViewCurrentInventoryListFragment extends Fragment implements
     public static final int COL_CATEGORY_BARCODE_PREFIX = 11;
     public static final int COL_BARCODE_ID = 12;
     public static final String CURRENT_URI_KEY = "current_uri_key";
+    public static final String CURRENT_SELECTION_KEY = "current_selection";
+    public static final String CURRENT_ARGUMENTS_KEY = "current_arguments";
     private static final String SELECTED_KEY = "selected_position";
     private static final int CURRENT_INVENTORY_LOADER = 1;
     // Current inventory columns
@@ -64,6 +66,8 @@ public class ViewCurrentInventoryListFragment extends Fragment implements
     private ListView mListView;
     private int mPosition = ListView.INVALID_POSITION;
     private Uri mUri;
+    private String mSelection;
+    private String[] mSelectionArgs;
 
     public ViewCurrentInventoryListFragment() {
         // Required empty public constructor
@@ -93,10 +97,17 @@ public class ViewCurrentInventoryListFragment extends Fragment implements
             }
         });
 
+        mSelection = null;
+
         // get arguments from bundle
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             mUri = bundle.getParcelable(CURRENT_URI_KEY);
+
+            if (bundle.containsKey(CURRENT_SELECTION_KEY)) {
+                mSelection = bundle.getString(CURRENT_SELECTION_KEY);
+                mSelectionArgs = bundle.getStringArray(CURRENT_ARGUMENTS_KEY);
+            }
         }
 
         if(savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
@@ -129,13 +140,28 @@ public class ViewCurrentInventoryListFragment extends Fragment implements
         if (mUri != null) {
             String sortOrder = InventoryContract.ItemEntry.COLUMN_NAME + " ASC";
 
-            return new CursorLoader(getActivity(),
-                    mUri,
-                    CURRENT_INVENTORY_COLUMNS,
-                    null,
-                    null,
-                    sortOrder
-            );
+            // check if search result
+            if (mSelection != null) {
+                return new CursorLoader(
+                        getActivity(),
+                        mUri,
+                        CURRENT_INVENTORY_COLUMNS,
+                        mSelection,
+                        mSelectionArgs,
+                        sortOrder
+                );
+
+            } else {
+                // is a category selection
+                return new CursorLoader(
+                        getActivity(),
+                        mUri,
+                        CURRENT_INVENTORY_COLUMNS,
+                        null,
+                        null,
+                        sortOrder
+                );
+            }
         }
 
         return null;

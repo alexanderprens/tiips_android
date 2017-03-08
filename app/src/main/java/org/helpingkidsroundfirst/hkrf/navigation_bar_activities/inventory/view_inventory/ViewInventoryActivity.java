@@ -16,6 +16,7 @@ import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_i
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.category_intermediate.ViewIntermediateListFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.current_inventory.ViewCurrentInventoryDetailFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.current_inventory.ViewCurrentInventoryListFragment;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.current_inventory.ViewCurrentSearchFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.inventory_items.ViewInventoryItemDetailFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.inventory_items.ViewInventoryItemListFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.past_inventory.ViewPastInventoryDetailFragment;
@@ -27,7 +28,8 @@ public class ViewInventoryActivity extends AppCompatActivity
         ViewCurrentInventoryListFragment.Callback,
         ViewPastInventoryListFragment.Callback,
         ViewCategoryListFragment.Callback,
-        ViewIntermediateListFragment.Callback {
+        ViewIntermediateListFragment.Callback,
+        ViewCurrentSearchFragment.OnSearchButton {
 
     private static final String TAG = "ViewInventoryActivity";
 
@@ -112,6 +114,14 @@ public class ViewInventoryActivity extends AppCompatActivity
         }
     }
 
+    private void startFragment(Fragment fragment, String fragmentTag) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_view_inventory, fragment)
+                .addToBackStack(fragmentTag)
+                .commit();
+    }
+
     @Override
     public void onItemSelected(Uri invItemURI) {
         //create fragment
@@ -166,14 +176,6 @@ public class ViewInventoryActivity extends AppCompatActivity
 
         //replace fragment
         startFragment(fragment, "ViewCategoryDetailFragment");
-    }
-
-    private void startFragment(Fragment fragment, String fragmentTag) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_view_inventory, fragment)
-                .addToBackStack(fragmentTag)
-                .commit();
     }
 
     @Override
@@ -231,5 +233,41 @@ public class ViewInventoryActivity extends AppCompatActivity
                 startFragment(fragment, "ViewInventoryItemListFragment");
                 break;
         }
+    }
+
+    @Override
+    public void onSearchFabPressed(int expected) {
+        Fragment fragment;
+
+        switch (expected) {
+            case ViewIntermediateListFragment.EXPECTED_CURRENT_INVENTORY:
+                fragment = new ViewCurrentSearchFragment();
+                startFragment(fragment, "ViewCurrentSearchFragment");
+                break;
+
+            case ViewIntermediateListFragment.EXPECTED_PAST_INVENTORY:
+
+                break;
+
+            default:
+                //oops
+                break;
+        }
+    }
+
+    @Override
+    public void currentSearchResults(Uri uri, String selection, String[] selectionArgs) {
+        //create fragment
+        Fragment fragment = new ViewCurrentInventoryListFragment();
+        Bundle bundle = new Bundle();
+
+        //create bundle for fragment
+        bundle.putParcelable(ViewCurrentInventoryListFragment.CURRENT_URI_KEY, uri);
+        bundle.putString(ViewCurrentInventoryListFragment.CURRENT_SELECTION_KEY, selection);
+        bundle.putStringArray(ViewCurrentInventoryListFragment.CURRENT_ARGUMENTS_KEY, selectionArgs);
+        fragment.setArguments(bundle);
+
+        //replace fragment
+        startFragment(fragment, "ViewCurrentInventoryListFragment");
     }
 }

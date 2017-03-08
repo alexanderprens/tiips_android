@@ -82,15 +82,26 @@ public class ViewIntermediateListFragment extends Fragment implements
         });
 
         // add fab
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(
+        FloatingActionButton fabAdd = (FloatingActionButton) rootView.findViewById(
                 R.id.view_intermediate_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentManager fragmentManager = getFragmentManager();
                 AddItemDialogFragment addItemDialogFragment = new AddItemDialogFragment();
                 addItemDialogFragment.setTargetFragment(ViewIntermediateListFragment.this, 300);
                 addItemDialogFragment.show(fragmentManager, "open item dialog");
+            }
+        });
+
+        // search fab
+        FloatingActionButton fabSearch = (FloatingActionButton) rootView.findViewById(
+                R.id.view_intermediate_search);
+        fabSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Callback callback = (Callback) getActivity();
+                callback.onSearchFabPressed(mExpected);
             }
         });
 
@@ -107,17 +118,20 @@ public class ViewIntermediateListFragment extends Fragment implements
             switch (mExpected) {
                 case EXPECTED_CURRENT_INVENTORY:
                     mUri = InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri();
-                    fab.setVisibility(View.GONE);
+                    fabAdd.setVisibility(View.GONE);
+                    fabSearch.setVisibility(View.VISIBLE);
                     break;
 
                 case EXPECTED_PAST_INVENTORY:
                     mUri = InventoryContract.PastInventoryEntry.buildPastInventoryUri();
-                    fab.setVisibility(View.GONE);
+                    fabAdd.setVisibility(View.GONE);
+                    fabSearch.setVisibility(View.VISIBLE);
                     break;
 
                 case EXPECTED_INVENTORY_ITEM:
                     mUri = InventoryContract.ItemEntry.buildInventoryItemUri();
-                    fab.setVisibility(View.VISIBLE);
+                    fabAdd.setVisibility(View.VISIBLE);
+                    fabSearch.setVisibility(View.GONE);
                     break;
 
                 default:
@@ -205,5 +219,7 @@ public class ViewIntermediateListFragment extends Fragment implements
 
     public interface Callback {
         void onIntermediateCategorySelected(Uri uri, int expected);
+
+        void onSearchFabPressed(int expected);
     }
 }
