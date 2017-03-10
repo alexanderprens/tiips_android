@@ -153,6 +153,15 @@
     <!-- View Reports Activity _________________________________________________________________-->
     <string name="title_activity_view_reports">View Reports</string>
 
+    <!-- fragment_view_report -->
+    <string name="view_reports_header">Select Report to View</string>
+    <string name="view_reports_barcode">Barcode Item Summary</string>
+    <string name="view_reports_current">Current Inventory Summary</string>
+    <string name="view_reports_past">Past Inventory Summary</string>
+
+    <!-- dialog_barcode_summary -->
+    <string name="dialog_barcode_summary_header">Choose Barcode for Summary</string>
+
     <!-- Locate Item Activity __________________________________________________________________-->
     <string name="title_activity_locate_item">Locate Item</string>
     <string name="ble_not_enabled">BLE not enabled</string>
@@ -243,8 +252,5 @@
     <string name="error_cat_and_prefix_exists">Category and Prefix already exist</string>
     <string name="error_category_exists">Category already exists in database</string>
     <string name="error_prefix_exists">Prefix already exists in database</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

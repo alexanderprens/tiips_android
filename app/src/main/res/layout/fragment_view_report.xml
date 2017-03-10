@@ -4,10 +4,41 @@
     android:layout_height="match_parent"
     tools:context="org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports.ViewReportFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView43"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/view_reports_header"
+                android:textAlignment="center"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
+
+            <Button
+                android:id="@+id/view_report_button_barcode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/view_reports_barcode" />
+
+            <Button
+                android:id="@+id/view_report_button_current"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/view_reports_current" />
+
+            <Button
+                android:id="@+id/view_report_button_past"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/view_reports_past" />
+        </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

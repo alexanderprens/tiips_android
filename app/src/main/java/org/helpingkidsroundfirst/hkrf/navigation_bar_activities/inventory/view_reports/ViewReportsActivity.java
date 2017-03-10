@@ -1,5 +1,6 @@
 package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -7,9 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import org.helpingkidsroundfirst.hkrf.R;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports.item_summary.ViewBarcodeSummaryDialogFragment;
 
 public class ViewReportsActivity extends AppCompatActivity implements
-        ViewReportFragment.OnReportButtonPressed {
+        ViewReportFragment.OnReportButtonPressed,
+        ViewBarcodeSummaryDialogFragment.OnViewBarcodeSummaryDialogResult {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,27 @@ public class ViewReportsActivity extends AppCompatActivity implements
 
     @Override
     public void onReportButtonPressed(int button) {
+
+        switch (button) {
+            case ViewReportFragment.BUTTON_ITEM:
+                // make dialog, start
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                ViewBarcodeSummaryDialogFragment dialog = new ViewBarcodeSummaryDialogFragment();
+                dialog.show(fragmentManager, "open barcode summary dialog");
+                break;
+
+            case ViewReportFragment.BUTTON_CURRENT_SUMMARY:
+
+                break;
+
+            case ViewReportFragment.BUTTON_PAST_SUMMARY:
+
+                break;
+        }
+    }
+
+    @Override
+    public void onBarcodeChosen(Uri uri) {
 
     }
 }

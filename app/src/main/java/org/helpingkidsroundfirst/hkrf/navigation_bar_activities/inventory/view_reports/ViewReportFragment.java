@@ -15,8 +15,14 @@ import org.helpingkidsroundfirst.hkrf.R;
  * {@link OnReportButtonPressed} interface
  * to handle interaction events.
  */
-public class ViewReportFragment extends Fragment {
+public class ViewReportFragment extends Fragment implements
+        View.OnClickListener {
 
+    public static final int BUTTON_ITEM = 0;
+    public static final int BUTTON_CURRENT_SUMMARY = 1;
+    public static final int BUTTON_PAST_SUMMARY = 2;
+    public static final int BUTTON_CURRENT_BY_DATE = 3;
+    public static final int BUTTON_PAST_BY_DATE = 4;
     private OnReportButtonPressed mListener;
 
     public ViewReportFragment() {
@@ -29,6 +35,12 @@ public class ViewReportFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_view_report, container, false);
+
+        rootView.findViewById(R.id.view_report_button_barcode).setOnClickListener(this);
+
+        rootView.findViewById(R.id.view_report_button_current).setOnClickListener(this);
+
+        rootView.findViewById(R.id.view_report_button_past).setOnClickListener(this);
 
         return rootView;
     }
@@ -48,6 +60,24 @@ public class ViewReportFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.view_report_button_barcode:
+                mListener.onReportButtonPressed(BUTTON_ITEM);
+                break;
+
+            case R.id.view_report_button_current:
+                mListener.onReportButtonPressed(BUTTON_CURRENT_SUMMARY);
+                break;
+
+            case R.id.view_report_button_past:
+                mListener.onReportButtonPressed(BUTTON_PAST_SUMMARY);
+                break;
+        }
     }
 
     public interface OnReportButtonPressed {
