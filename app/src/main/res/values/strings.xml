@@ -89,20 +89,15 @@
     <string name="update_current_successful">Update successful</string>
 
     <!-- fragment_view_current_search -->
-    <string name="current_search_header">Search Current Inventory</string>
-    <string name="current_search_name">Search by name. Type to search</string>
-    <string name="current_search_category">Search by category. Use drop-down box to select</string>
-    <string name="current_search_date">Search by date</string>
-    <string name="current_search_donor">Search by donor</string>
-    <string name="current_search_warehouse">Search by warehouse</string>
-    <string name="current_search_barcode">Search by barcode number</string>
-    <string name="current_search_button">Search Current Inventory</string>
-    <string name="current_search_no_results">No results found</string>
+    <string name="current_search">Search Current Inventory</string>
 
     <!-- fragment_view_past_inventory_detail -->
     <string name="view_past_inventory_detail_delete">Delete Past Inventory Record</string>
     <string name="past_inventory_delete_fail">Past inventory delete failed</string>
     <string name="past_inventory_delete_success">Past inventory delete success</string>
+
+    <!-- fragment_view_past_search -->
+    <string name="past_search">Search Past Inventory</string>
 
     <!-- Receive inventory acitivity ___________________________________________________________-->
     <!-- activity_receive_inventory -->
@@ -199,6 +194,15 @@
     <string name="detail_donor">Donor: </string>
     <string name="detail_warehouse">Warehouse: </string>
     <string name="detail_date_shipped">Date Shipped:</string>
+
+    <!-- generic search strings -->
+    <string name="search_name">Search by name. Type to search</string>
+    <string name="search_category">Search by category. Use drop-down box to select</string>
+    <string name="search_date">Search by date</string>
+    <string name="search_donor">Search by donor</string>
+    <string name="search_warehouse">Search by warehouse</string>
+    <string name="search_barcode">Search by barcode number</string>
+    <string name="search_no_results">No results found</string>
 
     <!-- Error and Validation ___________________________________________________________________-->
     <!-- input validation strings -->

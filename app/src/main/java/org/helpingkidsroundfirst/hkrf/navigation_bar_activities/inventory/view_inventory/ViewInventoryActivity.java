@@ -21,6 +21,7 @@ import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_i
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.inventory_items.ViewInventoryItemListFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.past_inventory.ViewPastInventoryDetailFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.past_inventory.ViewPastInventoryListFragment;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.past_inventory.ViewPastSearchFragment;
 
 public class ViewInventoryActivity extends AppCompatActivity
     implements onViewInventoryButtonListener,
@@ -29,7 +30,8 @@ public class ViewInventoryActivity extends AppCompatActivity
         ViewPastInventoryListFragment.Callback,
         ViewCategoryListFragment.Callback,
         ViewIntermediateListFragment.Callback,
-        ViewCurrentSearchFragment.OnSearchButton {
+        ViewCurrentSearchFragment.OnSearchButton,
+        ViewPastSearchFragment.OnSearchButtonListener {
 
     private static final String TAG = "ViewInventoryActivity";
 
@@ -246,7 +248,8 @@ public class ViewInventoryActivity extends AppCompatActivity
                 break;
 
             case ViewIntermediateListFragment.EXPECTED_PAST_INVENTORY:
-
+                fragment = new ViewPastSearchFragment();
+                startFragment(fragment, "ViewPastSearchFragment");
                 break;
 
             default:
@@ -269,5 +272,21 @@ public class ViewInventoryActivity extends AppCompatActivity
 
         //replace fragment
         startFragment(fragment, "ViewCurrentInventoryListFragment");
+    }
+
+    @Override
+    public void pastSearchResults(Uri uri, String selection, String[] selectionArgs) {
+        //create fragment
+        Fragment fragment = new ViewPastInventoryListFragment();
+        Bundle bundle = new Bundle();
+
+        //create bundle for fragment
+        bundle.putParcelable(ViewPastInventoryListFragment.PAST_URI_KEY, uri);
+        bundle.putString(ViewPastInventoryListFragment.PAST_SELECTION_KEY, selection);
+        bundle.putStringArray(ViewPastInventoryListFragment.PAST_ARGUMENTS_KEY, selectionArgs);
+        fragment.setArguments(bundle);
+
+        //replace fragment
+        startFragment(fragment, "ViewPastInventoryListFragment");
     }
 }

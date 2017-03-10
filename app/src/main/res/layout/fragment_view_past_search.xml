@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.current_inventory.ViewCurrentSearchFragment">
+    tools:context="org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.past_inventory.ViewPastSearchFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,15 +10,15 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView40"
+            android:id="@+id/textView41"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/current_search"
+            android:text="@string/past_search"
             android:textAlignment="center"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
         <EditText
-            android:id="@+id/current_search_name"
+            android:id="@+id/past_search_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -26,64 +26,53 @@
             android:inputType="text" />
 
         <CheckBox
-            android:id="@+id/current_search_cat_check"
+            android:id="@+id/past_search_cat_check"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/search_category" />
 
         <Spinner
-            android:id="@+id/current_search_cat_spinner"
+            android:id="@+id/past_search_cat_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <CheckBox
-            android:id="@+id/current_search_date_check"
+            android:id="@+id/past_search_date_check"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/search_date" />
 
         <Spinner
-            android:id="@+id/current_search_date_spinner"
+            android:id="@+id/past_search_date_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <CheckBox
-            android:id="@+id/current_search_donor_check"
+            android:id="@+id/past_search_donor_check"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/search_donor" />
 
         <Spinner
-            android:id="@+id/current_search_donor_spinner"
+            android:id="@+id/past_search_donor_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <CheckBox
-            android:id="@+id/current_search_warehouse_check"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/search_warehouse" />
-
-        <Spinner
-            android:id="@+id/current_search_warehouse_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <CheckBox
-            android:id="@+id/current_search_barcode_check"
+            android:id="@+id/past_search_barcode_check"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/search_barcode" />
 
         <Spinner
-            android:id="@+id/current_search_barcode_spinner"
+            android:id="@+id/past_search_barcode_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <Button
-            android:id="@+id/current_search_button"
+            android:id="@+id/past_search_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/current_search" />
+            android:text="@string/past_search" />
     </LinearLayout>
 </ScrollView>

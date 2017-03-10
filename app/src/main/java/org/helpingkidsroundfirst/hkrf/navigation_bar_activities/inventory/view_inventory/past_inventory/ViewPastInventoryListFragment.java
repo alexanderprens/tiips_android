@@ -37,6 +37,8 @@ public class ViewPastInventoryListFragment extends Fragment
     public static final int COL_CATEGORY_BARCODE = 10;
     public static final int COL_BARCODE_ID = 11;
     public static final String PAST_URI_KEY = "past_uri_key";
+    public static final String PAST_SELECTION_KEY = "past_selection_key";
+    public static final String PAST_ARGUMENTS_KEY = "past_arguments_key";
     private static final String SELECTED_KEY = "selected_position";
     private static final int PAST_INVENTORY_LOADER = 2;
     // Past inventory columns
@@ -59,6 +61,8 @@ public class ViewPastInventoryListFragment extends Fragment
     private ListView mListView;
     private int mPosition = ListView.INVALID_POSITION;
     private Uri mUri;
+    private String mSelection;
+    private String[] mSelectionArgs;
 
     public ViewPastInventoryListFragment() {
         // Required empty public constructor
@@ -86,10 +90,17 @@ public class ViewPastInventoryListFragment extends Fragment
             }
         });
 
+        mSelection = null;
+
         // get uri from arguments
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             mUri = bundle.getParcelable(PAST_URI_KEY);
+
+            if (bundle.containsKey(PAST_SELECTION_KEY)) {
+                mSelection = bundle.getString(PAST_SELECTION_KEY);
+                mSelectionArgs = bundle.getStringArray(PAST_ARGUMENTS_KEY);
+            }
         }
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
@@ -119,13 +130,27 @@ public class ViewPastInventoryListFragment extends Fragment
         if (mUri != null) {
             String sortOrder = PastInventoryEntry.COLUMN_NAME + " ASC";
 
-            return new CursorLoader(getActivity(),
-                    mUri,
-                    PAST_INVENTORY_COLUMNS,
-                    null,
-                    null,
-                    sortOrder
-            );
+            //check if search result
+            if (mSelection != null) {
+                return new CursorLoader(
+                        getActivity(),
+                        mUri,
+                        PAST_INVENTORY_COLUMNS,
+                        mSelection,
+                        mSelectionArgs,
+                        sortOrder
+                );
+
+            } else {
+                // is a category selection
+                return new CursorLoader(getActivity(),
+                        mUri,
+                        PAST_INVENTORY_COLUMNS,
+                        null,
+                        null,
+                        sortOrder
+                );
+            }
         }
 
         return null;
