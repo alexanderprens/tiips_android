@@ -10,10 +10,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,6 +69,7 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
     private TextView donorView;
     private Uri mUri;
     private long pastInventoryId;
+    private String pinNumber;
 
     public ViewPastInventoryDetailFragment() {
         // Required empty public constructor
@@ -113,11 +118,34 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
         };
 
         Button delete = (Button) rootView.findViewById(R.id.view_past_inventory_delete);
+        pinNumber = "";
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // call dialog
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                final EditText input = new EditText(v.getContext());
+
+                input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                builder.setView(input);
+
+                input.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        pinNumber = s.toString();
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+
                 builder.setMessage(R.string.are_you_sure_message)
                         .setPositiveButton(R.string.are_you_sure_yes, dialogClickListener)
                         .setNegativeButton(R.string.are_you_sure_no, dialogClickListener)
@@ -188,17 +216,14 @@ public class ViewPastInventoryDetailFragment extends Fragment implements
 
     private boolean handlePastInventoryDelete() {
         boolean deleted = false;
-        int rowDeleted = -1;
+        int rowDeleted = 0;
         Uri pastInventoryUri = InventoryContract.PastInventoryEntry.buildPastInventoryUri();
         String selection = InventoryContract.PastInventoryEntry.TABLE_NAME + "." +
-                InventoryContract.PastInventoryEntry._ID + " = ? AND " +
-                InventoryContract.PastInventoryEntry.COLUMN_DONOR + " = ? ";
-        String[] selectionArgs = {Long.toString(pastInventoryId),
-                "SDSU"
-        };
+                InventoryContract.PastInventoryEntry._ID + " = ? ";
+        String[] selectionArgs = {Long.toString(pastInventoryId)};
         String message = getContext().getResources().getString(R.string.past_inventory_delete_fail);
 
-        if (pastInventoryId != -1) {
+        if (pastInventoryId != -1 && pinNumber.equals("4856")) {
             rowDeleted = getContext().getContentResolver().delete(
                     pastInventoryUri,
                     selection,
