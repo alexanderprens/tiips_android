@@ -88,6 +88,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.helpingkidsroundfirst.hkrf.MainActivity" />
         </activity>
+        <activity
+            android:name=".navigation_bar_activities.inventory.view_reports.ViewReportsActivity"
+            android:label="@string/title_activity_view_reports"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.helpingkidsroundfirst.hkrf.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -22,6 +22,7 @@ import android.widget.Toast;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.receive_inventory.ReceiveInventoryActivity;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.ship_inventory.ShipInventoryActivity;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.ViewInventoryActivity;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports.ViewReportsActivity;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.LocateItemActivity;
 
 // TODO: 2/3/2017 add context to layouts
@@ -131,7 +132,9 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_reports:
-
+                intent = new Intent(MainActivity.this, ViewReportsActivity.class);
+                startActivity(intent);
+                Log.i(TAG, "Start View Reports Activity");
                 break;
 
             case R.id.nav_locate:
