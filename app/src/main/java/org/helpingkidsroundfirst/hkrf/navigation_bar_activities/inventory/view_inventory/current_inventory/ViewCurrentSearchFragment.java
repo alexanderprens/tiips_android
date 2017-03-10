@@ -41,10 +41,12 @@ public class ViewCurrentSearchFragment extends Fragment {
     private String dateInput;
     private String donorInput;
     private String warehouseInput;
+    private String barcodeInput;
     private CheckBox categoryCheck;
     private CheckBox dateCheck;
     private CheckBox donorCheck;
     private CheckBox warehouseCheck;
+    private CheckBox barcodeCheck;
 
     public ViewCurrentSearchFragment() {
         // Required empty public constructor
@@ -63,6 +65,7 @@ public class ViewCurrentSearchFragment extends Fragment {
         dateInput = "";
         donorInput = "";
         warehouseInput = "";
+        barcodeInput = "";
 
         // name search
         final EditText nameText = (EditText) rootView.findViewById(R.id.current_search_name);
@@ -90,7 +93,7 @@ public class ViewCurrentSearchFragment extends Fragment {
 
         Cursor categoryCursor = getContext().getContentResolver().query(
                 InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri(),
-                new String[]{InventoryContract.CategoryEntry.TABLE_NAME + "." +
+                new String[]{"DISTINCT " + InventoryContract.CategoryEntry.TABLE_NAME + "." +
                         InventoryContract.CategoryEntry._ID + " AS _id",
                         InventoryContract.CategoryEntry.COLUMN_CATEGORY
                 },
@@ -130,8 +133,7 @@ public class ViewCurrentSearchFragment extends Fragment {
 
         Cursor dateCursor = getContext().getContentResolver().query(
                 InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri(),
-                new String[]{InventoryContract.CurrentInventoryEntry.TABLE_NAME + "."
-                        + InventoryContract.CurrentInventoryEntry._ID + " AS _id",
+                new String[]{"DISTINCT 1 _id",
                         InventoryContract.CurrentInventoryEntry.COLUMN_DATE_RECEIVED},
                 null,
                 null,
@@ -171,8 +173,7 @@ public class ViewCurrentSearchFragment extends Fragment {
 
         Cursor donorCursor = getContext().getContentResolver().query(
                 InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri(),
-                new String[]{InventoryContract.CurrentInventoryEntry.TABLE_NAME + "."
-                        + InventoryContract.CurrentInventoryEntry._ID + " AS _id",
+                new String[]{"DISTINCT 1 _id",
                         InventoryContract.CurrentInventoryEntry.COLUMN_DONOR},
                 null,
                 null,
@@ -212,8 +213,7 @@ public class ViewCurrentSearchFragment extends Fragment {
 
         Cursor warehouseCursor = getContext().getContentResolver().query(
                 InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri(),
-                new String[]{InventoryContract.CurrentInventoryEntry.TABLE_NAME + "."
-                        + InventoryContract.CurrentInventoryEntry._ID + " AS _id",
+                new String[]{"DISTINCT 1 _id",
                         InventoryContract.CurrentInventoryEntry.COLUMN_WAREHOUSE},
                 null,
                 null,
@@ -238,6 +238,47 @@ public class ViewCurrentSearchFragment extends Fragment {
                 warehouseInput = cursor.getString(cursor.getColumnIndex(InventoryContract
                         .CurrentInventoryEntry.COLUMN_WAREHOUSE));
                 //Toast.makeText(getContext(), warehouseInput, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        // barcode search
+        barcodeCheck = (CheckBox) rootView.findViewById(R.id.current_search_barcode_check);
+        final Spinner barcodeSpinner = (Spinner) rootView.findViewById(
+                R.id.current_search_barcode_spinner);
+
+        Cursor barcodeCursor = getContext().getContentResolver().query(
+                InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri(),
+                new String[]{"DISTINCT " + InventoryContract.ItemEntry.TABLE_NAME + "."
+                        + InventoryContract.ItemEntry._ID + " AS _id",
+                        InventoryContract.ItemEntry.COLUMN_BARCODE_ID},
+                null,
+                null,
+                InventoryContract.CurrentInventoryEntry.COLUMN_WAREHOUSE
+        );
+
+        final SimpleCursorAdapter barcodeAdapter = new SimpleCursorAdapter(
+                getContext(),
+                android.R.layout.simple_spinner_item,
+                barcodeCursor,
+                new String[]{InventoryContract.ItemEntry.COLUMN_BARCODE_ID},
+                TO_VIEWS,
+                0
+        );
+
+        barcodeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        barcodeSpinner.setAdapter(barcodeAdapter);
+        barcodeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Cursor cursor = (Cursor) barcodeSpinner.getSelectedItem();
+                barcodeInput = cursor.getString(cursor.getColumnIndex(InventoryContract
+                        .ItemEntry.COLUMN_BARCODE_ID));
+                //Toast.makeText(getContext(), barcodeInput, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -279,7 +320,7 @@ public class ViewCurrentSearchFragment extends Fragment {
     private void searchButtonHandler() {
 
         String selection;
-        String[] selectionArgs = {"%", "%", "%", "%", "%"};
+        String[] selectionArgs = {"%", "%", "%", "%", "%", "%"};
         Uri currentInventory = InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri();
 
         // build query
@@ -288,7 +329,8 @@ public class ViewCurrentSearchFragment extends Fragment {
                 InventoryContract.CategoryEntry._ID + " LIKE ? AND " +
                 InventoryContract.CurrentInventoryEntry.COLUMN_DATE_RECEIVED + " LIKE ? AND " +
                 InventoryContract.CurrentInventoryEntry.COLUMN_DONOR + " LIKE ? AND " +
-                InventoryContract.CurrentInventoryEntry.COLUMN_WAREHOUSE + " LIKE ? ";
+                InventoryContract.CurrentInventoryEntry.COLUMN_WAREHOUSE + " LIKE ? AND " +
+                InventoryContract.ItemEntry.COLUMN_BARCODE_ID + " LIKE ? ";
 
         // check if name is used
         if (!nameInput.isEmpty()) {
@@ -313,6 +355,11 @@ public class ViewCurrentSearchFragment extends Fragment {
         // check if warehouse
         if (warehouseCheck.isChecked()) {
             selectionArgs[4] = warehouseInput;
+        }
+
+        // check if barcode
+        if (barcodeCheck.isChecked()) {
+            selectionArgs[5] = barcodeInput;
         }
 
         Cursor cursor = getContext().getContentResolver().query(

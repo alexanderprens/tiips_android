@@ -17,24 +17,13 @@
             android:textAlignment="center"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
-        <TextView
-            android:id="@+id/textView41"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/current_search_description" />
-
-        <TextView
-            android:id="@+id/textView42"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/current_search_name" />
-
         <EditText
             android:id="@+id/current_search_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:inputType="textCapWords" />
+            android:hint="@string/current_search_name"
+            android:inputType="text" />
 
         <CheckBox
             android:id="@+id/current_search_cat_check"
@@ -77,6 +66,17 @@
 
         <Spinner
             android:id="@+id/current_search_warehouse_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <CheckBox
+            android:id="@+id/current_search_barcode_check"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/current_search_barcode" />
+
+        <Spinner
+            android:id="@+id/current_search_barcode_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
