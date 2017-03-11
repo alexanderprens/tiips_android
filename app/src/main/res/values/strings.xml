@@ -174,6 +174,10 @@
 
     <!-- fragment_barcode_summary -->
     <string name="barcode_summary_header">Barcode Summary Result</string>
+    <string name="barcode_summary_inv">Inventory Summaries</string>
+    <string name="barcode_summary_current">Qty in current: </string>
+    <string name="barcode_summary_past">Qty in past: </string>
+    <string name="barcode_summary_detail">Barcode Item Details</string>
 
     <!-- Generic Strings _______________________________________________________________________-->
     <!-- generic button strings -->
