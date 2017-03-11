@@ -173,6 +173,10 @@
     <string name="current_sum_header">Current Inventory Summary</string>
     <string name="current_sum_date">Dates received: </string>
 
+    <!-- fragment_past_inventory_summary -->
+    <string name="past_sum_header">Past Inventory Summary</string>
+    <string name="past_sum_date">Dates shipped: </string>
+
     <!-- report strings -->
     <string name="total_value">Total value: </string>
     <string name="donor_sum">Donors: </string>
@@ -269,8 +273,5 @@
     <string name="error_cat_and_prefix_exists">Category and Prefix already exist</string>
     <string name="error_category_exists">Category already exists in database</string>
     <string name="error_prefix_exists">Prefix already exists in database</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

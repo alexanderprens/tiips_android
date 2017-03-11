@@ -46,6 +46,8 @@ public class ViewReportsActivity extends AppCompatActivity implements
     @Override
     public void onReportButtonPressed(int button) {
 
+        Fragment fragment;
+
         switch (button) {
             case ViewReportFragment.BUTTON_ITEM:
                 // make dialog, start
@@ -55,12 +57,13 @@ public class ViewReportsActivity extends AppCompatActivity implements
                 break;
 
             case ViewReportFragment.BUTTON_CURRENT_SUMMARY:
-                Fragment fragment = new CurrentInventorySummaryFragment();
+                fragment = new CurrentInventorySummaryFragment();
                 startFragment(fragment, "CurrentInventorySummaryFragment");
                 break;
 
             case ViewReportFragment.BUTTON_PAST_SUMMARY:
-
+                fragment = new PastInventorySummaryFragment();
+                startFragment(fragment, "PastInventorySummaryFragment");
                 break;
         }
     }

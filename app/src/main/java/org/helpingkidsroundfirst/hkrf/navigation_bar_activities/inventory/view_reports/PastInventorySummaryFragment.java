@@ -16,11 +16,11 @@ import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CurrentInventorySummaryFragment extends Fragment {
+public class PastInventorySummaryFragment extends Fragment {
 
-    private Uri currentUri;
+    private Uri pastUri;
 
-    public CurrentInventorySummaryFragment() {
+    public PastInventorySummaryFragment() {
         // Required empty public constructor
     }
 
@@ -28,20 +28,18 @@ public class CurrentInventorySummaryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_current_inventory_summary, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_past_inventory_summary, container, false);
 
         // initialize text views
-        TextView warehouseView = (TextView) rootView.findViewById(R.id.current_summary_warehouse);
-        TextView donorView = (TextView) rootView.findViewById(R.id.current_summary_donor);
-        TextView dateView = (TextView) rootView.findViewById(R.id.current_summary_dates);
-        TextView valueView = (TextView) rootView.findViewById(R.id.current_summary_total);
-        TextView itemView = (TextView) rootView.findViewById(R.id.current_summary_items);
+        TextView donorView = (TextView) rootView.findViewById(R.id.past_summary_donor);
+        TextView dateView = (TextView) rootView.findViewById(R.id.past_summary_dates);
+        TextView valueView = (TextView) rootView.findViewById(R.id.past_summary_total);
+        TextView itemView = (TextView) rootView.findViewById(R.id.past_summary_items);
 
         // setup
-        currentUri = InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri();
+        pastUri = InventoryContract.PastInventoryEntry.buildPastInventoryUri();
 
         // get values
-        warehouseView.setText(getWarehouses());
         donorView.setText(getDonors());
         dateView.setText(getDates());
         valueView.setText(getValue());
@@ -54,13 +52,13 @@ public class CurrentInventorySummaryFragment extends Fragment {
 
         // setup
         int total = 0;
-        String[] projection = {"DISTINCT " + InventoryContract.ItemEntry.COLUMN_NAME,
+        String[] projection = {"DISTINCT " + InventoryContract.PastInventoryEntry.COLUMN_NAME,
                 "1 _id"
         };
 
         // get cursor
         Cursor cursor = getContext().getContentResolver().query(
-                currentUri,
+                pastUri,
                 projection,
                 null,
                 null,
@@ -82,13 +80,13 @@ public class CurrentInventorySummaryFragment extends Fragment {
         // setup
         int total = 0;
         String[] projection = {"1 _id",
-                InventoryContract.ItemEntry.COLUMN_VALUE,
-                InventoryContract.CurrentInventoryEntry.COLUMN_QTY
+                InventoryContract.PastInventoryEntry.COLUMN_VALUE,
+                InventoryContract.PastInventoryEntry.COLUMN_QTY
         };
 
         // get cursor
         Cursor cursor = getContext().getContentResolver().query(
-                currentUri,
+                pastUri,
                 projection,
                 null,
                 null,
@@ -115,17 +113,17 @@ public class CurrentInventorySummaryFragment extends Fragment {
 
         // setup
         String dates = "None";
-        String[] projection = {"DISTINCT " + InventoryContract.CurrentInventoryEntry.COLUMN_DATE_RECEIVED,
+        String[] projection = {"DISTINCT " + InventoryContract.PastInventoryEntry.COLUMN_DATE_SHIPPED,
                 "1 _id"
         };
 
         // get cursor
         Cursor cursor = getContext().getContentResolver().query(
-                currentUri,
+                pastUri,
                 projection,
                 null,
                 null,
-                InventoryContract.CurrentInventoryEntry.COLUMN_DATE_RECEIVED
+                InventoryContract.PastInventoryEntry.COLUMN_DATE_SHIPPED
         );
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -148,17 +146,17 @@ public class CurrentInventorySummaryFragment extends Fragment {
 
         // setup
         String donors = "None";
-        String[] projection = {"DISTINCT " + InventoryContract.CurrentInventoryEntry.COLUMN_DONOR,
+        String[] projection = {"DISTINCT " + InventoryContract.PastInventoryEntry.COLUMN_DONOR,
                 "1 _id"
         };
 
         // get cursor
         Cursor cursor = getContext().getContentResolver().query(
-                currentUri,
+                pastUri,
                 projection,
                 null,
                 null,
-                InventoryContract.CurrentInventoryEntry.COLUMN_DONOR
+                InventoryContract.PastInventoryEntry.COLUMN_DONOR
         );
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -175,38 +173,5 @@ public class CurrentInventorySummaryFragment extends Fragment {
         }
 
         return donors;
-    }
-
-    private String getWarehouses() {
-
-        // setup
-        String warehouses = "None";
-        String[] projection = {"DISTINCT " + InventoryContract.CurrentInventoryEntry.COLUMN_WAREHOUSE,
-                "1 _id"
-        };
-
-        // get cursor
-        Cursor cursor = getContext().getContentResolver().query(
-                currentUri,
-                projection,
-                null,
-                null,
-                InventoryContract.CurrentInventoryEntry.COLUMN_WAREHOUSE
-        );
-
-        if (cursor != null && cursor.moveToFirst()) {
-
-            // put in first warehouse
-            warehouses = cursor.getString(0);
-
-            // get rest of warehouses
-            while (cursor.moveToNext()) {
-                warehouses += ", " + cursor.getString(0);
-            }
-
-            cursor.close();
-        }
-
-        return warehouses;
     }
 }
