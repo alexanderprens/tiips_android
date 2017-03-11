@@ -21,8 +21,6 @@ public class ViewReportFragment extends Fragment implements
     public static final int BUTTON_ITEM = 0;
     public static final int BUTTON_CURRENT_SUMMARY = 1;
     public static final int BUTTON_PAST_SUMMARY = 2;
-    public static final int BUTTON_CURRENT_BY_DATE = 3;
-    public static final int BUTTON_PAST_BY_DATE = 4;
     private OnReportButtonPressed mListener;
 
     public ViewReportFragment() {

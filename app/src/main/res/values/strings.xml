@@ -162,6 +162,23 @@
     <!-- dialog_barcode_summary -->
     <string name="dialog_barcode_summary_header">Choose Barcode for Summary</string>
 
+    <!-- fragment_barcode_summary -->
+    <string name="barcode_summary_header">Barcode Summary Result</string>
+    <string name="barcode_summary_inv">Inventory Summaries</string>
+    <string name="barcode_summary_current">Qty in current: </string>
+    <string name="barcode_summary_past">Qty in past: </string>
+    <string name="barcode_summary_detail">Barcode Item Details</string>
+
+    <!-- fragment_current_inventory_summary -->
+    <string name="current_sum_header">Current Inventory Summary</string>
+    <string name="current_sum_date">Dates received: </string>
+
+    <!-- report strings -->
+    <string name="total_value">Total value: </string>
+    <string name="donor_sum">Donors: </string>
+    <string name="warehouse_sum">Warehouses: </string>
+    <string name="items_sum"># distinct items: </string>
+
     <!-- Locate Item Activity __________________________________________________________________-->
     <string name="title_activity_locate_item">Locate Item</string>
     <string name="ble_not_enabled">BLE not enabled</string>
@@ -171,13 +188,6 @@
 
     <!-- fragment_scan_ble_devices -->
     <string name="unknown_device">Unknown device</string>
-
-    <!-- fragment_barcode_summary -->
-    <string name="barcode_summary_header">Barcode Summary Result</string>
-    <string name="barcode_summary_inv">Inventory Summaries</string>
-    <string name="barcode_summary_current">Qty in current: </string>
-    <string name="barcode_summary_past">Qty in past: </string>
-    <string name="barcode_summary_detail">Barcode Item Details</string>
 
     <!-- Generic Strings _______________________________________________________________________-->
     <!-- generic button strings -->

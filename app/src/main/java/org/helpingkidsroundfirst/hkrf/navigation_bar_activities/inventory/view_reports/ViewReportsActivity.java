@@ -55,7 +55,8 @@ public class ViewReportsActivity extends AppCompatActivity implements
                 break;
 
             case ViewReportFragment.BUTTON_CURRENT_SUMMARY:
-
+                Fragment fragment = new CurrentInventorySummaryFragment();
+                startFragment(fragment, "CurrentInventorySummaryFragment");
                 break;
 
             case ViewReportFragment.BUTTON_PAST_SUMMARY:
