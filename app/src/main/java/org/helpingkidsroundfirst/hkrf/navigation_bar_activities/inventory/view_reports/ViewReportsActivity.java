@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import org.helpingkidsroundfirst.hkrf.R;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports.item_summary.BarcodeSummaryFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports.item_summary.ViewBarcodeSummaryDialogFragment;
 
 public class ViewReportsActivity extends AppCompatActivity implements
@@ -34,6 +35,14 @@ public class ViewReportsActivity extends AppCompatActivity implements
         }
     }
 
+    private void startFragment(Fragment fragment, String fragmentTag) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_view_reports, fragment)
+                .addToBackStack(fragmentTag)
+                .commit();
+    }
+
     @Override
     public void onReportButtonPressed(int button) {
 
@@ -57,6 +66,12 @@ public class ViewReportsActivity extends AppCompatActivity implements
 
     @Override
     public void onBarcodeChosen(Uri uri) {
+        Fragment fragment = new BarcodeSummaryFragment();
+        Bundle bundle = new Bundle();
 
+        bundle.putParcelable(BarcodeSummaryFragment.ITEM_URI, uri);
+        fragment.setArguments(bundle);
+
+        startFragment(fragment, "BarcodeSummaryFragment");
     }
 }
