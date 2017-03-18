@@ -35,5 +35,11 @@
             android:layout_height="wrap_content"
             android:text="@string/view_reports_past" />
 
+        <Button
+            android:id="@+id/view_report_button_sheets"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/view_reports_sheets" />
+
     </LinearLayout>
 </ScrollView>

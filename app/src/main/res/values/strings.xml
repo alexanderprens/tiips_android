@@ -30,6 +30,8 @@
     <string name="view_past_title">View Past Inventory</string>
     <string name="view_category_title">View Categories</string>
     <string name="view_inventory_title">View Inventory</string>
+    <string name="export_to_sheets_title">Export to Sheets</string>
+    <string name="export_db_title">Export DB to Drive</string>
 
     <!-- content_main -->
     <string name="content_text" translatable="false">Helping Kids Round First Application</string>
@@ -158,6 +160,8 @@
     <string name="view_reports_barcode">Barcode Item Summary</string>
     <string name="view_reports_current">Current Inventory Summary</string>
     <string name="view_reports_past">Past Inventory Summary</string>
+    <string name="view_reports_shipments">Shipment Summary</string>
+    <string name="view_reports_sheets">Export to Sheets</string>
 
     <!-- dialog_barcode_summary -->
     <string name="dialog_barcode_summary_header">Choose Barcode for Summary</string>

@@ -1,5 +1,6 @@
 package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -64,6 +65,11 @@ public class ViewReportsActivity extends AppCompatActivity implements
             case ViewReportFragment.BUTTON_PAST_SUMMARY:
                 fragment = new PastInventorySummaryFragment();
                 startFragment(fragment, "PastInventorySummaryFragment");
+                break;
+
+            case ViewReportFragment.BUTTON_SHEET_EXPORT:
+                Intent intent = new Intent(ViewReportsActivity.this, ExportToSheetsActivity.class);
+                startActivity(intent);
                 break;
         }
     }
