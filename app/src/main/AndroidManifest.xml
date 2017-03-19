@@ -100,7 +100,7 @@
                 android:value="org.helpingkidsroundfirst.hkrf.MainActivity" />
         </activity>
         <activity
-            android:name=".navigation_bar_activities.inventory.view_reports.ExportDBToDriveActivity"
+            android:name=".navigation_bar_activities.inventory.view_reports.google_drive.ExportDBToDriveActivity"
             android:label="@string/export_db_title"
             android:parentActivityName=".navigation_bar_activities.inventory.view_reports.ViewReportsActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -109,7 +109,7 @@
                 android:value="org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports.ViewReportsActivity" />
         </activity>
         <activity
-            android:name=".navigation_bar_activities.inventory.view_reports.ExportToSheetsActivity"
+            android:name=".navigation_bar_activities.inventory.view_reports.google_drive.ExportToSheetsActivity"
             android:label="@string/export_to_sheets_title"
             android:parentActivityName=".navigation_bar_activities.inventory.view_reports.ViewReportsActivity"
             android:theme="@style/AppTheme.NoActionBar">

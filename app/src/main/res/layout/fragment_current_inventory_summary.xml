@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports.CurrentInventorySummaryFragment">
+    tools:context="org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports.summary_fragments.CurrentInventorySummaryFragment">
 
 
     <LinearLayout
