@@ -8,18 +8,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
-import android.text.method.ScrollingMovementMethod;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -31,12 +28,26 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
+import com.google.api.services.sheets.v4.model.AddSheetRequest;
+import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest;
+import com.google.api.services.sheets.v4.model.BatchUpdateValuesRequest;
+import com.google.api.services.sheets.v4.model.BatchUpdateValuesResponse;
+import com.google.api.services.sheets.v4.model.DeleteSheetRequest;
+import com.google.api.services.sheets.v4.model.Request;
+import com.google.api.services.sheets.v4.model.SheetProperties;
+import com.google.api.services.sheets.v4.model.Spreadsheet;
+import com.google.api.services.sheets.v4.model.SpreadsheetProperties;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
-import java.io.IOException;
+import org.helpingkidsroundfirst.hkrf.R;
+import org.helpingkidsroundfirst.hkrf.Utility;
+import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -53,13 +64,12 @@ public class ExportToSheetsActivity extends Activity implements
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
-    private static final String BUTTON_TEXT = "Call Google Sheets API";
+    private static final String[] SCOPES = {SheetsScopes.SPREADSHEETS};
     private static final String PREF_ACCOUNT_NAME = "accountName";
-    private static final String[] SCOPES = {SheetsScopes.SPREADSHEETS_READONLY};
+    private static final String TAG = "ExportToSheetsActivity";
     GoogleAccountCredential mCredential;
     ProgressDialog mProgress;
-    private TextView mOutputText;
-    private Button mCallApiButton;
+    private Context mContext;
 
     /**
      * Create the main activity.
@@ -69,49 +79,21 @@ public class ExportToSheetsActivity extends Activity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LinearLayout activityLayout = new LinearLayout(this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        activityLayout.setLayoutParams(lp);
-        activityLayout.setOrientation(LinearLayout.VERTICAL);
-        activityLayout.setPadding(16, 16, 16, 16);
 
-        ViewGroup.LayoutParams tlp = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
+        // get context
+        mContext = this;
 
-        mCallApiButton = new Button(this);
-        mCallApiButton.setText(BUTTON_TEXT);
-        mCallApiButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallApiButton.setEnabled(false);
-                mOutputText.setText("");
-                getResultsFromApi();
-                mCallApiButton.setEnabled(true);
-            }
-        });
-        activityLayout.addView(mCallApiButton);
-
-        mOutputText = new TextView(this);
-        mOutputText.setLayoutParams(tlp);
-        mOutputText.setPadding(16, 16, 16, 16);
-        mOutputText.setVerticalScrollBarEnabled(true);
-        mOutputText.setMovementMethod(new ScrollingMovementMethod());
-        mOutputText.setText(
-                "Click the \'" + BUTTON_TEXT + "\' button to test the API.");
-        activityLayout.addView(mOutputText);
-
+        // start progress
         mProgress = new ProgressDialog(this);
-        mProgress.setMessage("Calling Google Sheets API ...");
-
-        setContentView(activityLayout);
+        mProgress.setMessage("Exporting to sheets");
 
         // Initialize credentials and service object.
         mCredential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
+
+        // start working on sheets
+        getResultsFromApi();
     }
 
 
@@ -128,9 +110,9 @@ public class ExportToSheetsActivity extends Activity implements
         } else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
         } else if (!isDeviceOnline()) {
-            mOutputText.setText("No network connection available.");
+            Toast.makeText(this, "No network connection available.", Toast.LENGTH_LONG).show();
         } else {
-            new MakeRequestTask(mCredential).execute();
+            new ExportToSheetsTask(mCredential).execute();
         }
     }
 
@@ -187,9 +169,9 @@ public class ExportToSheetsActivity extends Activity implements
         switch (requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != RESULT_OK) {
-                    mOutputText.setText(
-                            "This app requires Google Play Services. Please install " +
-                                    "Google Play Services on your device and relaunch this app.");
+                    Toast.makeText(this, "This app requires Google Play Services. Please install " +
+                                    "Google Play Services on your device and relaunch this app.",
+                            Toast.LENGTH_LONG).show();
                 } else {
                     getResultsFromApi();
                 }
@@ -320,82 +302,332 @@ public class ExportToSheetsActivity extends Activity implements
         dialog.show();
     }
 
-    /**
-     * An asynchronous task that handles the Google Sheets API call.
-     * Placing the API calls in their own task ensures the UI stays responsive.
-     */
-    private class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
+    private class ExportToSheetsTask extends AsyncTask<Void, Void, Long> {
+        private static final int CURRENT_ID = 1;
+        private static final int INVENTORY_ID = 3;
+        private static final int PAST_ID = 2;
         private com.google.api.services.sheets.v4.Sheets mService = null;
-        private Exception mLastError = null;
+        private Exception mLastError;
+        private String spreadSheetId;
 
-        MakeRequestTask(GoogleAccountCredential credential) {
+        ExportToSheetsTask(GoogleAccountCredential credential) {
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
             mService = new com.google.api.services.sheets.v4.Sheets.Builder(
                     transport, jsonFactory, credential)
-                    .setApplicationName("Google Sheets API Android Quickstart")
+                    .setApplicationName(mContext.getResources().getString(R.string.app_name))
                     .build();
         }
 
-        /**
-         * Background task to call Google Sheets API.
-         *
-         * @param params no parameters needed for this task.
-         */
         @Override
-        protected List<String> doInBackground(Void... params) {
+        protected Long doInBackground(Void... params) {
+            Looper.prepare();
+
+            // attempt to create spreadsheet
             try {
-                return getDataFromApi();
-            } catch (Exception e) {
+                createSpreadsheet();
+            } catch (java.io.IOException e) {
                 mLastError = e;
                 cancel(true);
                 return null;
             }
-        }
 
-        /**
-         * Fetch a list of names and majors of students in a sample spreadsheet:
-         * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
-         *
-         * @return List of names and majors
-         * @throws IOException
-         */
-        private List<String> getDataFromApi() throws IOException {
-            String spreadsheetId = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms";
-            String range = "Class Data!A2:E";
-            List<String> results = new ArrayList<String>();
-            ValueRange response = this.mService.spreadsheets().values()
-                    .get(spreadsheetId, range)
-                    .execute();
-            List<List<Object>> values = response.getValues();
-            if (values != null) {
-                results.add("Name, Major");
-                for (List row : values) {
-                    results.add(row.get(0) + ", " + row.get(4));
-                }
+            // attempt to rename inventory item sheet
+            try {
+                updatedSheets();
+            } catch (java.io.IOException e) {
+                mLastError = e;
+                cancel(true);
+                return null;
             }
-            return results;
+
+            // get data
+            List<ValueRange> valueRanges = new ArrayList<>();
+            valueRanges.add(getCurrentData());
+            valueRanges.add(getPastData());
+            valueRanges.add(getItemData());
+
+            // attempt to upload data
+            try {
+                uploadData(valueRanges);
+            } catch (java.io.IOException e) {
+                mLastError = e;
+                cancel(true);
+                return null;
+            }
+
+            // attempt to format spreadsheets
+
+
+            return null;
         }
 
+        private void createSpreadsheet() throws java.io.IOException {
+            Spreadsheet spreadsheet = new Spreadsheet();
+            SpreadsheetProperties properties = new SpreadsheetProperties();
 
-        @Override
+            // get file name string
+            final Calendar c = Calendar.getInstance();
+            String fileName = "HKRF Inventory ";
+            fileName += Utility.getDatePickerString(c.get(Calendar.YEAR), c.get(Calendar.MONTH),
+                    c.get(Calendar.DATE));
+            properties.setTitle(fileName);
+            spreadsheet.setProperties(properties);
+
+            // attempt to create spreadsheet
+            spreadsheet = mService.spreadsheets().create(spreadsheet).execute();
+            spreadSheetId = spreadsheet.getSpreadsheetId();
+        }
+
+        private void updatedSheets() throws java.io.IOException {
+            List<Request> requests = new ArrayList<>();
+
+            // barcode items
+            requests.add(new Request()
+                    .setAddSheet(new AddSheetRequest().setProperties(
+                            new SheetProperties().setTitle("Barcode Items")
+                                    .setSheetId(INVENTORY_ID)))
+            );
+
+            // current inventory
+            requests.add(new Request()
+                    .setAddSheet(new AddSheetRequest().setProperties(
+                            new SheetProperties().setTitle("Current Inventory")
+                                    .setSheetId(CURRENT_ID)))
+            );
+
+            // past inventory
+            requests.add(new Request()
+                    .setAddSheet(new AddSheetRequest().setProperties(
+                            new SheetProperties().setTitle("Past Inventory")
+                                    .setSheetId(PAST_ID)))
+            );
+
+            // delete default sheet
+            requests.add(new Request()
+                    .setDeleteSheet(new DeleteSheetRequest().setSheetId(0))
+            );
+
+            BatchUpdateSpreadsheetRequest body =
+                    new BatchUpdateSpreadsheetRequest().setRequests(requests);
+            mService.spreadsheets().batchUpdate(spreadSheetId, body).execute();
+        }
+
+        private ValueRange getCurrentData() {
+            // create header row
+            final String[] header = {"Barcode #", "Name", "Description", "Value", "Quantity",
+                    "Date Received", "Donor", "Warehouse", "Category"
+            };
+
+            // get cursor of values
+            final String[] projection = {
+                    InventoryContract.ItemEntry.COLUMN_BARCODE_ID,
+                    InventoryContract.ItemEntry.COLUMN_NAME,
+                    InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
+                    InventoryContract.ItemEntry.COLUMN_VALUE,
+                    InventoryContract.CurrentInventoryEntry.COLUMN_QTY,
+                    InventoryContract.CurrentInventoryEntry.COLUMN_DATE_RECEIVED,
+                    InventoryContract.CurrentInventoryEntry.COLUMN_DONOR,
+                    InventoryContract.CurrentInventoryEntry.COLUMN_WAREHOUSE,
+                    InventoryContract.CategoryEntry.COLUMN_CATEGORY,
+                    InventoryContract.CurrentInventoryEntry.TABLE_NAME + "." +
+                            InventoryContract.CurrentInventoryEntry._ID + " AS _id"
+            };
+
+            Cursor cursor = mContext.getContentResolver().query(
+                    InventoryContract.CurrentInventoryEntry.buildCurrentInventoryUri(),
+                    projection,
+                    null,
+                    null,
+                    InventoryContract.ItemEntry.COLUMN_NAME
+            );
+
+            // get list of values
+            List<List<Object>> values = new ArrayList<>();
+            List<Object> headerValues = new ArrayList<>();
+
+            // get row values
+            for (int i = 0; i < projection.length - 1; i++) {
+                headerValues.add(header[i]);
+            }
+
+            // add row to list
+            values.add(headerValues);
+
+            if (cursor != null && cursor.moveToFirst()) {
+
+                // get all values in current inventory
+                do {
+                    List<Object> row = new ArrayList<>();
+
+                    // get row values
+                    for (int i = 0; i < projection.length - 1; i++) {
+                        row.add(cursor.getString(i));
+                    }
+
+                    // add row to list
+                    values.add(row);
+                } while (cursor.moveToNext());
+                cursor.close();
+            }
+
+            // create api valueRange
+            String range = "Current Inventory" + "!A1";
+            ValueRange valueRange = new ValueRange();
+            valueRange.setMajorDimension("ROWS");
+            valueRange.setRange(range);
+            valueRange.setValues(values);
+            return valueRange;
+        }
+
+        private ValueRange getPastData() {
+            // create header row
+            final String[] header = {"Barcode #", "Name", "Description", "Value", "Quantity",
+                    "Date Shipped", "Donor", "Category"
+            };
+
+            // get cursor of values
+            final String[] projection = {
+                    InventoryContract.PastInventoryEntry.COLUMN_BARCODE_ID,
+                    InventoryContract.PastInventoryEntry.COLUMN_NAME,
+                    InventoryContract.PastInventoryEntry.COLUMN_DESCRIPTION,
+                    InventoryContract.PastInventoryEntry.COLUMN_VALUE,
+                    InventoryContract.PastInventoryEntry.COLUMN_QTY,
+                    InventoryContract.PastInventoryEntry.COLUMN_DATE_SHIPPED,
+                    InventoryContract.PastInventoryEntry.COLUMN_DONOR,
+                    InventoryContract.CategoryEntry.COLUMN_CATEGORY,
+                    InventoryContract.PastInventoryEntry.TABLE_NAME + "." +
+                            InventoryContract.PastInventoryEntry._ID + " AS _id"
+            };
+
+            Cursor cursor = mContext.getContentResolver().query(
+                    InventoryContract.PastInventoryEntry.buildPastInventoryUri(),
+                    projection,
+                    null,
+                    null,
+                    InventoryContract.PastInventoryEntry.COLUMN_NAME
+            );
+
+            // get list of values
+            List<List<Object>> values = new ArrayList<>();
+            List<Object> headerValues = new ArrayList<>();
+
+            // get row values
+            for (int i = 0; i < projection.length - 1; i++) {
+                headerValues.add(header[i]);
+            }
+
+            // add row to list
+            values.add(headerValues);
+
+            if (cursor != null && cursor.moveToFirst()) {
+
+                // get all values in current inventory
+                do {
+                    List<Object> row = new ArrayList<>();
+
+                    // get row values
+                    for (int i = 0; i < projection.length - 1; i++) {
+                        row.add(cursor.getString(i));
+                    }
+
+                    // add row to list
+                    values.add(row);
+                } while (cursor.moveToNext());
+                cursor.close();
+            }
+
+            // create api valueRange
+            String range = "Past Inventory" + "!A1";
+            ValueRange valueRange = new ValueRange();
+            valueRange.setMajorDimension("ROWS");
+            valueRange.setRange(range);
+            valueRange.setValues(values);
+            return valueRange;
+        }
+
+        private ValueRange getItemData() {
+            // create header row
+            final String[] header = {"Barcode #", "Name", "Description", "Value", "Category"};
+
+            // get cursor of values
+            final String[] projection = {
+                    InventoryContract.ItemEntry.COLUMN_BARCODE_ID,
+                    InventoryContract.ItemEntry.COLUMN_NAME,
+                    InventoryContract.ItemEntry.COLUMN_DESCRIPTION,
+                    InventoryContract.ItemEntry.COLUMN_VALUE,
+                    InventoryContract.CategoryEntry.COLUMN_CATEGORY,
+                    InventoryContract.ItemEntry.TABLE_NAME + "." +
+                            InventoryContract.ItemEntry._ID + " AS _id"
+            };
+
+            Cursor cursor = mContext.getContentResolver().query(
+                    InventoryContract.ItemEntry.buildInventoryItemUri(),
+                    projection,
+                    null,
+                    null,
+                    InventoryContract.ItemEntry.COLUMN_NAME
+            );
+
+            // get list of values
+            List<List<Object>> values = new ArrayList<>();
+            List<Object> headerValues = new ArrayList<>();
+
+            // get row values
+            for (int i = 0; i < projection.length - 1; i++) {
+                headerValues.add(header[i]);
+            }
+
+            // add row to list
+            values.add(headerValues);
+
+            if (cursor != null && cursor.moveToFirst()) {
+
+                // get all values in current inventory
+                do {
+                    List<Object> row = new ArrayList<>();
+
+                    // get row values
+                    for (int i = 0; i < projection.length - 1; i++) {
+                        row.add(cursor.getString(i));
+                    }
+
+                    // add row to list
+                    values.add(row);
+                } while (cursor.moveToNext());
+                cursor.close();
+            }
+
+            // create api valueRange
+            String range = "Barcode Items" + "!A1";
+            ValueRange valueRange = new ValueRange();
+            valueRange.setMajorDimension("ROWS");
+            valueRange.setRange(range);
+            valueRange.setValues(values);
+            return valueRange;
+        }
+
+        private void uploadData(List<ValueRange> inputRange) throws java.io.IOException {
+
+            // create request
+            BatchUpdateValuesRequest requestBody = new BatchUpdateValuesRequest();
+            requestBody.setValueInputOption("RAW");
+            requestBody.setData(inputRange);
+
+            Sheets.Spreadsheets.Values.BatchUpdate request = mService.spreadsheets().values()
+                    .batchUpdate(spreadSheetId, requestBody);
+
+            BatchUpdateValuesResponse response = request.execute();
+        }
+
         protected void onPreExecute() {
-            mOutputText.setText("");
             mProgress.show();
         }
 
-        @Override
-        protected void onPostExecute(List<String> output) {
-            mProgress.hide();
-            if (output == null || output.size() == 0) {
-                mOutputText.setText("No results returned.");
-            } else {
-                output.add(0, "Data retrieved using the Google Sheets API:");
-                mOutputText.setText(TextUtils.join("\n", output));
-            }
+        protected void onPostExecute(Long result) {
+            finish();
         }
 
-        @Override
         protected void onCancelled() {
             mProgress.hide();
             if (mLastError != null) {
@@ -408,12 +640,13 @@ public class ExportToSheetsActivity extends Activity implements
                             ((UserRecoverableAuthIOException) mLastError).getIntent(),
                             ExportToSheetsActivity.REQUEST_AUTHORIZATION);
                 } else {
-                    mOutputText.setText("The following error occurred:\n"
-                            + mLastError.getMessage());
+                    Log.e(TAG, mLastError.getMessage());
                 }
             } else {
-                mOutputText.setText("Request cancelled.");
+                Log.e(TAG, "Cancelled with no error");
             }
+
+            finish();
         }
     }
 }
