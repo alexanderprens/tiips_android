@@ -48,6 +48,7 @@ public class ViewReportsActivity extends AppCompatActivity implements
     public void onReportButtonPressed(int button) {
 
         Fragment fragment;
+        Intent intent;
 
         switch (button) {
             case ViewReportFragment.BUTTON_ITEM:
@@ -68,8 +69,17 @@ public class ViewReportsActivity extends AppCompatActivity implements
                 break;
 
             case ViewReportFragment.BUTTON_SHEET_EXPORT:
-                Intent intent = new Intent(ViewReportsActivity.this, ExportToSheetsActivity.class);
+                intent = new Intent(ViewReportsActivity.this, ExportToSheetsActivity.class);
                 startActivity(intent);
+                break;
+
+            case ViewReportFragment.BUTTON_DB_EXPORT:
+                intent = new Intent(ViewReportsActivity.this, ExportDBToDriveActivity.class);
+                startActivity(intent);
+                break;
+
+            case ViewReportFragment.BUTTON_SHIPMENT_SUMMARY:
+                // TODO: 3/19/2017 make shipment summary
                 break;
         }
     }

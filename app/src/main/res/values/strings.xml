@@ -162,6 +162,8 @@
     <string name="view_reports_past">Past Inventory Summary</string>
     <string name="view_reports_shipments">Shipment Summary</string>
     <string name="view_reports_sheets">Export to Sheets</string>
+    <string name="view_reports_db">Database Actions</string>
+    <string name="view_reports_export">Backup Database</string>
 
     <!-- dialog_barcode_summary -->
     <string name="dialog_barcode_summary_header">Choose Barcode for Summary</string>

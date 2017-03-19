@@ -42,8 +42,8 @@ import com.google.api.services.sheets.v4.model.SpreadsheetProperties;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
 import org.helpingkidsroundfirst.hkrf.R;
-import org.helpingkidsroundfirst.hkrf.Utility;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
+import org.helpingkidsroundfirst.hkrf.helper_classes.Utility;
 
 import java.util.ArrayList;
 import java.util.Arrays;

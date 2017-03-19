@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package org.helpingkidsroundfirst.hkrf;
+package org.helpingkidsroundfirst.hkrf.helper_classes;
 
 import android.app.Activity;
 import android.content.Intent;

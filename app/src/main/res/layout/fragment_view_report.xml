@@ -36,10 +36,30 @@
             android:text="@string/view_reports_past" />
 
         <Button
+            android:id="@+id/view_report_button_shipments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/view_reports_shipments" />
+
+        <TextView
+            android:id="@+id/textView45"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/view_reports_db"
+            android:textAlignment="center"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
+
+        <Button
             android:id="@+id/view_report_button_sheets"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/view_reports_sheets" />
+
+        <Button
+            android:id="@+id/view_report_button_export"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/view_reports_export" />
 
     </LinearLayout>
 </ScrollView>

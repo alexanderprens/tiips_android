@@ -20,8 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.helpingkidsroundfirst.hkrf.R;
-import org.helpingkidsroundfirst.hkrf.Utility;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
+import org.helpingkidsroundfirst.hkrf.helper_classes.Utility;
 
 import java.util.ArrayList;
 import java.util.Calendar;
