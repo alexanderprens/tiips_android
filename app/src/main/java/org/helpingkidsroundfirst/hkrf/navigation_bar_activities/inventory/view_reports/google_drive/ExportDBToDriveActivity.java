@@ -56,46 +56,47 @@ public class ExportDBToDriveActivity extends BaseDemoActivity {
                     final DriveContents driveContents = result.getDriveContents();
 
                     new Thread() {
-                @Override
-                public void run() {
-                    // write contents of database to drive
-                    try {
-                        InventoryDbHelper db = new InventoryDbHelper(ExportDBToDriveActivity.this);
-                        String inFileName = getApplicationContext().getDatabasePath(db.getDatabaseName()).getPath();
-                        FileInputStream is = new FileInputStream(inFileName);
-                        BufferedInputStream in = new BufferedInputStream(is);
-                        byte[] buffer = new byte[4 * 1024];
+                        @Override
+                        public void run() {
+                            // write contents of database to drive
+                            try {
+                                InventoryDbHelper db = new InventoryDbHelper(ExportDBToDriveActivity.this);
+                                String inFileName = getApplicationContext().getDatabasePath(db.getDatabaseName()).getPath();
+                                FileInputStream is = new FileInputStream(inFileName);
+                                BufferedInputStream in = new BufferedInputStream(is);
+                                byte[] buffer = new byte[4 * 1024];
 
-                        BufferedOutputStream out = new BufferedOutputStream(driveContents.getOutputStream());
-                        int n;
-                        while ((n = in.read(buffer)) > 0) {
-                            out.write(buffer, 0, n);
-                            out.flush();
+                                BufferedOutputStream out = new BufferedOutputStream(driveContents.getOutputStream());
+                                int n;
+                                while ((n = in.read(buffer)) > 0) {
+                                    out.write(buffer, 0, n);
+                                    out.flush();
+                                }
+                                in.close();
+                                out.close();
+                            } catch (java.io.IOException e) {
+                                Log.e(TAG, "Error writing db file");
+                            }
+
+                            // get file name string
+                            final Calendar c = Calendar.getInstance();
+                            String fileName = "HKRF Database Backup ";
+                            fileName += Utility.getDatePickerString(c.get(Calendar.YEAR),
+                                    c.get(Calendar.MONTH),
+                                    c.get(Calendar.DATE));
+
+                            //change the metadata of the file. by setting title, setMimeType.
+                            String mimeType = "application/x-sqlite3";   // sqlite mime type
+                            MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                                    .setTitle(fileName)
+                                    .setMimeType(mimeType)
+                                    .build();
+
+                            // change data
+                            Drive.DriveApi.getRootFolder(getGoogleApiClient())
+                                    .createFile(getGoogleApiClient(), changeSet, driveContents)
+                                    .setResultCallback(fileCallBack);
                         }
-                        in.close();
-                    } catch (java.io.IOException e) {
-                        Log.e(TAG, "Error writing db file");
-                    }
-
-                    // get file name string
-                    final Calendar c = Calendar.getInstance();
-                    String fileName = "HKRF Database Backup ";
-                    fileName += Utility.getDatePickerString(c.get(Calendar.YEAR),
-                            c.get(Calendar.MONTH),
-                            c.get(Calendar.DATE));
-
-                    //change the metadata of the file. by setting title, setMimeType.
-                    String mimeType = "application/x-sqlite3";   // sqlite mime type
-                    MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                            .setTitle(fileName)
-                            .setMimeType(mimeType)
-                            .build();
-
-                    // change data
-                    Drive.DriveApi.getRootFolder(getGoogleApiClient())
-                            .createFile(getGoogleApiClient(), changeSet, driveContents)
-                            .setResultCallback(fileCallBack);
-                }
                     }.start();
                 }
             };

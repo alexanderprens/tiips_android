@@ -32,6 +32,7 @@
     <string name="view_inventory_title">View Inventory</string>
     <string name="export_to_sheets_title">Export to Sheets</string>
     <string name="export_db_title">Export DB to Drive</string>
+    <string name="import_db_title">Import DB to Drive</string>
 
     <!-- content_main -->
     <string name="content_text" translatable="false">Helping Kids Round First Application</string>
@@ -164,6 +165,7 @@
     <string name="view_reports_sheets">Export to Sheets</string>
     <string name="view_reports_db">Database Actions</string>
     <string name="view_reports_export">Backup Database</string>
+    <string name="view_reports_import">Update Database</string>
 
     <!-- dialog_barcode_summary -->
     <string name="dialog_barcode_summary_header">Choose Barcode for Summary</string>
@@ -285,8 +287,5 @@
     <string name="error_cat_and_prefix_exists">Category and Prefix already exist</string>
     <string name="error_category_exists">Category already exists in database</string>
     <string name="error_prefix_exists">Prefix already exists in database</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -24,6 +24,7 @@ public class ViewReportFragment extends Fragment implements
     public static final int BUTTON_SHEET_EXPORT = 3;
     public static final int BUTTON_DB_EXPORT = 4;
     public static final int BUTTON_SHIPMENT_SUMMARY = 5;
+    public static final int BUTTON_DB_IMPORT = 6;
     private OnReportButtonPressed mListener;
 
     public ViewReportFragment() {
@@ -48,6 +49,8 @@ public class ViewReportFragment extends Fragment implements
         rootView.findViewById(R.id.view_report_button_export).setOnClickListener(this);
 
         rootView.findViewById(R.id.view_report_button_shipments).setOnClickListener(this);
+
+        rootView.findViewById(R.id.view_report_button_import).setOnClickListener(this);
 
         return rootView;
     }
@@ -95,6 +98,10 @@ public class ViewReportFragment extends Fragment implements
 
             case R.id.view_report_button_shipments:
                 mListener.onReportButtonPressed(BUTTON_SHIPMENT_SUMMARY);
+                break;
+
+            case R.id.view_report_button_import:
+                mListener.onReportButtonPressed(BUTTON_DB_IMPORT);
                 break;
         }
     }

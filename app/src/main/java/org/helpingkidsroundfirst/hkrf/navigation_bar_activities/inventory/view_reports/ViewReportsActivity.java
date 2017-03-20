@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports.google_drive.ExportDBToDriveActivity;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports.google_drive.ExportToSheetsActivity;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports.google_drive.UpdateDBFromDriveActivity;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports.item_summary.BarcodeSummaryFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports.item_summary.ViewBarcodeSummaryDialogFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports.shipment_summary.ShipmentSummaryDialogFragment;
@@ -90,6 +91,11 @@ public class ViewReportsActivity extends AppCompatActivity implements
                 fragmentManager = getSupportFragmentManager();
                 ShipmentSummaryDialogFragment dialogShip = new ShipmentSummaryDialogFragment();
                 dialogShip.show(fragmentManager, "open shipment summary dialog");
+                break;
+
+            case ViewReportFragment.BUTTON_DB_IMPORT:
+                intent = new Intent(ViewReportsActivity.this, UpdateDBFromDriveActivity.class);
+                startActivity(intent);
                 break;
         }
     }

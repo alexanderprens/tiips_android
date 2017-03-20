@@ -117,6 +117,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports.ViewReportsActivity" />
         </activity>
+        <activity
+            android:name=".navigation_bar_activities.inventory.view_reports.google_drive.UpdateDBFromDriveActivity"
+            android:label="@string/import_db_title"
+            android:parentActivityName=".navigation_bar_activities.inventory.view_reports.ViewReportsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports.ViewReportsActivity" />
+        </activity>
     </application>
 
 </manifest>
