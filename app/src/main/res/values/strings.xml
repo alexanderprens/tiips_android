@@ -198,6 +198,28 @@
     <!-- dialog_shiment_summary -->
     <string name="dialog_shipment_sum">Select Shipment Date</string>
 
+    <!-- ExportDBToDriveActivity -->
+    <string name="database_update_success">Successfully backed up database</string>
+    <string name="database_update_create_error">Error while creating database update file</string>
+    <string name="sqlite_mime_type" translatable="false">application/x-sqlite3</string>
+    <string name="database_update_progress">Backing up database&#8230;</string>
+    <string name="database_file_name">HKRF Database Backup </string>
+
+    <!-- ExportToSheetsActivity -->
+    <string name="export_sheets_progress">Exporting to Google Sheets&#8230;</string>
+    <string name="no_network">No network connection available.</string>
+    <string name="permissions_message">This app needs to access your Google account (via Contacts).</string>
+    <string name="google_play">This app requires Google Play Services. Please install Google Play Services on your device and relaunch this app.</string>
+    <string name="sheets_file_name">HKRF Inventory</string>
+    <string name="tab_barcode">Barcode Items</string>
+    <string name="tab_current">Current Inventory</string>
+    <string name="tab_past">Past Inventory</string>
+
+    <!-- UpdateDBFromDriveActivity -->
+    <string name="import_database_progress">Updating database&#8230;</string>
+    <string name="import_database_error">Error while updating database</string>
+    <string name="import_database_success">Database updated successfully</string>
+
     <!-- Locate Item Activity __________________________________________________________________-->
     <string name="title_activity_locate_item">Locate Item</string>
     <string name="ble_not_enabled">BLE not enabled</string>

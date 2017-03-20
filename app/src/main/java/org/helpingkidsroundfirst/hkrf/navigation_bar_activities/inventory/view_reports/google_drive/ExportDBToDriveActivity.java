@@ -12,6 +12,7 @@ import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.MetadataChangeSet;
 
+import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.data.InventoryDbHelper;
 import org.helpingkidsroundfirst.hkrf.helper_classes.BaseDemoActivity;
 import org.helpingkidsroundfirst.hkrf.helper_classes.Utility;
@@ -38,7 +39,7 @@ public class ExportDBToDriveActivity extends BaseDemoActivity {
                 finish();
                 return;
             }
-            showMessage("Successfully uploaded database");
+            showMessage(getResources().getString(R.string.database_update_success));
             finish();
         }
     };
@@ -48,7 +49,7 @@ public class ExportDBToDriveActivity extends BaseDemoActivity {
                 public void onResult(@NonNull DriveApi.DriveContentsResult result) {
                     if (!result.getStatus().isSuccess()) {
                         //if failure
-                        showMessage("Error while trying to create new file contents");
+                        showMessage(getResources().getString(R.string.database_update_create_error));
                         return;
                     }
 
@@ -80,13 +81,13 @@ public class ExportDBToDriveActivity extends BaseDemoActivity {
 
                             // get file name string
                             final Calendar c = Calendar.getInstance();
-                            String fileName = "HKRF Database Backup ";
+                            String fileName = getResources().getString(R.string.database_file_name);
                             fileName += Utility.getDatePickerString(c.get(Calendar.YEAR),
                                     c.get(Calendar.MONTH),
                                     c.get(Calendar.DATE));
 
                             //change the metadata of the file. by setting title, setMimeType.
-                            String mimeType = "application/x-sqlite3";   // sqlite mime type
+                            String mimeType = getResources().getString(R.string.sqlite_mime_type);
                             MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
                                     .setTitle(fileName)
                                     .setMimeType(mimeType)
@@ -114,7 +115,7 @@ public class ExportDBToDriveActivity extends BaseDemoActivity {
     public void onStart() {
         super.onStart();
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Backing up database");
+        progressDialog.setMessage(getResources().getString(R.string.database_update_progress));
         progressDialog.show();
     }
 

@@ -18,6 +18,7 @@ import com.google.android.gms.drive.DriveFile;
 import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.OpenFileActivityBuilder;
 
+import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.data.InventoryDbHelper;
 import org.helpingkidsroundfirst.hkrf.helper_classes.ApiClientAsyncTask;
 import org.helpingkidsroundfirst.hkrf.helper_classes.BaseDemoActivity;
@@ -44,7 +45,7 @@ public class UpdateDBFromDriveActivity extends BaseDemoActivity {
 
         IntentSender intentSender = Drive.DriveApi
                 .newOpenFileActivityBuilder()
-                .setMimeType(new String[]{"application/x-sqlite3"})
+                .setMimeType(new String[]{getResources().getString(R.string.sqlite_mime_type)})
                 .build(getGoogleApiClient());
         try {
             startIntentSenderForResult(
@@ -58,7 +59,7 @@ public class UpdateDBFromDriveActivity extends BaseDemoActivity {
     public void onStart() {
         super.onStart();
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Updating database");
+        progressDialog.setMessage(getResources().getString(R.string.import_database_progress));
         progressDialog.show();
     }
 
@@ -146,11 +147,11 @@ public class UpdateDBFromDriveActivity extends BaseDemoActivity {
             super.onPostExecute(result);
             if (!result) {
                 Log.e(TAG, "Error while reading from the file");
-                showMessage("Error while reading from the file");
+                showMessage(getResources().getString(R.string.import_database_error));
                 finish();
                 return;
             }
-            showMessage("Database updated successfully");
+            showMessage(getResources().getString(R.string.import_database_success));
             finish();
         }
     }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="current_inventory_sheet_header">
+        <item>Barcode #</item>
+        <item>Name</item>
+        <item>Description</item>
+        <item>Value</item>
+        <item>Quantity</item>
+        <item>Date Received</item>
+        <item>Donor</item>
+        <item>Warehouse</item>
+        <item>Category</item>
+    </string-array>
+
+    <string-array name="past_inventory_sheet_header">
+        <item>Barcode #</item>
+        <item>Name</item>
+        <item>Description</item>
+        <item>Value</item>
+        <item>Quantity</item>
+        <item>Date Shipped</item>
+        <item>Donor</item>
+        <item>Category</item>
+    </string-array>
+
+    <string-array name="item_inventory_sheet_header">
+        <item>Barcode #</item>
+        <item>Name</item>
+        <item>Description</item>
+        <item>Value</item>
+        <item>Category</item>
+    </string-array>
+</resources>

@@ -85,7 +85,7 @@ public class ExportToSheetsActivity extends Activity implements
 
         // start progress
         mProgress = new ProgressDialog(this);
-        mProgress.setMessage("Exporting to sheets");
+        mProgress.setMessage(getResources().getString(R.string.export_sheets_progress));
 
         // Initialize credentials and service object.
         mCredential = GoogleAccountCredential.usingOAuth2(
@@ -110,7 +110,7 @@ public class ExportToSheetsActivity extends Activity implements
         } else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
         } else if (!isDeviceOnline()) {
-            Toast.makeText(this, "No network connection available.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.no_network), Toast.LENGTH_LONG).show();
         } else {
             new ExportToSheetsTask(mCredential).execute();
         }
@@ -145,7 +145,7 @@ public class ExportToSheetsActivity extends Activity implements
             // Request the GET_ACCOUNTS permission via a user dialog
             EasyPermissions.requestPermissions(
                     this,
-                    "This app needs to access your Google account (via Contacts).",
+                    getResources().getString(R.string.permissions_message),
                     REQUEST_PERMISSION_GET_ACCOUNTS,
                     Manifest.permission.GET_ACCOUNTS);
         }
@@ -169,8 +169,7 @@ public class ExportToSheetsActivity extends Activity implements
         switch (requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != RESULT_OK) {
-                    Toast.makeText(this, "This app requires Google Play Services. Please install " +
-                                    "Google Play Services on your device and relaunch this app.",
+                    Toast.makeText(this, getResources().getString(R.string.google_play),
                             Toast.LENGTH_LONG).show();
                 } else {
                     getResultsFromApi();
@@ -306,6 +305,7 @@ public class ExportToSheetsActivity extends Activity implements
         private static final int CURRENT_ID = 1;
         private static final int INVENTORY_ID = 3;
         private static final int PAST_ID = 2;
+        private static final String MAJOR_DIMENSION = "ROWS";
         private com.google.api.services.sheets.v4.Sheets mService = null;
         private Exception mLastError;
         private String spreadSheetId;
@@ -368,7 +368,7 @@ public class ExportToSheetsActivity extends Activity implements
 
             // get file name string
             final Calendar c = Calendar.getInstance();
-            String fileName = "HKRF Inventory ";
+            String fileName = mContext.getResources().getString(R.string.sheets_file_name) + " ";
             fileName += Utility.getDatePickerString(c.get(Calendar.YEAR), c.get(Calendar.MONTH),
                     c.get(Calendar.DATE));
             properties.setTitle(fileName);
@@ -385,21 +385,21 @@ public class ExportToSheetsActivity extends Activity implements
             // barcode items
             requests.add(new Request()
                     .setAddSheet(new AddSheetRequest().setProperties(
-                            new SheetProperties().setTitle("Barcode Items")
+                            new SheetProperties().setTitle(mContext.getResources().getString(R.string.tab_barcode))
                                     .setSheetId(INVENTORY_ID)))
             );
 
             // current inventory
             requests.add(new Request()
                     .setAddSheet(new AddSheetRequest().setProperties(
-                            new SheetProperties().setTitle("Current Inventory")
+                            new SheetProperties().setTitle(mContext.getResources().getString(R.string.tab_current))
                                     .setSheetId(CURRENT_ID)))
             );
 
             // past inventory
             requests.add(new Request()
                     .setAddSheet(new AddSheetRequest().setProperties(
-                            new SheetProperties().setTitle("Past Inventory")
+                            new SheetProperties().setTitle(mContext.getResources().getString(R.string.tab_past))
                                     .setSheetId(PAST_ID)))
             );
 
@@ -415,9 +415,7 @@ public class ExportToSheetsActivity extends Activity implements
 
         private ValueRange getCurrentData() {
             // create header row
-            final String[] header = {"Barcode #", "Name", "Description", "Value", "Quantity",
-                    "Date Received", "Donor", "Warehouse", "Category"
-            };
+            final String[] header = mContext.getResources().getStringArray(R.array.current_inventory_sheet_header);
 
             // get cursor of values
             final String[] projection = {
@@ -472,9 +470,9 @@ public class ExportToSheetsActivity extends Activity implements
             }
 
             // create api valueRange
-            String range = "Current Inventory" + "!A1";
+            String range = mContext.getResources().getString(R.string.tab_current) + "!A1";
             ValueRange valueRange = new ValueRange();
-            valueRange.setMajorDimension("ROWS");
+            valueRange.setMajorDimension(MAJOR_DIMENSION);
             valueRange.setRange(range);
             valueRange.setValues(values);
             return valueRange;
@@ -482,9 +480,7 @@ public class ExportToSheetsActivity extends Activity implements
 
         private ValueRange getPastData() {
             // create header row
-            final String[] header = {"Barcode #", "Name", "Description", "Value", "Quantity",
-                    "Date Shipped", "Donor", "Category"
-            };
+            final String[] header = mContext.getResources().getStringArray(R.array.past_inventory_sheet_header);
 
             // get cursor of values
             final String[] projection = {
@@ -538,9 +534,9 @@ public class ExportToSheetsActivity extends Activity implements
             }
 
             // create api valueRange
-            String range = "Past Inventory" + "!A1";
+            String range = mContext.getResources().getString(R.string.tab_past) + "!A1";
             ValueRange valueRange = new ValueRange();
-            valueRange.setMajorDimension("ROWS");
+            valueRange.setMajorDimension(MAJOR_DIMENSION);
             valueRange.setRange(range);
             valueRange.setValues(values);
             return valueRange;
@@ -548,7 +544,7 @@ public class ExportToSheetsActivity extends Activity implements
 
         private ValueRange getItemData() {
             // create header row
-            final String[] header = {"Barcode #", "Name", "Description", "Value", "Category"};
+            final String[] header = mContext.getResources().getStringArray(R.array.item_inventory_sheet_header);
 
             // get cursor of values
             final String[] projection = {
@@ -599,9 +595,9 @@ public class ExportToSheetsActivity extends Activity implements
             }
 
             // create api valueRange
-            String range = "Barcode Items" + "!A1";
+            String range = mContext.getResources().getString(R.string.tab_barcode) + "!A1";
             ValueRange valueRange = new ValueRange();
-            valueRange.setMajorDimension("ROWS");
+            valueRange.setMajorDimension(MAJOR_DIMENSION);
             valueRange.setRange(range);
             valueRange.setValues(values);
             return valueRange;
