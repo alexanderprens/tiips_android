@@ -1,6 +1,8 @@
 package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -26,6 +28,7 @@ public class ViewReportFragment extends Fragment implements
     public static final int BUTTON_SHIPMENT_SUMMARY = 5;
     public static final int BUTTON_DB_IMPORT = 6;
     private OnReportButtonPressed mListener;
+    private DialogInterface.OnClickListener dialogClickListener;
 
     public ViewReportFragment() {
         // Required empty public constructor
@@ -51,6 +54,18 @@ public class ViewReportFragment extends Fragment implements
         rootView.findViewById(R.id.view_report_button_shipments).setOnClickListener(this);
 
         rootView.findViewById(R.id.view_report_button_import).setOnClickListener(this);
+
+        // implement delete button
+        dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        mListener.onReportButtonPressed(BUTTON_DB_IMPORT);
+                        break;
+                }
+            }
+        };
 
         return rootView;
     }
@@ -101,7 +116,12 @@ public class ViewReportFragment extends Fragment implements
                 break;
 
             case R.id.view_report_button_import:
-                mListener.onReportButtonPressed(BUTTON_DB_IMPORT);
+                // call dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setMessage(R.string.view_reports_sure)
+                        .setPositiveButton(R.string.are_you_sure_yes, dialogClickListener)
+                        .setNegativeButton(R.string.are_you_sure_no, dialogClickListener)
+                        .show();
                 break;
         }
     }

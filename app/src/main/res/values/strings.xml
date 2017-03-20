@@ -166,6 +166,7 @@
     <string name="view_reports_db">Database Actions</string>
     <string name="view_reports_export">Backup Database</string>
     <string name="view_reports_import">Update Database</string>
+    <string name="view_reports_sure">This will replace the current database with the selected Drive database. Are you sure?</string>
 
     <!-- dialog_barcode_summary -->
     <string name="dialog_barcode_summary_header">Choose Barcode for Summary</string>

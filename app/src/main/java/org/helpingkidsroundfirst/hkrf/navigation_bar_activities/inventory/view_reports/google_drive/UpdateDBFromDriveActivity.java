@@ -6,16 +6,17 @@ package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi.DriveContentsResult;
-import com.google.android.gms.drive.DriveApi.DriveIdResult;
 import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFile;
 import com.google.android.gms.drive.DriveId;
+import com.google.android.gms.drive.OpenFileActivityBuilder;
 
 import org.helpingkidsroundfirst.hkrf.data.InventoryDbHelper;
 import org.helpingkidsroundfirst.hkrf.helper_classes.ApiClientAsyncTask;
@@ -32,13 +33,7 @@ import java.io.IOException;
 public class UpdateDBFromDriveActivity extends BaseDemoActivity {
 
     private static final String TAG = "UpdateDBFromActivity";
-    final private ResultCallback<DriveIdResult> idCallback = new ResultCallback<DriveIdResult>() {
-        @Override
-        public void onResult(DriveIdResult result) {
-            new RetrieveDriveFileContentsAsyncTask(
-                    UpdateDBFromDriveActivity.this).execute(result.getDriveId());
-        }
-    };
+    private static final int REQUEST_CODE_OPENER = 1;
     private Context mContext;
     private ProgressDialog progressDialog;
 
@@ -46,8 +41,17 @@ public class UpdateDBFromDriveActivity extends BaseDemoActivity {
     public void onConnected(Bundle connectionHint) {
         super.onConnected(connectionHint);
         mContext = UpdateDBFromDriveActivity.this;
-        Drive.DriveApi.fetchDriveId(getGoogleApiClient(), EXISTING_FILE_ID)
-                .setResultCallback(idCallback);
+
+        IntentSender intentSender = Drive.DriveApi
+                .newOpenFileActivityBuilder()
+                .setMimeType(new String[]{"application/x-sqlite3"})
+                .build(getGoogleApiClient());
+        try {
+            startIntentSenderForResult(
+                    intentSender, REQUEST_CODE_OPENER, null, 0, 0, 0);
+        } catch (IntentSender.SendIntentException e) {
+            Log.w(TAG, "Unable to send intent", e);
+        }
     }
 
     @Override
@@ -59,16 +63,40 @@ public class UpdateDBFromDriveActivity extends BaseDemoActivity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        progressDialog.show();
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
 
         progressDialog.hide();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CODE_OPENER:
+                if (resultCode == RESULT_OK) {
+                    DriveId driveId = data.getParcelableExtra(
+                            OpenFileActivityBuilder.EXTRA_RESPONSE_DRIVE_ID);
+
+                    new RetrieveDriveFileContentsAsyncTask(
+                            UpdateDBFromDriveActivity.this).execute(driveId);
+                }
+                finish();
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
     final private class RetrieveDriveFileContentsAsyncTask
             extends ApiClientAsyncTask<DriveId, Boolean, Boolean> {
 
-        public RetrieveDriveFileContentsAsyncTask(Context context) {
+        private RetrieveDriveFileContentsAsyncTask(Context context) {
             super(context);
         }
 
@@ -117,11 +145,12 @@ public class UpdateDBFromDriveActivity extends BaseDemoActivity {
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
             if (!result) {
+                Log.e(TAG, "Error while reading from the file");
                 showMessage("Error while reading from the file");
                 finish();
                 return;
             }
-            showMessage("File read successfully");
+            showMessage("Database updated successfully");
             finish();
         }
     }
