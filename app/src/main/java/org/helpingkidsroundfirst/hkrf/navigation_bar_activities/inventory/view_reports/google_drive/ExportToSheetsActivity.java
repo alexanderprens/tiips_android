@@ -34,11 +34,20 @@ import com.google.api.services.sheets.v4.model.AddSheetRequest;
 import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest;
 import com.google.api.services.sheets.v4.model.BatchUpdateValuesRequest;
 import com.google.api.services.sheets.v4.model.BatchUpdateValuesResponse;
+import com.google.api.services.sheets.v4.model.Border;
+import com.google.api.services.sheets.v4.model.Borders;
+import com.google.api.services.sheets.v4.model.CellData;
+import com.google.api.services.sheets.v4.model.CellFormat;
 import com.google.api.services.sheets.v4.model.DeleteSheetRequest;
+import com.google.api.services.sheets.v4.model.GridProperties;
+import com.google.api.services.sheets.v4.model.GridRange;
+import com.google.api.services.sheets.v4.model.RepeatCellRequest;
 import com.google.api.services.sheets.v4.model.Request;
 import com.google.api.services.sheets.v4.model.SheetProperties;
 import com.google.api.services.sheets.v4.model.Spreadsheet;
 import com.google.api.services.sheets.v4.model.SpreadsheetProperties;
+import com.google.api.services.sheets.v4.model.TextFormat;
+import com.google.api.services.sheets.v4.model.UpdateSheetPropertiesRequest;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
 import org.helpingkidsroundfirst.hkrf.R;
@@ -305,10 +314,16 @@ public class ExportToSheetsActivity extends Activity implements
         private static final int CURRENT_ID = 1;
         private static final int INVENTORY_ID = 3;
         private static final int PAST_ID = 2;
+        private static final int CURRENT_COL_COUNT = 9;
+        private static final int PAST_COL_COUNT = 8;
+        private static final int ITEM_COL_COUNT = 5;
         private static final String MAJOR_DIMENSION = "ROWS";
         private com.google.api.services.sheets.v4.Sheets mService = null;
         private Exception mLastError;
         private String spreadSheetId;
+        private int currentRowCount;
+        private int pastRowCount;
+        private int itemRowCount;
 
         ExportToSheetsTask(GoogleAccountCredential credential) {
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
@@ -334,7 +349,7 @@ public class ExportToSheetsActivity extends Activity implements
 
             // attempt to rename inventory item sheet
             try {
-                updatedSheets();
+                createSheets();
             } catch (java.io.IOException e) {
                 mLastError = e;
                 cancel(true);
@@ -357,7 +372,13 @@ public class ExportToSheetsActivity extends Activity implements
             }
 
             // attempt to format spreadsheets
-
+            try {
+                formatSheets();
+            } catch (java.io.IOException e) {
+                mLastError = e;
+                cancel(true);
+                return null;
+            }
 
             return null;
         }
@@ -379,7 +400,7 @@ public class ExportToSheetsActivity extends Activity implements
             spreadSheetId = spreadsheet.getSpreadsheetId();
         }
 
-        private void updatedSheets() throws java.io.IOException {
+        private void createSheets() throws java.io.IOException {
             List<Request> requests = new ArrayList<>();
 
             // barcode items
@@ -469,6 +490,8 @@ public class ExportToSheetsActivity extends Activity implements
                 cursor.close();
             }
 
+            currentRowCount = values.size();
+
             // create api valueRange
             String range = mContext.getResources().getString(R.string.tab_current) + "!A1";
             ValueRange valueRange = new ValueRange();
@@ -533,6 +556,8 @@ public class ExportToSheetsActivity extends Activity implements
                 cursor.close();
             }
 
+            pastRowCount = values.size();
+
             // create api valueRange
             String range = mContext.getResources().getString(R.string.tab_past) + "!A1";
             ValueRange valueRange = new ValueRange();
@@ -594,6 +619,8 @@ public class ExportToSheetsActivity extends Activity implements
                 cursor.close();
             }
 
+            itemRowCount = values.size();
+
             // create api valueRange
             String range = mContext.getResources().getString(R.string.tab_barcode) + "!A1";
             ValueRange valueRange = new ValueRange();
@@ -614,6 +641,129 @@ public class ExportToSheetsActivity extends Activity implements
                     .batchUpdate(spreadSheetId, requestBody);
 
             BatchUpdateValuesResponse response = request.execute();
+        }
+
+        private void formatSheets() throws java.io.IOException {
+            final String BORDER_SOLID = "SOLID";
+            final int BORDER_WIDTH = 1;
+            final Border BORDER_DEFAULT = new Border()
+                    .setStyle(BORDER_SOLID)
+                    .setWidth(BORDER_WIDTH);
+
+            List<Request> requests = new ArrayList<>();
+
+            // update header row -------------------------------------------------------------------
+            final String ALIGNMENT = "CENTER";
+            final CellData HEADER_CELL = new CellData()
+                    .setUserEnteredFormat(new CellFormat()
+                            .setHorizontalAlignment(ALIGNMENT)
+                            .setTextFormat(new TextFormat()
+                                    .setBold(true)));
+
+            // current inv
+            requests.add(new Request()
+                    .setRepeatCell(new RepeatCellRequest()
+                            .setRange(new GridRange()
+                                    .setSheetId(CURRENT_ID)
+                                    .setStartRowIndex(0)
+                                    .setEndRowIndex(1))
+                            .setCell(HEADER_CELL)
+                            .setFields("userEnteredFormat(textFormat,horizontalAlignment)")));
+
+            requests.add(new Request()
+                    .setUpdateSheetProperties(new UpdateSheetPropertiesRequest()
+                            .setProperties(new SheetProperties().setSheetId(CURRENT_ID)
+                                    .setGridProperties(new GridProperties()
+                                            .setFrozenRowCount(1)))
+                            .setFields("gridProperties.frozenRowCount")));
+
+            // past inv
+            requests.add(new Request()
+                    .setRepeatCell(new RepeatCellRequest()
+                            .setRange(new GridRange()
+                                    .setSheetId(PAST_ID)
+                                    .setStartRowIndex(0)
+                                    .setEndRowIndex(1))
+                            .setCell(HEADER_CELL)
+                            .setFields("userEnteredFormat(textFormat,horizontalAlignment)")));
+
+            requests.add(new Request()
+                    .setUpdateSheetProperties(new UpdateSheetPropertiesRequest()
+                            .setProperties(new SheetProperties().setSheetId(PAST_ID)
+                                    .setGridProperties(new GridProperties()
+                                            .setFrozenRowCount(1)))
+                            .setFields("gridProperties.frozenRowCount")));
+
+            // item inv
+            requests.add(new Request()
+                    .setRepeatCell(new RepeatCellRequest()
+                            .setRange(new GridRange()
+                                    .setSheetId(INVENTORY_ID)
+                                    .setStartRowIndex(0)
+                                    .setEndRowIndex(1))
+                            .setCell(HEADER_CELL)
+                            .setFields("userEnteredFormat(textFormat,horizontalAlignment)")));
+
+            requests.add(new Request()
+                    .setUpdateSheetProperties(new UpdateSheetPropertiesRequest()
+                            .setProperties(new SheetProperties().setSheetId(INVENTORY_ID)
+                                    .setGridProperties(new GridProperties()
+                                            .setFrozenRowCount(1)))
+                            .setFields("gridProperties.frozenRowCount")));
+
+            // format all data ---------------------------------------------------------------------
+            final String WRAP_STRATEGY = "WRAP";
+            final CellData ALL_CELLS = new CellData()
+                    .setUserEnteredFormat(new CellFormat()
+                            .setWrapStrategy(WRAP_STRATEGY)
+                            .setBorders(new Borders()
+                                    .setTop(BORDER_DEFAULT)
+                                    .setBottom(BORDER_DEFAULT)
+                                    .setLeft(BORDER_DEFAULT)
+                                    .setRight(BORDER_DEFAULT)));
+
+            // current inv
+            requests.add(new Request()
+                    .setRepeatCell(new RepeatCellRequest()
+                            .setRange(new GridRange()
+                                    .setSheetId(CURRENT_ID)
+                                    .setStartColumnIndex(0)
+                                    .setStartRowIndex(0)
+                                    .setEndColumnIndex(CURRENT_COL_COUNT)
+                                    .setEndRowIndex(currentRowCount)
+                            )
+                            .setCell(ALL_CELLS)
+                            .setFields("userEnteredFormat(wrapStrategy,borders)")));
+
+            // past inv
+            requests.add(new Request()
+                    .setRepeatCell(new RepeatCellRequest()
+                            .setRange(new GridRange()
+                                    .setSheetId(PAST_ID)
+                                    .setStartColumnIndex(0)
+                                    .setStartRowIndex(0)
+                                    .setEndColumnIndex(PAST_COL_COUNT)
+                                    .setEndRowIndex(pastRowCount)
+                            )
+                            .setCell(ALL_CELLS)
+                            .setFields("userEnteredFormat(wrapStrategy,borders)")));
+
+            // barcode inv
+            requests.add(new Request()
+                    .setRepeatCell(new RepeatCellRequest()
+                            .setRange(new GridRange()
+                                    .setSheetId(INVENTORY_ID)
+                                    .setStartColumnIndex(0)
+                                    .setStartRowIndex(0)
+                                    .setEndColumnIndex(ITEM_COL_COUNT)
+                                    .setEndRowIndex(pastRowCount)
+                            )
+                            .setCell(ALL_CELLS)
+                            .setFields("userEnteredFormat(wrapStrategy,borders)")));
+
+            BatchUpdateSpreadsheetRequest body =
+                    new BatchUpdateSpreadsheetRequest().setRequests(requests);
+            mService.spreadsheets().batchUpdate(spreadSheetId, body).execute();
         }
 
         protected void onPreExecute() {
