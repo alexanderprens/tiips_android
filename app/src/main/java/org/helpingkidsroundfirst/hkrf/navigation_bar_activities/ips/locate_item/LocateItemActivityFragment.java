@@ -16,6 +16,7 @@ import org.helpingkidsroundfirst.hkrf.R;
 public class LocateItemActivityFragment extends Fragment {
 
     public static final int BUTTON_CHOOSE = 1;
+    public static final int BUTTON_LOCATE = 2;
     private LocateItemListener mListener;
 
 
@@ -43,6 +44,14 @@ public class LocateItemActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mListener.onButtonPressed(BUTTON_CHOOSE);
+            }
+        });
+
+        final Button locateButton = (Button) rootView.findViewById(R.id.locate_button_coord);
+        locateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onButtonPressed(BUTTON_LOCATE);
             }
         });
 

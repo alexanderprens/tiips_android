@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.scan_devices.ScanBLEDevicesFragment;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.scan_devices.ShowLocationFragment;
 
 public class LocateItemActivity extends AppCompatActivity implements
         LocateItemActivityFragment.LocateItemListener,
@@ -42,6 +43,11 @@ public class LocateItemActivity extends AppCompatActivity implements
             case LocateItemActivityFragment.BUTTON_CHOOSE:
                 fragment = new ScanBLEDevicesFragment();
                 startFragment(fragment, "ScanBLEDevicesFragment");
+                break;
+
+            case LocateItemActivityFragment.BUTTON_LOCATE:
+                fragment = new ShowLocationFragment();
+                startFragment(fragment, "ShowLocationFragment");
                 break;
         }
     }

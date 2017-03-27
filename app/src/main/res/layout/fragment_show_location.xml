@@ -1,0 +1,66 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.scan_devices.ShowLocationFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView52"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Location Test" />
+
+        <EditText
+            android:id="@+id/master_beacon_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Master"
+            android:inputType="textCapCharacters"
+            android:maxLength="2" />
+
+        <EditText
+            android:id="@+id/side_becon1_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Side 1"
+            android:inputType="textCapCharacters"
+            android:maxLength="2" />
+
+        <EditText
+            android:id="@+id/side_becon2_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Side 2"
+            android:inputType="textCapCharacters"
+            android:maxLength="2" />
+
+        <EditText
+            android:id="@+id/side_becon3_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Side 3"
+            android:inputType="textCapCharacters"
+            android:maxLength="2" />
+
+        <Button
+            android:id="@+id/show_location_calc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Calculate" />
+
+        <TextView
+            android:id="@+id/show_location_coord"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</ScrollView>
