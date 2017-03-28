@@ -2,6 +2,7 @@ package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item
 
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -38,6 +39,7 @@ public class ScanBLEDevicesFragment extends Fragment {
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mBluetoothLeScanner;
     private Handler mHandler;
+    private ProgressDialog progressDialog;
     // Device scan callback.
     private ScanCallback mScanCallback = new ScanCallback() {
         @Override
@@ -45,6 +47,7 @@ public class ScanBLEDevicesFragment extends Fragment {
             super.onScanResult(callbackType, result);
             mLeDeviceListAdapter.addResult(result);
             mLeDeviceListAdapter.notifyDataSetChanged();
+            progressDialog.hide();
         }
 
         @Override
@@ -53,6 +56,7 @@ public class ScanBLEDevicesFragment extends Fragment {
                 mLeDeviceListAdapter.addResult(sr);
                 mLeDeviceListAdapter.notifyDataSetChanged();
             }
+            progressDialog.hide();
         }
 
         @Override
@@ -95,6 +99,10 @@ public class ScanBLEDevicesFragment extends Fragment {
         if (mBluetoothAdapter == null) {
             ((ScanBLEListener) getActivity()).BTNotEnabled();
         }
+
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getResources().getString(R.string.scanning_devices));
+        progressDialog.show();
 
         return rootView;
     }
