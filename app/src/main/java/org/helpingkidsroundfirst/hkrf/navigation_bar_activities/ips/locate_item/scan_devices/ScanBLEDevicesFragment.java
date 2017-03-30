@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
@@ -21,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.helpingkidsroundfirst.hkrf.R;
 
@@ -32,8 +34,9 @@ import java.util.List;
  */
 public class ScanBLEDevicesFragment extends Fragment {
 
-    private final static int REQUEST_ENABLE_BT = 10;
-    private static final long SCAN_PERIOD = 10000;
+    private static final int REQUEST_ENABLE_BT = 10;
+    private static final long SCAN_PERIOD = 5000;
+    private static final String MASTER_NAME = "TIIPS";
     private ListView listView;
     private LeDeviceListAdapter mLeDeviceListAdapter;
     private BluetoothAdapter mBluetoothAdapter;
@@ -61,8 +64,11 @@ public class ScanBLEDevicesFragment extends Fragment {
 
         @Override
         public void onScanFailed(int errorCode) {
-            //Toast.makeText(getContext(), "FUCK", Toast.LENGTH_SHORT).show();
+
         }
+    };
+
+    private BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
 
     };
 
@@ -82,8 +88,7 @@ public class ScanBLEDevicesFragment extends Fragment {
         listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((ScanBLEListener) getActivity()).onResultSelected(
-                        mLeDeviceListAdapter.getScanResult(position));
+                getCharacteristicData(mLeDeviceListAdapter.getScanResult(position));
             }
 
             @Override
@@ -160,10 +165,22 @@ public class ScanBLEDevicesFragment extends Fragment {
         }
     }
 
+    private void getCharacteristicData(ScanResult result) {
+        // check if selected is a master beacon
+        BluetoothDevice device = result.getDevice();
+        if (!device.getName().equals(MASTER_NAME)) {
+            // warn the user that this isn't the master beacon
+            Toast.makeText(getContext(), getContext().getResources().getString(R.string.not_master),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // connect to gatt server
+
+    }
+
     public interface ScanBLEListener {
         void BTNotEnabled();
-
-        void onResultSelected(ScanResult result);
     }
 
     static class ViewHolder {

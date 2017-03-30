@@ -230,6 +230,7 @@
     <!-- fragment_scan_ble_devices -->
     <string name="unknown_device">Unknown device</string>
     <string name="scanning_devices">Scanning for BLE devices&#8230;</string>
+    <string name="not_master">Please choose the device named "TIIPS"</string>
 
     <!-- Generic Strings _______________________________________________________________________-->
     <!-- generic button strings -->
