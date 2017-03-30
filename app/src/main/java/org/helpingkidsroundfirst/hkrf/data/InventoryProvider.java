@@ -34,6 +34,8 @@ public class InventoryProvider extends ContentProvider {
     static final int SHIP_INVENTORY = 600;
     static final int SHIP_INVENTORY_WITH_ID = 601;
     static final int SHIP_INVENTORY_WITH_CATEGORY = 602;
+    static final int TAGS = 700;
+    static final int TAGS_WITH_ID = 701;
     // The URI matcher used by this content provider
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     // Make Query builders for joined tables
@@ -78,6 +80,10 @@ public class InventoryProvider extends ContentProvider {
     private static final String sShipInventoryIdSelection =
             InventoryContract.ShipInventoryEntry.TABLE_NAME + "." +
                     InventoryContract.ShipInventoryEntry._ID + " = ? ";
+    // tags with id
+    private static final String sTagsIdSelection =
+            InventoryContract.TagEntry.TABLE_NAME + "." +
+                    InventoryContract.TagEntry._ID + " = ? ";
     static {
         sInventoryItemQueryBuilder = new SQLiteQueryBuilder();
 
@@ -204,6 +210,10 @@ public class InventoryProvider extends ContentProvider {
                 SHIP_INVENTORY_WITH_ID);
         matcher.addURI(authority, InventoryContract.PATH_SHIP_INVENTORY + "/*/#",
                 SHIP_INVENTORY_WITH_CATEGORY);
+
+        // tags codes
+        matcher.addURI(authority, InventoryContract.PATH_TAGS, TAGS);
+        matcher.addURI(authority, InventoryContract.PATH_TAGS + "/*", TAGS);
 
         return matcher;
     }
@@ -364,6 +374,21 @@ public class InventoryProvider extends ContentProvider {
         );
     }
 
+    // tags with id
+    private Cursor getTagsById(Uri uri, String[] projection, String sortOrder) {
+        long tagId = InventoryContract.TagEntry.getTagIdFromUri(uri);
+
+        return mOpenHelper.getReadableDatabase().query(
+                InventoryContract.TagEntry.TABLE_NAME,
+                projection,
+                sTagsIdSelection,
+                new String[]{Long.toString(tagId)},
+                null,
+                null,
+                sortOrder
+        );
+    }
+
     // create provider
     @Override
     public boolean onCreate() {
@@ -415,6 +440,10 @@ public class InventoryProvider extends ContentProvider {
                 return InventoryContract.ShipInventoryEntry.CONTENT_ITEM_TYPE;
             case SHIP_INVENTORY_WITH_CATEGORY:
                 return InventoryContract.ShipInventoryEntry.CONTENT_TYPE;
+            case TAGS:
+                return InventoryContract.TagEntry.CONTENT_TYPE;
+            case TAGS_WITH_ID:
+                return InventoryContract.TagEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -538,6 +567,22 @@ public class InventoryProvider extends ContentProvider {
                 retCursor = getShipInventoryByCategory(uri, projection, sortOrder);
                 break;
 
+            case TAGS:
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        InventoryContract.TagEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+
+            case TAGS_WITH_ID:
+                retCursor = getTagsById(uri, projection, sortOrder);
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -615,6 +660,16 @@ public class InventoryProvider extends ContentProvider {
                 break;
             }
 
+            case TAGS: {
+                long _id = db.insert(InventoryContract.TagEntry.TABLE_NAME, null, values);
+                if (_id > 0) {
+                    returnUri = InventoryContract.TagEntry.buildTagWithIdUri(_id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
+            }
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -659,6 +714,11 @@ public class InventoryProvider extends ContentProvider {
 
             case SHIP_INVENTORY:
                 rowsDeleted = db.delete(InventoryContract.ShipInventoryEntry.TABLE_NAME,
+                        selection, selectionArgs);
+                break;
+
+            case TAGS:
+                rowsDeleted = db.delete(InventoryContract.TagEntry.TABLE_NAME,
                         selection, selectionArgs);
                 break;
 
@@ -708,6 +768,11 @@ public class InventoryProvider extends ContentProvider {
 
             case SHIP_INVENTORY:
                 rowsUpdated = db.update(InventoryContract.ShipInventoryEntry.TABLE_NAME,
+                        values, selection, selectionArgs);
+                break;
+
+            case TAGS:
+                rowsUpdated = db.update(InventoryContract.TagEntry.TABLE_NAME,
                         values, selection, selectionArgs);
                 break;
 

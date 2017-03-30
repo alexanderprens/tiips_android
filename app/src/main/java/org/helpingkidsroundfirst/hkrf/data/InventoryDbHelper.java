@@ -11,6 +11,7 @@ import org.helpingkidsroundfirst.hkrf.data.InventoryContract.ItemEntry;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.PastInventoryEntry;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.ReceiveInventoryEntry;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.ShipInventoryEntry;
+import org.helpingkidsroundfirst.hkrf.data.InventoryContract.TagEntry;
 
 /**
  * Manages the local database
@@ -21,7 +22,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
     static final String DATABASE_NAME = "inventory.db";
     //change when database changes
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 15;
 
     public InventoryDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -115,6 +116,21 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY (" + ShipInventoryEntry.COLUMN_CATEGORY_KEY + ") REFERENCES " +
                 CategoryEntry.TABLE_NAME + " (" + CategoryEntry._ID + "));";
 
+        // create tags table
+        final String SQL_CREATE_TAGS_TABLE = "CREATE TABLE " +
+                TagEntry.TABLE_NAME + " (" +
+                TagEntry._ID + " INTEGER PRIMARY KEY, " +
+                TagEntry.COLUMN_ID + " TEXT NOT NULL, " +
+                TagEntry.COLUMN_NAME + " TEXT, " +
+                TagEntry.COLUMN_ACTIVE + " BOOLEAN, " +
+                TagEntry.COLUMN_DATE + " TEXT, " +
+                TagEntry.COLUMN_BATTERY + " FLOAT, " +
+                TagEntry.COLUMN_RSSI_M + " TEXT, " +
+                TagEntry.COLUMN_RSSI_1 + " TEXT, " +
+                TagEntry.COLUMN_RSSI_2 + " TEXT, " +
+                TagEntry.COLUMN_RSSI_3 + ");";
+
+
         // execute SQL commands
         sqLiteDatabase.execSQL(SQL_CREATE_CATEGORY_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_ITEM_TABLE);
@@ -122,6 +138,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_PAST_INVENTORY_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_RECEIVE_INVENTORY_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_SHIP_INVENTORY_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_TAGS_TABLE);
 
         // insert "Un-categorized" into category table
         ContentValues defaultCategory = new ContentValues();
@@ -143,6 +160,23 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ReceiveInventoryEntry.TABLE_NAME);
             sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ShipInventoryEntry.TABLE_NAME);
             onCreate(sqLiteDatabase);
+
+        } else if (oldVersion == 14) {
+            // create tags table
+            final String SQL_CREATE_TAGS_TABLE = "CREATE TABLE " +
+                    TagEntry.TABLE_NAME + " (" +
+                    TagEntry._ID + " INTEGER PRIMARY KEY, " +
+                    TagEntry.COLUMN_ID + " TEXT NOT NULL, " +
+                    TagEntry.COLUMN_NAME + " TEXT, " +
+                    TagEntry.COLUMN_ACTIVE + " BOOLEAN, " +
+                    TagEntry.COLUMN_DATE + " TEXT, " +
+                    TagEntry.COLUMN_BATTERY + " FLOAT, " +
+                    TagEntry.COLUMN_RSSI_M + " TEXT, " +
+                    TagEntry.COLUMN_RSSI_1 + " TEXT, " +
+                    TagEntry.COLUMN_RSSI_2 + " TEXT, " +
+                    TagEntry.COLUMN_RSSI_3 + ");";
+
+            sqLiteDatabase.execSQL(SQL_CREATE_TAGS_TABLE);
         }
     }
 }

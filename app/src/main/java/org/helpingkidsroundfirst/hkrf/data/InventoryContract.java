@@ -25,6 +25,7 @@ public class InventoryContract {
     public static final String PATH_PAST_INVENTORY = "past_inventory";
     public static final String PATH_RECEIVE_INVENTORY = "receive_inventory";
     public static final String PATH_SHIP_INVENTORY = "ship_inventory";
+    public static final String PATH_TAGS = "tags";
 
     /* Define Category Table */
     public static final class CategoryEntry implements BaseColumns {
@@ -279,6 +280,43 @@ public class InventoryContract {
 
         public static Long getCategoryFromUri(Uri uri) {
             return Long.parseLong(uri.getPathSegments().get(2));
+        }
+    }
+
+    /* Define Tags Table */
+    public static final class TagEntry implements BaseColumns {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_TAGS).build();
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TAGS;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TAGS;
+
+        // Table name
+        public static final String TABLE_NAME = "tags";
+
+        // Table columns
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_ID = "tag_id";
+        public static final String COLUMN_RSSI_M = "rssi_m";
+        public static final String COLUMN_RSSI_1 = "rssi_1";
+        public static final String COLUMN_RSSI_2 = "rssi_2";
+        public static final String COLUMN_RSSI_3 = "rssi_3";
+        public static final String COLUMN_BATTERY = "battery";
+        public static final String COLUMN_ACTIVE = "active";
+        public static final String COLUMN_DATE = "date";
+
+        // Uri builders and handlers
+        public static Uri buildTagUri() {
+            return CONTENT_URI;
+        }
+
+        public static Uri buildTagWithIdUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        public static long getTagIdFromUri(Uri uri) {
+            return Long.parseLong(uri.getPathSegments().get(1));
         }
     }
 }
