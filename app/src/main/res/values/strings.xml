@@ -33,6 +33,7 @@
     <string name="export_to_sheets_title">Export to Sheets</string>
     <string name="export_db_title">Export DB to Drive</string>
     <string name="import_db_title">Import DB to Drive</string>
+    <string name="get_master_info">Get Master Info</string>
 
     <!-- content_main -->
     <string name="content_text" translatable="false">Helping Kids Round First Application</string>
@@ -231,6 +232,8 @@
     <string name="unknown_device">Unknown device</string>
     <string name="scanning_devices">Scanning for BLE devices&#8230;</string>
     <string name="not_master">Please choose the device named "TIIPS"</string>
+    <string name="connecting_to_master">Connecting to beacon&#8230;</string>
+    <string name="reading_data">Reading Data&#8230;</string>
 
     <!-- Generic Strings _______________________________________________________________________-->
     <!-- generic button strings -->

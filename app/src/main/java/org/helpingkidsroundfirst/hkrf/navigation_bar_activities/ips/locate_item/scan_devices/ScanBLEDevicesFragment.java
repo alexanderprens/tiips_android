@@ -2,11 +2,14 @@ package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item
 
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
@@ -18,16 +21,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.helpingkidsroundfirst.hkrf.R;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,41 +35,66 @@ import java.util.List;
 public class ScanBLEDevicesFragment extends Fragment {
 
     private static final int REQUEST_ENABLE_BT = 10;
-    private static final long SCAN_PERIOD = 5000;
+    private static final long SCAN_PERIOD = 500;
     private static final String MASTER_NAME = "TIIPS";
-    private ListView listView;
-    private LeDeviceListAdapter mLeDeviceListAdapter;
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mBluetoothLeScanner;
     private Handler mHandler;
-    private ProgressDialog progressDialog;
+    private ProgressBar progressBar;
+    private TextView textView;
+    private BluetoothGatt mBluetoothGatt;
+    private BluetoothDevice mDevice = null;
+    private int count = 0;
+    private int numBeacons = 1;
+    private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
+
+        @Override
+        public void onCharacteristicRead(BluetoothGatt gatt,
+                                         BluetoothGattCharacteristic characteristic,
+                                         int status) {
+            readCharResponse(characteristic);
+        }
+
+        @Override
+        public void onCharacteristicChanged(BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic) {
+            // this will get called anytime you perform a read or write characteristic operation
+            readCharResponse(characteristic);
+        }
+
+        @Override
+        public void onConnectionStateChange(final BluetoothGatt gatt, final int status, final int newState) {
+            // this will get called when a device connects or disconnects
+            if (newState == BluetoothProfile.STATE_CONNECTED) {
+                mBluetoothGatt.discoverServices();
+                textView.setText(getResources().getString(R.string.reading_data));
+            }
+        }
+
+        @Override
+        public void onServicesDiscovered(final BluetoothGatt gatt, final int status) {
+            // this will get called after the client initiates a BluetoothGatt.discoverServices() call
+            sendCharReads();
+        }
+    };
     // Device scan callback.
     private ScanCallback mScanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
-            mLeDeviceListAdapter.addResult(result);
-            mLeDeviceListAdapter.notifyDataSetChanged();
-            progressDialog.hide();
+            connectToGatt(result);
         }
 
         @Override
         public void onBatchScanResults(List<ScanResult> results) {
             for (ScanResult sr : results) {
-                mLeDeviceListAdapter.addResult(sr);
-                mLeDeviceListAdapter.notifyDataSetChanged();
+                connectToGatt(sr);
             }
-            progressDialog.hide();
         }
 
         @Override
         public void onScanFailed(int errorCode) {
 
         }
-    };
-
-    private BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
-
     };
 
     public ScanBLEDevicesFragment() {
@@ -84,19 +109,6 @@ public class ScanBLEDevicesFragment extends Fragment {
 
         mHandler = new Handler();
 
-        listView = (ListView) rootView.findViewById(R.id.choose_locate_item_list);
-        listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                getCharacteristicData(mLeDeviceListAdapter.getScanResult(position));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         final BluetoothManager bluetoothManager = (BluetoothManager)
                 getContext().getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
@@ -105,9 +117,9 @@ public class ScanBLEDevicesFragment extends Fragment {
             ((ScanBLEListener) getActivity()).BTNotEnabled();
         }
 
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage(getResources().getString(R.string.scanning_devices));
-        progressDialog.show();
+        progressBar = (ProgressBar) rootView.findViewById(R.id.scan_ble_progress);
+        textView = (TextView) rootView.findViewById(R.id.scan_ble_text);
+        textView.setText(getResources().getString(R.string.scanning_devices));
 
         return rootView;
     }
@@ -128,8 +140,6 @@ public class ScanBLEDevicesFragment extends Fragment {
             mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
         }
         // Initializes list view adapter.
-        mLeDeviceListAdapter = new LeDeviceListAdapter(getActivity());
-        listView.setAdapter(mLeDeviceListAdapter);
         scanLeDevice(true);
     }
 
@@ -137,7 +147,9 @@ public class ScanBLEDevicesFragment extends Fragment {
     public void onPause() {
         super.onPause();
         scanLeDevice(false);
-        mLeDeviceListAdapter.clear();
+        if (mBluetoothGatt != null) {
+            mBluetoothGatt.close();
+        }
     }
 
     @Override
@@ -159,117 +171,68 @@ public class ScanBLEDevicesFragment extends Fragment {
                     mBluetoothLeScanner.startScan(mScanCallback);
                 }
             }, SCAN_PERIOD);
-            //mBluetoothLeScanner.startScan(mScanCallback);
         } else {
             mBluetoothLeScanner.stopScan(mScanCallback);
         }
     }
 
-    private void getCharacteristicData(ScanResult result) {
+    private void connectToGatt(ScanResult result) {
         // check if selected is a master beacon
-        BluetoothDevice device = result.getDevice();
-        if (!device.getName().equals(MASTER_NAME)) {
-            // warn the user that this isn't the master beacon
-            Toast.makeText(getContext(), getContext().getResources().getString(R.string.not_master),
-                    Toast.LENGTH_SHORT).show();
-            return;
+        mDevice = result.getDevice();
+        if (mDevice != null) {
+            String name = mDevice.getName();
+
+            if (name != null && name.equals(MASTER_NAME)) {
+                // connect to gatt server
+                textView.setText(getResources().getString(R.string.connecting_to_master));
+                mBluetoothGatt = mDevice.connectGatt(getContext(), true, mGattCallback);
+                scanLeDevice(false);
+            }
         }
+    }
 
-        // connect to gatt server
+    private void sendCharReads() {
+        if (mDevice != null) {
+            List<BluetoothGattService> services = mBluetoothGatt.getServices();
 
+            for (BluetoothGattService service : services) {
+
+                UUID uuid = service.getUuid();
+                String uuidString = uuid.toString();
+
+                if (uuidString.contains("00003651")) {
+                    List<BluetoothGattCharacteristic> characteristics = service.getCharacteristics();
+
+                    for (BluetoothGattCharacteristic characteristic : characteristics) {
+
+                        // if readable, send read request
+                        final int charaProp = characteristic.getProperties();
+                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
+
+                            mBluetoothGatt.readCharacteristic(characteristic);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void readCharResponse(BluetoothGattCharacteristic characteristic) {
+        byte[] data = characteristic.getValue();
+        final StringBuilder stringBuilder = new StringBuilder(data.length);
+        for (byte byteChar : data)
+            stringBuilder.append(String.format("%02X", byteChar));
+        String tempString = stringBuilder.toString();
+
+        count++;
+        if (count >= numBeacons) {
+            ((ScanBLEListener) getActivity()).scanComplete();
+        }
     }
 
     public interface ScanBLEListener {
         void BTNotEnabled();
-    }
 
-    static class ViewHolder {
-        TextView deviceName;
-        TextView deviceAddress;
-        TextView deviceRSSI;
-    }
-
-    // Adapter for holding devices found through scanning.
-    private class LeDeviceListAdapter extends BaseAdapter {
-        private Context context;
-        private ArrayList<ScanResult> mLeDevices;
-        private LayoutInflater inflater;
-
-        public LeDeviceListAdapter(Context c) {
-            super();
-            context = c;
-            mLeDevices = new ArrayList<>();
-            inflater = (LayoutInflater.from(context));
-        }
-
-        public void addResult(ScanResult result) {
-
-            boolean exists = false;
-            BluetoothDevice device = result.getDevice();
-
-            for (ScanResult sr : mLeDevices) {
-                if (device.equals(sr.getDevice())) {
-                    exists = true;
-                    mLeDevices.remove(sr);
-                    mLeDevices.add(result);
-                    break;
-                }
-            }
-            if (!exists) {
-                mLeDevices.add(result);
-            }
-        }
-
-        public ScanResult getScanResult(int position) {
-            return mLeDevices.get(position);
-        }
-
-        public void clear() {
-            mLeDevices.clear();
-        }
-
-        @Override
-        public int getCount() {
-            return mLeDevices.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return mLeDevices.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            ViewHolder viewHolder;
-            // General ListView optimization code.
-            if (view == null) {
-                view = inflater.inflate(R.layout.fragment_scan_ble_device_item, null);
-                viewHolder = new ViewHolder();
-                viewHolder.deviceAddress = (TextView) view.findViewById(R.id.scan_ble_adress);
-                viewHolder.deviceName = (TextView) view.findViewById(R.id.scan_ble_name);
-                viewHolder.deviceRSSI = (TextView) view.findViewById(R.id.scan_ble_rssi);
-                view.setTag(viewHolder);
-            } else {
-                viewHolder = (ViewHolder) view.getTag();
-            }
-
-            BluetoothDevice device = mLeDevices.get(i).getDevice();
-            final String deviceName = device.getName();
-            if (deviceName != null && deviceName.length() > 0)
-                viewHolder.deviceName.setText(deviceName);
-            else {
-                viewHolder.deviceName.setText(R.string.unknown_device);
-            }
-            viewHolder.deviceAddress.setText(device.getAddress());
-            String rssi = "" + mLeDevices.get(i).getRssi();
-            viewHolder.deviceRSSI.setText(rssi);
-
-            return view;
-        }
+        void scanComplete();
     }
 }

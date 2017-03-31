@@ -1,6 +1,5 @@
 package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item;
 
-import android.bluetooth.le.ScanResult;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -67,7 +66,9 @@ public class LocateItemActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onResultSelected(ScanResult result) {
-        // result detail fragment
+    public void scanComplete() {
+        getSupportFragmentManager().popBackStack();
     }
+
+
 }
