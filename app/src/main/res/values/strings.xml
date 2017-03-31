@@ -19,7 +19,7 @@
     <string name="nav_option_receive">Receive Inventory</string>
     <string name="nav_options_ship">Ship Inventory</string>
     <string name="nav_option_locate">Locate Item</string>
-    <string name="nav_option_add">Add/Remove Tags</string>
+    <string name="nav_option_add">Manage Tags</string>
     <string name="nav_option_messages">Tag Messages</string>
 
     <!-- title bar strings -->
@@ -321,5 +321,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_manage_tags">ManageTagsActivity</string>
 
 </resources>

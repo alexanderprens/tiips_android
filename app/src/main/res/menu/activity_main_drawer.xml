@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:title="@string/nav_group_inventory">
         <menu>
             <item
@@ -17,14 +16,15 @@
                         android:title="@string/nav_option_reports" />
         </menu>
     </item>
-    <item android:title="@string/nav_group_indoor"
-        android:id="@+id/nav_ips" >
+    <item
+        android:id="@+id/nav_ips"
+        android:title="@string/nav_group_indoor">
         <menu >
             <item
                 android:id="@+id/nav_locate"
                 android:title="@string/nav_option_locate" />
             <item
-                android:id="@+id/nav_add"
+                android:id="@+id/nav_manage"
                 android:title="@string/nav_option_add" />
             <item
                 android:id="@+id/nav_messages"
