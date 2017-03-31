@@ -39,6 +39,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -49,6 +50,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".navigation_bar_activities.inventory.view_inventory.ViewInventoryActivity"
             android:label="@string/title_activity_view_inventory"
@@ -59,10 +61,6 @@
                 android:value="org.helpingkidsroundfirst.hkrf.MainActivity" />
         </activity>
 
-        <provider
-            android:name=".data.InventoryProvider"
-            android:authorities="org.helpingkidsroundfirst.hkrf" />
-
         <activity
             android:name=".navigation_bar_activities.inventory.receive_inventory.ReceiveInventoryActivity"
             android:label="@string/title_activity_receive_inventory"
@@ -72,6 +70,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.helpingkidsroundfirst.hkrf.MainActivity" />
         </activity>
+
         <activity
             android:name=".navigation_bar_activities.inventory.ship_inventory.ShipInventoryActivity"
             android:label="@string/title_activity_ship_inventory"
@@ -81,6 +80,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.helpingkidsroundfirst.hkrf.MainActivity" />
         </activity>
+
         <activity
             android:name=".navigation_bar_activities.ips.locate_item.LocateItemActivity"
             android:label="@string/title_activity_locate_item"
@@ -90,6 +90,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.helpingkidsroundfirst.hkrf.MainActivity" />
         </activity>
+
         <activity
             android:name=".navigation_bar_activities.inventory.view_reports.ViewReportsActivity"
             android:label="@string/title_activity_view_reports"
@@ -99,6 +100,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.helpingkidsroundfirst.hkrf.MainActivity" />
         </activity>
+
         <activity
             android:name=".navigation_bar_activities.inventory.view_reports.google_drive.ExportDBToDriveActivity"
             android:label="@string/export_db_title"
@@ -108,6 +110,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports.ViewReportsActivity" />
         </activity>
+
         <activity
             android:name=".navigation_bar_activities.inventory.view_reports.google_drive.ExportToSheetsActivity"
             android:label="@string/export_to_sheets_title"
@@ -117,6 +120,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports.ViewReportsActivity" />
         </activity>
+
         <activity
             android:name=".navigation_bar_activities.inventory.view_reports.google_drive.UpdateDBFromDriveActivity"
             android:label="@string/import_db_title"
@@ -126,6 +130,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports.ViewReportsActivity" />
         </activity>
+
+        <provider
+            android:name=".data.InventoryProvider"
+            android:authorities="org.helpingkidsroundfirst.hkrf"
+            android:exported="true" />
+
     </application>
 
 </manifest>

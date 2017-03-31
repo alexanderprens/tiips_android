@@ -12,6 +12,7 @@ import org.helpingkidsroundfirst.hkrf.data.InventoryContract.PastInventoryEntry;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.ReceiveInventoryEntry;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.ShipInventoryEntry;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract.TagEntry;
+import org.helpingkidsroundfirst.hkrf.helper_classes.Utility;
 
 /**
  * Manages the local database
@@ -22,7 +23,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
     static final String DATABASE_NAME = "inventory.db";
     //change when database changes
-    private static final int DATABASE_VERSION = 15;
+    private static final int DATABASE_VERSION = 17;
 
     public InventoryDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -145,6 +146,9 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
         defaultCategory.put(CategoryEntry.COLUMN_CATEGORY, "Uncategorized");
         defaultCategory.put(CategoryEntry.COLUMN_BARCODE_PREFIX, "00");
         sqLiteDatabase.insert(CategoryEntry.TABLE_NAME, null, defaultCategory);
+
+        // insert initial tag value into tag table
+        Utility.initialTagData(sqLiteDatabase);
     }
 
     @Override
@@ -177,6 +181,32 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
                     TagEntry.COLUMN_RSSI_3 + ");";
 
             sqLiteDatabase.execSQL(SQL_CREATE_TAGS_TABLE);
+
+        } else if (oldVersion == 15) {
+            Utility.initialTagData(sqLiteDatabase);
+
+        } else if (oldVersion == 16) {
+
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS tags");
+
+            // create tags table
+            final String SQL_CREATE_TAGS_TABLE = "CREATE TABLE " +
+                    TagEntry.TABLE_NAME + " (" +
+                    TagEntry._ID + " INTEGER PRIMARY KEY, " +
+                    TagEntry.COLUMN_ID + " TEXT NOT NULL, " +
+                    TagEntry.COLUMN_NAME + " TEXT, " +
+                    TagEntry.COLUMN_ACTIVE + " BOOLEAN, " +
+                    TagEntry.COLUMN_DATE + " TEXT, " +
+                    TagEntry.COLUMN_BATTERY + " FLOAT, " +
+                    TagEntry.COLUMN_RSSI_M + " TEXT, " +
+                    TagEntry.COLUMN_RSSI_1 + " TEXT, " +
+                    TagEntry.COLUMN_RSSI_2 + " TEXT, " +
+                    TagEntry.COLUMN_RSSI_3 + ");";
+
+            sqLiteDatabase.execSQL(SQL_CREATE_TAGS_TABLE);
+
+            // insert initial tag value into tag table
+            Utility.initialTagData(sqLiteDatabase);
         }
     }
 }

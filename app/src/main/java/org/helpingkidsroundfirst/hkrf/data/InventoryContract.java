@@ -25,7 +25,7 @@ public class InventoryContract {
     public static final String PATH_PAST_INVENTORY = "past_inventory";
     public static final String PATH_RECEIVE_INVENTORY = "receive_inventory";
     public static final String PATH_SHIP_INVENTORY = "ship_inventory";
-    public static final String PATH_TAGS = "tags";
+    public static final String PATH_TAGS = "ips_tags";
 
     /* Define Category Table */
     public static final class CategoryEntry implements BaseColumns {
@@ -293,7 +293,7 @@ public class InventoryContract {
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TAGS;
 
         // Table name
-        public static final String TABLE_NAME = "tags";
+        public static final String TABLE_NAME = "ips_tags";
 
         // Table columns
         public static final String COLUMN_NAME = "name";

@@ -13,8 +13,10 @@ import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -24,8 +26,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.helpingkidsroundfirst.hkrf.R;
+import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
+import org.helpingkidsroundfirst.hkrf.helper_classes.Utility;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,11 +39,8 @@ import java.util.UUID;
  */
 public class ScanBLEDevicesFragment extends Fragment {
 
-    private static final int REQUEST_ENABLE_BT = 10;
-    private static final long SCAN_PERIOD = 500;
-    private static final String MASTER_NAME = "TIIPS";
-    private static final int NUM_BEACONS = 8;
-    private static final String[] CONST_UUIDS = {
+    public static final int NUM_BEACONS = 12;
+    public static final String[] CONST_UUIDS = {
             "00003a00-0000-1000-8000-00805f9b34fb",
             "00003a01-0000-1000-8000-00805f9b34fb",
             "00003a02-0000-1000-8000-00805f9b34fb",
@@ -47,17 +49,28 @@ public class ScanBLEDevicesFragment extends Fragment {
             "00003a05-0000-1000-8000-00805f9b34fb",
             "00003a06-0000-1000-8000-00805f9b34fb",
             "00003a07-0000-1000-8000-00805f9b34fb",
-            "00003a08-0000-1000-8000-00805f9b34fb"
+            "00003a08-0000-1000-8000-00805f9b34fb",
+            "00003a09-0000-1000-8000-00805f9b34fb",
+            "00003a0a-0000-1000-8000-00805f9b34fb",
+            "00003a0b-0000-1000-8000-00805f9b34fb",
+            "00003a0c-0000-1000-8000-00805f9b34fb"
     };
-    private static final int TAG_SERVICE_UUID = 0;
-    private static final int TAG01_CHAR_UUID = 1;
-    private static final int TAG02_CHAR_UUID = 2;
-    private static final int TAG03_CHAR_UUID = 3;
-    private static final int TAG04_CHAR_UUID = 4;
-    private static final int TAG05_CHAR_UUID = 5;
-    private static final int TAG06_CHAR_UUID = 6;
-    private static final int TAG07_CHAR_UUID = 7;
-    private static final int TAG08_CHAR_UUID = 8;
+    public static final int TAG_SERVICE_UUID = 0;
+    public static final int TAG01_CHAR_UUID = 1;
+    public static final int TAG02_CHAR_UUID = 2;
+    public static final int TAG03_CHAR_UUID = 3;
+    public static final int TAG04_CHAR_UUID = 4;
+    public static final int TAG05_CHAR_UUID = 5;
+    public static final int TAG06_CHAR_UUID = 6;
+    public static final int TAG07_CHAR_UUID = 7;
+    public static final int TAG08_CHAR_UUID = 8;
+    public static final int BEACON_M_CHAR_UUID = 9;
+    public static final int BEACON_1_CHAR_UUID = 10;
+    public static final int BEACON_2_CHAR_UUID = 11;
+    public static final int BEACON_3_CHAR_UUID = 12;
+    private static final int REQUEST_ENABLE_BT = 10;
+    private static final long SCAN_PERIOD = 500;
+    private static final String MASTER_NAME = "TIIPS";
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mBluetoothLeScanner;
     private Handler mHandler;
@@ -240,43 +253,22 @@ public class ScanBLEDevicesFragment extends Fragment {
     }
 
     private void readCharResponse(BluetoothGattCharacteristic characteristic) {
-        byte[] data = characteristic.getValue();
-        final StringBuilder stringBuilder = new StringBuilder(data.length);
-        for (byte byteChar : data)
-            stringBuilder.append(String.format("%02X", byteChar));
-        String charValue = stringBuilder.toString();
 
         String charUUID = characteristic.getUuid().toString();
+        boolean isKnown = false;
 
-        if (charUUID.equals(CONST_UUIDS[TAG01_CHAR_UUID])) {
-            // tag 01
-
-        } else if (charUUID.equals(CONST_UUIDS[TAG02_CHAR_UUID])) {
-
-
-        } else if (charUUID.equals(CONST_UUIDS[TAG03_CHAR_UUID])) {
-
-
-        } else if (charUUID.equals(CONST_UUIDS[TAG04_CHAR_UUID])) {
-
-
-        } else if (charUUID.equals(CONST_UUIDS[TAG05_CHAR_UUID])) {
-
-
-        } else if (charUUID.equals(CONST_UUIDS[TAG06_CHAR_UUID])) {
-
-
-        } else if (charUUID.equals(CONST_UUIDS[TAG07_CHAR_UUID])) {
-
-
-        } else if (charUUID.equals(CONST_UUIDS[TAG08_CHAR_UUID])) {
-
-
-        } else {
-            // not recognized
-            return;
+        // check if characteristic is known
+        for (int i = 1; i <= NUM_BEACONS; i++) {
+            if (charUUID.equals(CONST_UUIDS[i])) {
+                isKnown = true;
+                break;
+            }
         }
 
+        // if characteristic is know, put in database
+        if (isKnown) {
+            parseCharacteristicData(characteristic, charUUID);
+        }
 
         chars.remove(characteristic);
 
@@ -285,6 +277,89 @@ public class ScanBLEDevicesFragment extends Fragment {
             mBluetoothGatt.readCharacteristic(chars.get(chars.size() - 1));
         } else {
             ((ScanBLEListener) getActivity()).scanComplete();
+        }
+    }
+
+    private void parseCharacteristicData(BluetoothGattCharacteristic characteristic,
+                                         String uuid) {
+        ContentValues contentValues = new ContentValues();
+
+        // get id
+        contentValues.put(InventoryContract.TagEntry.COLUMN_ID, uuid);
+
+        // get current data
+        final Calendar calendar = Calendar.getInstance();
+        String date = Utility.getDatePickerString(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DATE));
+        contentValues.put(InventoryContract.TagEntry.COLUMN_DATE, date);
+
+        // get characteristic data
+        byte[] data = characteristic.getValue();
+        final StringBuilder stringBuilder = new StringBuilder(data.length);
+        for (byte byteChar : data)
+            stringBuilder.append(String.format("%02X", byteChar));
+        String charValue = stringBuilder.toString();
+
+        // check if tag or beacon characteristic
+        if (charValue.length() > 8) {
+            // tag
+            // parse battery level
+            String battHex = charValue.substring(0, 4);
+            Long battLong = Long.parseLong(battHex, 16);
+            double battDouble = (double) battLong / 1000.0;
+            contentValues.put(InventoryContract.TagEntry.COLUMN_BATTERY, battDouble);
+
+            // parse master rssi
+            String rssiString = charValue.substring(4, 14);
+            contentValues.put(InventoryContract.TagEntry.COLUMN_RSSI_M, rssiString);
+
+            // parse side 1 rssi
+            rssiString = charValue.substring(14, 24);
+            contentValues.put(InventoryContract.TagEntry.COLUMN_RSSI_1, rssiString);
+
+            // parse side 2 rssi
+            rssiString = charValue.substring(24, 34);
+            contentValues.put(InventoryContract.TagEntry.COLUMN_RSSI_2, rssiString);
+
+            // parse side 3 rssi
+            rssiString = charValue.substring(34, 44);
+            contentValues.put(InventoryContract.TagEntry.COLUMN_RSSI_3, rssiString);
+
+        } else if (!charValue.isEmpty()) {
+            // beacon
+            // parse battery level
+            String battHex = charValue.substring(0, 4);
+            Long battLong = Long.parseLong(battHex, 16);
+            double battDouble = (double) battLong / 1000.0;
+            contentValues.put(InventoryContract.TagEntry.COLUMN_BATTERY, battDouble);
+        }
+
+        // put into table
+        putDataIntoTable(contentValues);
+    }
+
+    private void putDataIntoTable(ContentValues contentValues) {
+
+        int updated = 0;
+
+        // update tag info
+        Uri tagUri = InventoryContract.TagEntry.buildTagUri();
+        String selection = InventoryContract.TagEntry.COLUMN_ID + " = ? ";
+        String[] selectionArgs = {contentValues.getAsString(InventoryContract.TagEntry.COLUMN_ID)};
+
+        try {
+            updated = getContext().getContentResolver().update(
+                    tagUri,
+                    contentValues,
+                    selection,
+                    selectionArgs
+            );
+        } catch (Exception e) {
+            String message = e.getMessage();
+        }
+
+        if (updated < 1) {
+            // shit
         }
     }
 
