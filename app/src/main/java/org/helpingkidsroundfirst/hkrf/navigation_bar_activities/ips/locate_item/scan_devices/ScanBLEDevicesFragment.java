@@ -21,11 +21,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.helpingkidsroundfirst.hkrf.R;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,15 +37,34 @@ public class ScanBLEDevicesFragment extends Fragment {
     private static final int REQUEST_ENABLE_BT = 10;
     private static final long SCAN_PERIOD = 500;
     private static final String MASTER_NAME = "TIIPS";
+    private static final int NUM_BEACONS = 8;
+    private static final String[] CONST_UUIDS = {
+            "00003a00-0000-1000-8000-00805f9b34fb",
+            "00003a01-0000-1000-8000-00805f9b34fb",
+            "00003a02-0000-1000-8000-00805f9b34fb",
+            "00003a03-0000-1000-8000-00805f9b34fb",
+            "00003a04-0000-1000-8000-00805f9b34fb",
+            "00003a05-0000-1000-8000-00805f9b34fb",
+            "00003a06-0000-1000-8000-00805f9b34fb",
+            "00003a07-0000-1000-8000-00805f9b34fb",
+            "00003a08-0000-1000-8000-00805f9b34fb"
+    };
+    private static final int TAG_SERVICE_UUID = 0;
+    private static final int TAG01_CHAR_UUID = 1;
+    private static final int TAG02_CHAR_UUID = 2;
+    private static final int TAG03_CHAR_UUID = 3;
+    private static final int TAG04_CHAR_UUID = 4;
+    private static final int TAG05_CHAR_UUID = 5;
+    private static final int TAG06_CHAR_UUID = 6;
+    private static final int TAG07_CHAR_UUID = 7;
+    private static final int TAG08_CHAR_UUID = 8;
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mBluetoothLeScanner;
     private Handler mHandler;
-    private ProgressBar progressBar;
     private TextView textView;
     private BluetoothGatt mBluetoothGatt;
     private BluetoothDevice mDevice = null;
-    private int count = 0;
-    private int numBeacons = 1;
+    private List<BluetoothGattCharacteristic> chars = new ArrayList<>();
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
 
         @Override
@@ -76,6 +95,7 @@ public class ScanBLEDevicesFragment extends Fragment {
             sendCharReads();
         }
     };
+    private int count = 0;
     // Device scan callback.
     private ScanCallback mScanCallback = new ScanCallback() {
         @Override
@@ -117,7 +137,6 @@ public class ScanBLEDevicesFragment extends Fragment {
             ((ScanBLEListener) getActivity()).BTNotEnabled();
         }
 
-        progressBar = (ProgressBar) rootView.findViewById(R.id.scan_ble_progress);
         textView = (TextView) rootView.findViewById(R.id.scan_ble_text);
         textView.setText(getResources().getString(R.string.scanning_devices));
 
@@ -200,7 +219,7 @@ public class ScanBLEDevicesFragment extends Fragment {
                 UUID uuid = service.getUuid();
                 String uuidString = uuid.toString();
 
-                if (uuidString.contains("00003651")) {
+                if (uuidString.equals(CONST_UUIDS[TAG_SERVICE_UUID])) {
                     List<BluetoothGattCharacteristic> characteristics = service.getCharacteristics();
 
                     for (BluetoothGattCharacteristic characteristic : characteristics) {
@@ -208,11 +227,14 @@ public class ScanBLEDevicesFragment extends Fragment {
                         // if readable, send read request
                         final int charaProp = characteristic.getProperties();
                         if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
-
-                            mBluetoothGatt.readCharacteristic(characteristic);
+                            chars.add(characteristic);
                         }
                     }
                 }
+            }
+
+            if (!chars.isEmpty()) {
+                mBluetoothGatt.readCharacteristic(chars.get(chars.size() - 1));
             }
         }
     }
@@ -222,17 +244,52 @@ public class ScanBLEDevicesFragment extends Fragment {
         final StringBuilder stringBuilder = new StringBuilder(data.length);
         for (byte byteChar : data)
             stringBuilder.append(String.format("%02X", byteChar));
-        String tempString = stringBuilder.toString();
+        String charValue = stringBuilder.toString();
 
-        count++;
-        if (count >= numBeacons) {
+        String charUUID = characteristic.getUuid().toString();
+
+        if (charUUID.equals(CONST_UUIDS[TAG01_CHAR_UUID])) {
+            // tag 01
+
+        } else if (charUUID.equals(CONST_UUIDS[TAG02_CHAR_UUID])) {
+
+
+        } else if (charUUID.equals(CONST_UUIDS[TAG03_CHAR_UUID])) {
+
+
+        } else if (charUUID.equals(CONST_UUIDS[TAG04_CHAR_UUID])) {
+
+
+        } else if (charUUID.equals(CONST_UUIDS[TAG05_CHAR_UUID])) {
+
+
+        } else if (charUUID.equals(CONST_UUIDS[TAG06_CHAR_UUID])) {
+
+
+        } else if (charUUID.equals(CONST_UUIDS[TAG07_CHAR_UUID])) {
+
+
+        } else if (charUUID.equals(CONST_UUIDS[TAG08_CHAR_UUID])) {
+
+
+        } else {
+            // not recognized
+            return;
+        }
+
+
+        chars.remove(characteristic);
+
+        // check if there are more characteristics to be read
+        if (chars.size() > 0) {
+            mBluetoothGatt.readCharacteristic(chars.get(chars.size() - 1));
+        } else {
             ((ScanBLEListener) getActivity()).scanComplete();
         }
     }
 
     public interface ScanBLEListener {
         void BTNotEnabled();
-
         void scanComplete();
     }
 }
