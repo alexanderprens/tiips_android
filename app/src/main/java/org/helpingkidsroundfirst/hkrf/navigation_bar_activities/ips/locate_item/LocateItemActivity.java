@@ -1,5 +1,6 @@
 package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,12 +9,14 @@ import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import org.helpingkidsroundfirst.hkrf.R;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.scan_devices.ChooseTagLocateDialogFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.scan_devices.ScanBLEDevicesFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.scan_devices.ShowLocationFragment;
 
 public class LocateItemActivity extends AppCompatActivity implements
         LocateItemActivityFragment.LocateItemListener,
-        ScanBLEDevicesFragment.ScanBLEListener {
+        ScanBLEDevicesFragment.ScanBLEListener,
+        ChooseTagLocateDialogFragment.OnChooseTagLocateListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +48,11 @@ public class LocateItemActivity extends AppCompatActivity implements
                 break;
 
             case LocateItemActivityFragment.BUTTON_LOCATE:
-                fragment = new ShowLocationFragment();
-                startFragment(fragment, "ShowLocationFragment");
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                ChooseTagLocateDialogFragment dialogChoose = new ChooseTagLocateDialogFragment();
+                dialogChoose.show(fragmentManager, "open choose locate tag dialog");
+
+
                 break;
         }
     }
@@ -71,4 +77,15 @@ public class LocateItemActivity extends AppCompatActivity implements
     }
 
 
+    @Override
+    public void onTagChosen(Uri uri) {
+
+        Fragment fragment;
+        Bundle bundle = new Bundle();
+
+        fragment = new ShowLocationFragment();
+        bundle.putParcelable(ShowLocationFragment.URI_KEY, uri);
+        fragment.setArguments(bundle);
+        startFragment(fragment, "ShowLocationFragment");
+    }
 }

@@ -235,6 +235,9 @@
     <string name="connecting_to_master">Connecting to beacon&#8230;</string>
     <string name="reading_data">Reading Data&#8230;</string>
 
+    <!-- dialog_choose_tag_locate -->
+    <string name="dialog_choose_tag_header">Choose Tag to Locate</string>
+
     <!-- Generic Strings _______________________________________________________________________-->
     <!-- generic button strings -->
     <string name="button_ok">OK</string>

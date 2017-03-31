@@ -15,48 +15,6 @@
             android:layout_height="wrap_content"
             android:text="Location Test" />
 
-        <EditText
-            android:id="@+id/master_beacon_in"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Master"
-            android:inputType="textCapCharacters"
-            android:maxLength="2" />
-
-        <EditText
-            android:id="@+id/side_becon1_in"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Side 1"
-            android:inputType="textCapCharacters"
-            android:maxLength="2" />
-
-        <EditText
-            android:id="@+id/side_becon2_in"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Side 2"
-            android:inputType="textCapCharacters"
-            android:maxLength="2" />
-
-        <EditText
-            android:id="@+id/side_becon3_in"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Side 3"
-            android:inputType="textCapCharacters"
-            android:maxLength="2" />
-
-        <Button
-            android:id="@+id/show_location_calc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Calculate" />
-
         <TextView
             android:id="@+id/show_location_coord"
             android:layout_width="match_parent"
