@@ -213,7 +213,7 @@ public class InventoryProvider extends ContentProvider {
 
         // tags codes
         matcher.addURI(authority, InventoryContract.PATH_TAGS, TAGS);
-        matcher.addURI(authority, InventoryContract.PATH_TAGS + "/*", TAGS);
+        matcher.addURI(authority, InventoryContract.PATH_TAGS + "/#", TAGS_WITH_ID);
 
         return matcher;
     }
