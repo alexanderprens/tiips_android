@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- google drive arrays -->
     <string-array name="current_inventory_sheet_header">
         <item>Barcode #</item>
         <item>Name</item>
@@ -29,5 +30,17 @@
         <item>Description</item>
         <item>Value</item>
         <item>Category</item>
+    </string-array>
+
+    <!-- manage tags array -->
+    <string-array name="tag_default_names">
+        <item>Tag 01</item>
+        <item>Tag 02</item>
+        <item>Tag 03</item>
+        <item>Tag 04</item>
+        <item>Tag 05</item>
+        <item>Tag 06</item>
+        <item>Tag 07</item>
+        <item>Tag 08</item>
     </string-array>
 </resources>

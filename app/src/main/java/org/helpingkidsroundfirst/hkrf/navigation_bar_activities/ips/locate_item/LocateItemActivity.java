@@ -76,6 +76,12 @@ public class LocateItemActivity extends AppCompatActivity implements
         getSupportFragmentManager().popBackStack();
     }
 
+    @Override
+    public void disconnected() {
+        getSupportFragmentManager().popBackStack();
+        Toast.makeText(this, getResources().getString(R.string.ble_disconnected), Toast.LENGTH_SHORT).show();
+    }
+
 
     @Override
     public void onTagChosen(Uri uri) {

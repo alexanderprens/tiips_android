@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.manage_tags.ManageTagsActivity">
 
     <android.support.design.widget.AppBarLayout

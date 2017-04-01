@@ -90,7 +90,6 @@ public class ScanBLEDevicesFragment extends Fragment {
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic) {
             // this will get called anytime you perform a read or write characteristic operation
-            readCharResponse(characteristic);
         }
 
         @Override
@@ -99,6 +98,8 @@ public class ScanBLEDevicesFragment extends Fragment {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 mBluetoothGatt.discoverServices();
                 textView.setText(getResources().getString(R.string.reading_data));
+            } else if (newState == BluetoothProfile.STATE_DISCONNECTED || newState == BluetoothProfile.STATE_DISCONNECTING) {
+                ((ScanBLEListener) getActivity()).disconnected();
             }
         }
 
@@ -366,5 +367,7 @@ public class ScanBLEDevicesFragment extends Fragment {
     public interface ScanBLEListener {
         void BTNotEnabled();
         void scanComplete();
+
+        void disconnected();
     }
 }

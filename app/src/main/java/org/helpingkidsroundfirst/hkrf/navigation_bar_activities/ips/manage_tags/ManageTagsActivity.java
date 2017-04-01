@@ -23,7 +23,7 @@ public class ManageTagsActivity extends AppCompatActivity {
             Fragment fragment = new ManageTagsActivityFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .replace(R.id.content_locate_item, fragment)
+                    .replace(R.id.content_manage_tags, fragment)
                     .commit();
         }
     }
