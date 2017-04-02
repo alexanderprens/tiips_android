@@ -27,10 +27,9 @@ public class ShowLocationFragment extends Fragment {
     private static final int SIDE_3 = 3;
     private static final double LENGTH = 35.0;
     private static final double WIDTH = 45.0;
-    private static final double TRIANGLE_SIZE = 1.0;
+    private static final double WALL_BUFFER = 10;
     private double[] distanceValues = new double[4];
     private TextView coordinateView;
-    private double[][] triangle = new double[3][2];
     private double[] error = new double[3];
     private Uri mUri;
 
@@ -123,28 +122,14 @@ public class ShowLocationFragment extends Fragment {
 
         double[] coordinates;
         String text = coordinateView.getText().toString();
-        double triangleStartY, triangleStartX;
 
         // convert rssi to distance
         for (int i = 0; i < 4; i++) {
             distanceValues[i] = convertRssiToDistance(distanceValues[i]);
         }
 
-        // x values
-        triangleStartX = 25;
-        triangle[0][0] = triangleStartX;
-        triangle[1][0] = triangleStartX + TRIANGLE_SIZE;
-        triangle[2][0] = triangleStartX;
-
-        // y values
-        triangleStartY = 25;
-        triangle[0][1] = triangleStartY;
-        triangle[1][1] = triangleStartY;
-        triangle[2][1] = triangleStartY + TRIANGLE_SIZE;
-
-        // nm simplex
-        simplex();
-        coordinates = triangle[1];
+        // NILEX
+        coordinates = nilex();
 
         text += String.format(Locale.US, "%.1f,%.1f\n", coordinates[0], coordinates[1]);
         coordinateView.setText(text);
@@ -154,6 +139,50 @@ public class ShowLocationFragment extends Fragment {
         return 4.0 * (Math.pow(10.0, -6.0)) * (Math.pow(rssi, 3.6718));
     }
 
+    private double[] nilex() {
+
+        double coordinates[] = {0, 0};
+        double best[] = {0, 0};
+        double bestError, currentError;
+        double x = 0.0 - WALL_BUFFER;
+        double y = 0.0 - WALL_BUFFER;
+        final double X_MAX = WIDTH + WALL_BUFFER;
+        final double Y_MAX = LENGTH + WALL_BUFFER;
+
+        // get error starting value
+        bestError = calcError(coordinates);
+
+        while (x <= X_MAX) {
+
+            coordinates[0] = x;
+
+            while (y <= Y_MAX) {
+
+                coordinates[1] = y;
+                currentError = calcError(coordinates);
+
+                if (currentError < bestError) {
+                    bestError = currentError;
+                    best[0] = coordinates[0] + WALL_BUFFER;
+                    best[1] = coordinates[1] + WALL_BUFFER;
+                }
+                y++;
+            }
+            x++;
+        }
+
+        return best;
+    }
+
+    // calcError function
+    private double calcError(double[] coordinate) {
+        return Math.abs(Math.sqrt(Math.pow(coordinate[0], 2.0) + Math.pow(coordinate[1], 2.0)) - distanceValues[MASTER]) +
+                Math.abs(Math.sqrt(Math.pow(WIDTH - coordinate[0], 2.0) + Math.pow(coordinate[1], 2.0)) - distanceValues[SIDE_1]) +
+                Math.abs(Math.sqrt(Math.pow(coordinate[0], 2.0) + Math.pow(LENGTH - coordinate[1], 2.0)) - distanceValues[SIDE_2]) +
+                Math.abs(Math.sqrt(Math.pow(WIDTH - coordinate[0], 2.0) + Math.pow(LENGTH - coordinate[1], 2.0)) - distanceValues[SIDE_3]);
+    }
+
+    /*
     private void simplex() {
         int worst;
         int oldWorst = -1;
@@ -206,13 +235,6 @@ public class ShowLocationFragment extends Fragment {
             oldWorst = worst;
         }
     }
-
-    // calcError function
-    private double calcError(double[] trianglePoint) {
-        return Math.abs(Math.sqrt(Math.pow(trianglePoint[0], 2.0) + Math.pow(trianglePoint[1], 2.0)) - distanceValues[MASTER]) +
-                Math.abs(Math.sqrt(Math.pow(WIDTH - trianglePoint[0], 2.0) + Math.pow(trianglePoint[1], 2.0)) - distanceValues[SIDE_1]) +
-                Math.abs(Math.sqrt(Math.pow(trianglePoint[0], 2.0) + Math.pow(LENGTH - trianglePoint[1], 2.0)) - distanceValues[SIDE_2]) +
-                Math.abs(Math.sqrt(Math.pow(WIDTH - trianglePoint[0], 2.0) + Math.pow(LENGTH - trianglePoint[1], 2.0)) - distanceValues[SIDE_3]);
-    }
+    */
 }
 
