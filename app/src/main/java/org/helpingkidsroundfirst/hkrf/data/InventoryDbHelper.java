@@ -23,7 +23,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
     static final String DATABASE_NAME = "inventory.db";
     //change when database changes
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 19;
 
     public InventoryDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -207,6 +207,9 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
             // insert initial tag value into tag table
             Utility.initialTagData(sqLiteDatabase);
+
+        } else if (oldVersion == 17 || oldVersion == 18) {
+            Utility.updateTagData(sqLiteDatabase);
         }
     }
 }

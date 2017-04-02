@@ -22,8 +22,9 @@ public class Utility {
     // create initial data for tags on database startup
     public static void initialTagData(SQLiteDatabase sqLiteDatabase) {
 
-        for (int i = 1; i <= ScanBLEDevicesFragment.NUM_BEACONS; i++) {
-            ContentValues contentValue = new ContentValues();
+        ContentValues contentValue = new ContentValues();
+
+        for (int i = 1; i <= 8; i++) {
 
             // set uuid
             contentValue.put(InventoryContract.TagEntry.COLUMN_ID,
@@ -31,6 +32,89 @@ public class Utility {
 
             // set default name
             String name = String.format(Locale.US, "TAG%2d", i);
+            contentValue.put(InventoryContract.TagEntry.COLUMN_NAME, name);
+
+            // set active
+            contentValue.put(InventoryContract.TagEntry.COLUMN_ACTIVE, false);
+
+            // insert into table
+            sqLiteDatabase.insert(
+                    InventoryContract.TagEntry.TABLE_NAME,
+                    null,
+                    contentValue
+            );
+        }
+
+        for (int i = 9; i <= ScanBLEDevicesFragment.NUM_BEACONS; i++) {
+            // set uuid
+            contentValue.put(InventoryContract.TagEntry.COLUMN_ID,
+                    ScanBLEDevicesFragment.CONST_UUIDS[i]);
+
+            // set default name
+            String name;
+            if (i == 9) {
+                name = "MASTER BEACON";
+            } else {
+                name = String.format(Locale.US, "BEACON%2d", i - 9);
+            }
+            contentValue.put(InventoryContract.TagEntry.COLUMN_NAME, name);
+
+            // set active
+            contentValue.put(InventoryContract.TagEntry.COLUMN_ACTIVE, false);
+
+            // insert into table
+            sqLiteDatabase.insert(
+                    InventoryContract.TagEntry.TABLE_NAME,
+                    null,
+                    contentValue
+            );
+        }
+    }
+
+    // create initial data for tags on database startup
+    public static void updateTagData(SQLiteDatabase sqLiteDatabase) {
+
+        ContentValues contentValue = new ContentValues();
+
+        sqLiteDatabase.delete(
+                InventoryContract.TagEntry.TABLE_NAME,
+                null,
+                null
+        );
+
+        for (int i = 1; i <= 8; i++) {
+
+            // set uuid
+            contentValue.put(InventoryContract.TagEntry.COLUMN_ID,
+                    ScanBLEDevicesFragment.CONST_UUIDS[i]);
+
+            // set default name
+            String name = String.format(Locale.US, "TAG%2d", i);
+            contentValue.put(InventoryContract.TagEntry.COLUMN_NAME, name);
+
+            // set active
+            contentValue.put(InventoryContract.TagEntry.COLUMN_ACTIVE, false);
+
+            // insert into table
+            sqLiteDatabase.insert(
+                    InventoryContract.TagEntry.TABLE_NAME,
+                    null,
+                    contentValue
+            );
+        }
+
+        for (int i = 9; i <= ScanBLEDevicesFragment.NUM_BEACONS; i++) {
+            // set uuid
+            contentValue.put(InventoryContract.TagEntry.COLUMN_ID,
+                    ScanBLEDevicesFragment.CONST_UUIDS[i]);
+
+            // set default name
+            String name;
+            if (i == 9) {
+                name = "MASTER BEACON";
+            } else {
+                name = String.format(Locale.US, "BEACON%2d", i - 9);
+            }
             contentValue.put(InventoryContract.TagEntry.COLUMN_NAME, name);
 
             // set active

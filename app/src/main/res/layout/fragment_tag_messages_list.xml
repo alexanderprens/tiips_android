@@ -1,0 +1,12 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.tag_messages.TagMessagesListFragment">
+
+
+    <ListView
+        android:id="@+id/tag_messages_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</FrameLayout>

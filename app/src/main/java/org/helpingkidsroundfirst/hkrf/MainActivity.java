@@ -25,6 +25,7 @@ import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_i
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_reports.ViewReportsActivity;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.LocateItemActivity;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.manage_tags.ManageTagsActivity;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.tag_messages.TagMessagesActivity;
 
 // TODO: 2/3/2017 add context to layouts
 
@@ -151,7 +152,9 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_messages:
-
+                intent = new Intent(MainActivity.this, TagMessagesActivity.class);
+                startActivity(intent);
+                Log.i(TAG, "Start Tag Messages Activity");
                 break;
         }
 

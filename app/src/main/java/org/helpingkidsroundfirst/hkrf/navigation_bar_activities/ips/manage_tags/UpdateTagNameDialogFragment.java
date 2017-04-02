@@ -72,10 +72,11 @@ public class UpdateTagNameDialogFragment extends DialogFragment implements
         TextView header = (TextView) view.findViewById(R.id.dialog_update_tag_name_text);
         String headerString = String.format(Locale.US, "Tag %2d", tagId);
         header.setText(headerString);
+        nameInput = getPreviousName();
 
         // edit text
         final EditText nameText = (EditText) view.findViewById(R.id.update_tag_name_edit);
-        nameText.setText(getPreviousName());
+        nameText.setText(nameInput);
         nameText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
