@@ -9,13 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import org.helpingkidsroundfirst.hkrf.R;
-import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.scan_devices.ChooseTagLocateDialogFragment;
-import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.scan_devices.ScanBLEDevicesFragment;
-import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.scan_devices.ShowLocationFragment;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.scan_devices.GetLocationDataFragment;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.show_location.ChooseTagLocateDialogFragment;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.show_location.ShowLocationFragment;
 
 public class LocateItemActivity extends AppCompatActivity implements
         LocateItemActivityFragment.LocateItemListener,
-        ScanBLEDevicesFragment.ScanBLEListener,
+        GetLocationDataFragment.ScanBLEListener,
         ChooseTagLocateDialogFragment.OnChooseTagLocateListener {
 
     @Override
@@ -43,8 +43,8 @@ public class LocateItemActivity extends AppCompatActivity implements
 
         switch (button) {
             case LocateItemActivityFragment.BUTTON_CHOOSE:
-                fragment = new ScanBLEDevicesFragment();
-                startFragment(fragment, "ScanBLEDevicesFragment");
+                fragment = new GetLocationDataFragment();
+                startFragment(fragment, "GetLocationDataFragment");
                 break;
 
             case LocateItemActivityFragment.BUTTON_LOCATE:

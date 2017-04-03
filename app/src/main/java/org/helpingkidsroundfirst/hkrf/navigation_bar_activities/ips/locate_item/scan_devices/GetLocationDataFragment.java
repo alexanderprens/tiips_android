@@ -37,7 +37,7 @@ import java.util.UUID;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ScanBLEDevicesFragment extends Fragment {
+public class GetLocationDataFragment extends Fragment {
 
     public static final int NUM_BEACONS = 12;
     public static final String[] CONST_UUIDS = {
@@ -131,7 +131,7 @@ public class ScanBLEDevicesFragment extends Fragment {
         }
     };
 
-    public ScanBLEDevicesFragment() {
+    public GetLocationDataFragment() {
         // Required empty public constructor
     }
 

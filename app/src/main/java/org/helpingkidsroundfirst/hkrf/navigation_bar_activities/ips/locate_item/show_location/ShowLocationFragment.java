@@ -1,4 +1,4 @@
-package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.scan_devices;
+package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.show_location;
 
 
 import android.database.Cursor;

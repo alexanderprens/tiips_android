@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
-import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.scan_devices.ScanBLEDevicesFragment;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.scan_devices.GetLocationDataFragment;
 
 import java.util.Locale;
 
@@ -28,7 +28,7 @@ public class Utility {
 
             // set uuid
             contentValue.put(InventoryContract.TagEntry.COLUMN_ID,
-                    ScanBLEDevicesFragment.CONST_UUIDS[i]);
+                    GetLocationDataFragment.CONST_UUIDS[i]);
 
             // set default name
             String name = String.format(Locale.US, "TAG%2d", i);
@@ -45,10 +45,10 @@ public class Utility {
             );
         }
 
-        for (int i = 9; i <= ScanBLEDevicesFragment.NUM_BEACONS; i++) {
+        for (int i = 9; i <= GetLocationDataFragment.NUM_BEACONS; i++) {
             // set uuid
             contentValue.put(InventoryContract.TagEntry.COLUMN_ID,
-                    ScanBLEDevicesFragment.CONST_UUIDS[i]);
+                    GetLocationDataFragment.CONST_UUIDS[i]);
 
             // set default name
             String name;
@@ -86,7 +86,7 @@ public class Utility {
 
             // set uuid
             contentValue.put(InventoryContract.TagEntry.COLUMN_ID,
-                    ScanBLEDevicesFragment.CONST_UUIDS[i]);
+                    GetLocationDataFragment.CONST_UUIDS[i]);
 
             // set default name
             String name = String.format(Locale.US, "TAG%2d", i);
@@ -103,10 +103,10 @@ public class Utility {
             );
         }
 
-        for (int i = 9; i <= ScanBLEDevicesFragment.NUM_BEACONS; i++) {
+        for (int i = 9; i <= GetLocationDataFragment.NUM_BEACONS; i++) {
             // set uuid
             contentValue.put(InventoryContract.TagEntry.COLUMN_ID,
-                    ScanBLEDevicesFragment.CONST_UUIDS[i]);
+                    GetLocationDataFragment.CONST_UUIDS[i]);
 
             // set default name
             String name;

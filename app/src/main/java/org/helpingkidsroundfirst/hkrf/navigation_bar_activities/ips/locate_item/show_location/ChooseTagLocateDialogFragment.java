@@ -1,4 +1,4 @@
-package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.scan_devices;
+package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.show_location;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -14,6 +14,7 @@ import android.widget.Spinner;
 
 import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.scan_devices.GetLocationDataFragment;
 
 /**
  * Created by alexa on 3/31/2017.
@@ -62,10 +63,10 @@ public class ChooseTagLocateDialogFragment extends DialogFragment implements
                 " AND " + InventoryContract.TagEntry.COLUMN_ID + " != ? " +
                 " AND " + InventoryContract.TagEntry.COLUMN_ID + " != ? ";
         String[] selectionArgs = {
-                ScanBLEDevicesFragment.CONST_UUIDS[ScanBLEDevicesFragment.BEACON_M_CHAR_UUID],
-                ScanBLEDevicesFragment.CONST_UUIDS[ScanBLEDevicesFragment.BEACON_1_CHAR_UUID],
-                ScanBLEDevicesFragment.CONST_UUIDS[ScanBLEDevicesFragment.BEACON_2_CHAR_UUID],
-                ScanBLEDevicesFragment.CONST_UUIDS[ScanBLEDevicesFragment.BEACON_3_CHAR_UUID]
+                GetLocationDataFragment.CONST_UUIDS[GetLocationDataFragment.BEACON_M_CHAR_UUID],
+                GetLocationDataFragment.CONST_UUIDS[GetLocationDataFragment.BEACON_1_CHAR_UUID],
+                GetLocationDataFragment.CONST_UUIDS[GetLocationDataFragment.BEACON_2_CHAR_UUID],
+                GetLocationDataFragment.CONST_UUIDS[GetLocationDataFragment.BEACON_3_CHAR_UUID]
         };
 
         final Cursor cursor = getContext().getContentResolver().query(
