@@ -27,10 +27,9 @@ public class ShowLocationFragment extends Fragment {
     private static final int SIDE_3 = 3;
     private static final double LENGTH = 35.0;
     private static final double WIDTH = 45.0;
-    private static final double WALL_BUFFER = 10;
+    private static final double WALL_BUFFER = 5.0;
     private double[] distanceValues = new double[4];
     private TextView coordinateView;
-    private double[] error = new double[3];
     private Uri mUri;
 
     public ShowLocationFragment() {
@@ -65,6 +64,9 @@ public class ShowLocationFragment extends Fragment {
 
         String[] dataString = new String[4];
         double[][] tagDistanceValues = new double[5][4];
+        double[] coordinates;
+        double x = 0, y = 0;
+        String text = coordinateView.getText().toString();
 
         // get cursor of data
         String[] projection = {
@@ -114,24 +116,23 @@ public class ShowLocationFragment extends Fragment {
         // call location
         for (int i = 0; i < 5; i++) {
             distanceValues = tagDistanceValues[i];
-            findLocation();
-        }
-    }
 
-    private void findLocation() {
+            // convert rssi to distance
+            for (int j = 0; j < 4; j++) {
+                distanceValues[j] = convertRssiToDistance(distanceValues[j]);
+            }
 
-        double[] coordinates;
-        String text = coordinateView.getText().toString();
-
-        // convert rssi to distance
-        for (int i = 0; i < 4; i++) {
-            distanceValues[i] = convertRssiToDistance(distanceValues[i]);
+            coordinates = nilex();
+            x += coordinates[0];
+            y += coordinates[1];
         }
 
-        // NILEX
-        coordinates = nilex();
+        // average
+        x = x / 5.0;
+        y = y / 5.0;
 
-        text += String.format(Locale.US, "%.1f,%.1f\n", coordinates[0], coordinates[1]);
+        // write result to text view
+        text += String.format(Locale.US, "%.0f,%.0f\n", x, y);
         coordinateView.setText(text);
     }
 
@@ -151,6 +152,8 @@ public class ShowLocationFragment extends Fragment {
 
         // get error starting value
         bestError = calcError(coordinates);
+        best[0] = coordinates[0] + WALL_BUFFER;
+        best[1] = coordinates[1] + WALL_BUFFER;
 
         while (x <= X_MAX) {
 
@@ -181,60 +184,5 @@ public class ShowLocationFragment extends Fragment {
                 Math.abs(Math.sqrt(Math.pow(coordinate[0], 2.0) + Math.pow(LENGTH - coordinate[1], 2.0)) - distanceValues[SIDE_2]) +
                 Math.abs(Math.sqrt(Math.pow(WIDTH - coordinate[0], 2.0) + Math.pow(LENGTH - coordinate[1], 2.0)) - distanceValues[SIDE_3]);
     }
-
-    /*
-    private void simplex() {
-        int worst;
-        int oldWorst = -1;
-        double centroid[] = new double[2];
-
-        // loop until found
-        while (true) {
-
-            // get errors
-            error[0] = calcError(triangle[0]);
-            error[1] = calcError(triangle[1]);
-            error[2] = calcError(triangle[2]);
-
-            // find worst error
-            if (error[0] > error[1]) {
-                if (error[0] > error[2]) {
-                    worst = 0;
-                } else {
-                    worst = 2;
-                }
-            } else {
-                if (error[2] > error[1]) {
-                    worst = 2;
-                } else {
-                    worst = 1;
-                }
-            }
-
-            // find centroid
-            if (worst == 0) {
-                centroid[0] = (triangle[1][0] + triangle[2][0]) / 2.0;
-                centroid[1] = (triangle[1][1] + triangle[2][1]) / 2.0;
-            } else if (worst == 1) {
-                centroid[0] = (triangle[0][0] + triangle[2][0]) / 2.0;
-                centroid[1] = (triangle[0][1] + triangle[2][1]) / 2.0;
-            } else {
-                centroid[0] = (triangle[1][0] + triangle[0][0]) / 2.0;
-                centroid[1] = (triangle[1][1] + triangle[0][1]) / 2.0;
-            }
-
-            // reflect point with most error
-            triangle[worst][0] = centroid[0] + (centroid[0] - triangle[worst][0]);
-            triangle[worst][1] = centroid[1] + (centroid[1] - triangle[worst][1]);
-
-            // if worst hasn't changed, exit loop
-            if (worst == oldWorst) {
-                break;
-            }
-
-            oldWorst = worst;
-        }
-    }
-    */
 }
 

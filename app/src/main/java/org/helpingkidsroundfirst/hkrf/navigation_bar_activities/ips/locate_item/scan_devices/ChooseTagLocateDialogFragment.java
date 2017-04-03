@@ -57,6 +57,16 @@ public class ChooseTagLocateDialogFragment extends DialogFragment implements
         nameId = -1;
 
         final Spinner nameSpinner = (Spinner) rootView.findViewById(R.id.choose_tag_locate_spinner);
+        String selection = InventoryContract.TagEntry.COLUMN_ID + " != ? " +
+                " AND " + InventoryContract.TagEntry.COLUMN_ID + " != ? " +
+                " AND " + InventoryContract.TagEntry.COLUMN_ID + " != ? " +
+                " AND " + InventoryContract.TagEntry.COLUMN_ID + " != ? ";
+        String[] selectionArgs = {
+                ScanBLEDevicesFragment.CONST_UUIDS[ScanBLEDevicesFragment.BEACON_M_CHAR_UUID],
+                ScanBLEDevicesFragment.CONST_UUIDS[ScanBLEDevicesFragment.BEACON_1_CHAR_UUID],
+                ScanBLEDevicesFragment.CONST_UUIDS[ScanBLEDevicesFragment.BEACON_2_CHAR_UUID],
+                ScanBLEDevicesFragment.CONST_UUIDS[ScanBLEDevicesFragment.BEACON_3_CHAR_UUID]
+        };
 
         final Cursor cursor = getContext().getContentResolver().query(
                 InventoryContract.TagEntry.buildTagUri(),
@@ -64,9 +74,9 @@ public class ChooseTagLocateDialogFragment extends DialogFragment implements
                         InventoryContract.TagEntry.TABLE_NAME + "." +
                                 InventoryContract.TagEntry._ID + " AS _id"
                 },
-                null,
-                null,
-                InventoryContract.TagEntry.COLUMN_NAME
+                selection,
+                selectionArgs,
+                InventoryContract.TagEntry._ID
         );
 
         final SimpleCursorAdapter adapter = new SimpleCursorAdapter(
