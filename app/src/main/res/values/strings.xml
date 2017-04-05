@@ -237,6 +237,8 @@
     <string name="not_master">Please choose the device named "TIIPS"</string>
     <string name="connecting_to_master">Connecting to beacon&#8230;</string>
     <string name="reading_data">Reading Data&#8230;</string>
+    <string name="location_of">Location of tag:</string>
+    <string name="tag_alert">Attempt to alert tag</string>
 
     <!-- dialog_choose_tag_locate -->
     <string name="dialog_choose_tag_header">Choose Tag to Locate</string>

@@ -2,12 +2,23 @@ package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item
 
 
 import android.database.Cursor;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.helpingkidsroundfirst.hkrf.R;
@@ -29,6 +40,7 @@ public class ShowLocationFragment extends Fragment {
     private static final double WIDTH = 45.0;
     private static final double WALL_BUFFER = 5.0;
     private double[] distanceValues = new double[4];
+    private double[] tagLocation = new double[2];
     private TextView coordinateView;
     private Uri mUri;
 
@@ -52,10 +64,30 @@ public class ShowLocationFragment extends Fragment {
             mUri = bundle.getParcelable(URI_KEY);
         }
 
+        // coordinates
         coordinateView = (TextView) rootView.findViewById(R.id.show_location_coord);
         coordinateView.setText("");
 
+        // header
+        String header = getContext().getResources().getString(R.string.location_of) + " " +
+                String.format(Locale.US, "%2d", InventoryContract.TagEntry.getTagIdFromUri(mUri));
+        final TextView headerView = (TextView) rootView.findViewById(R.id.show_location_header);
+        headerView.setText(header);
+
+        // tag alert button
+        rootView.findViewById(R.id.show_location_alert).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // attempt to write to tag
+            }
+        });
+
+        // get data from tag
         getTagData();
+
+        // draw tag location
+        ((ImageView) rootView.findViewById(R.id.show_location_graph))
+                .setImageDrawable(new TagLocationGraph());
 
         return rootView;
     }
@@ -131,6 +163,10 @@ public class ShowLocationFragment extends Fragment {
         x = x / 5.0;
         y = y / 5.0;
 
+        // set location
+        tagLocation[0] = x;
+        tagLocation[1] = y;
+
         // write result to text view
         text += String.format(Locale.US, "%.0f,%.0f\n", x, y);
         coordinateView.setText(text);
@@ -183,6 +219,76 @@ public class ShowLocationFragment extends Fragment {
                 Math.abs(Math.sqrt(Math.pow(WIDTH - coordinate[0], 2.0) + Math.pow(coordinate[1], 2.0)) - distanceValues[SIDE_1]) +
                 Math.abs(Math.sqrt(Math.pow(coordinate[0], 2.0) + Math.pow(LENGTH - coordinate[1], 2.0)) - distanceValues[SIDE_2]) +
                 Math.abs(Math.sqrt(Math.pow(WIDTH - coordinate[0], 2.0) + Math.pow(LENGTH - coordinate[1], 2.0)) - distanceValues[SIDE_3]);
+    }
+
+    private float dipToPix(float dips) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dips,
+                getResources().getDisplayMetrics());
+    }
+
+    private class TagLocationGraph extends Drawable {
+
+        @Override
+        public void draw(@NonNull Canvas canvas) {
+
+            Paint paint = new Paint();
+            paint.setColor(Color.BLACK);
+
+            // constants
+            final float SCALE = 7;
+            final float BUFFER = dipToPix(16);
+            final float PLOT_W = (float) ((WIDTH + WALL_BUFFER * 2.0) * SCALE);
+            final float PLOT_L = (float) ((LENGTH + WALL_BUFFER * 2.0) * SCALE);
+
+            // draw outline
+            paint.setStrokeWidth(2);
+            canvas.drawLine(BUFFER, BUFFER, dipToPix(PLOT_L) + BUFFER, BUFFER, paint);
+            canvas.drawLine(BUFFER, BUFFER, BUFFER, dipToPix(PLOT_W) + BUFFER, paint);
+            canvas.drawLine(dipToPix(PLOT_L) + BUFFER, BUFFER, dipToPix(PLOT_L) + BUFFER,
+                    dipToPix(PLOT_W) + BUFFER, paint);
+            canvas.drawLine(BUFFER, dipToPix(PLOT_W) + BUFFER, dipToPix(PLOT_L) + BUFFER,
+                    dipToPix(PLOT_W) + BUFFER, paint);
+
+            // draw grid
+            paint.setStrokeWidth(0);
+            paint.setColor(Color.GRAY);
+            float l = dipToPix(10 * SCALE) + BUFFER;
+            while (l < dipToPix(PLOT_L) + BUFFER) {
+                canvas.drawLine(l, BUFFER, l, dipToPix(PLOT_W) + BUFFER, paint);
+                l += dipToPix(10 * SCALE);
+            }
+            float w = BUFFER + dipToPix(PLOT_W) - dipToPix(10 * SCALE);
+            while (w > BUFFER) {
+                canvas.drawLine(BUFFER, w, dipToPix(PLOT_L) + BUFFER, w, paint);
+                w -= dipToPix(10 * SCALE);
+            }
+
+            // draw location
+            float y = (float) tagLocation[0];
+            y = PLOT_W - y * SCALE;
+            y = dipToPix(y) + BUFFER;
+            float x = (float) tagLocation[1];
+            x = PLOT_L - x * SCALE;
+            x = dipToPix(x) + BUFFER;
+            float rad = 10 * SCALE;
+            paint.setColor(Color.BLUE);
+            canvas.drawCircle(x, y, rad, paint);
+        }
+
+        @Override
+        public void setAlpha(@IntRange(from = 0, to = 255) int alpha) {
+
+        }
+
+        @Override
+        public void setColorFilter(@Nullable ColorFilter colorFilter) {
+
+        }
+
+        @Override
+        public int getOpacity() {
+            return PixelFormat.OPAQUE;
+        }
     }
 }
 
