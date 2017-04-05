@@ -109,7 +109,6 @@ public class GetLocationDataFragment extends Fragment {
             sendCharReads();
         }
     };
-    private int count = 0;
     // Device scan callback.
     private ScanCallback mScanCallback = new ScanCallback() {
         @Override

@@ -10,13 +10,16 @@ import android.widget.Toast;
 
 import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.scan_devices.GetLocationDataFragment;
+import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.show_location.AlertTagFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.show_location.ChooseTagLocateDialogFragment;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.ips.locate_item.show_location.ShowLocationFragment;
 
 public class LocateItemActivity extends AppCompatActivity implements
         LocateItemActivityFragment.LocateItemListener,
         GetLocationDataFragment.ScanBLEListener,
-        ChooseTagLocateDialogFragment.OnChooseTagLocateListener {
+        ChooseTagLocateDialogFragment.OnChooseTagLocateListener,
+        ShowLocationFragment.OnShowLocation,
+        AlertTagFragment.AlertTagListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,11 @@ public class LocateItemActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void writeComplete() {
+        getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
     public void scanComplete() {
         getSupportFragmentManager().popBackStack();
     }
@@ -93,5 +101,17 @@ public class LocateItemActivity extends AppCompatActivity implements
         bundle.putParcelable(ShowLocationFragment.URI_KEY, uri);
         fragment.setArguments(bundle);
         startFragment(fragment, "ShowLocationFragment");
+    }
+
+    @Override
+    public void onAlertButtonClick(Uri uri) {
+
+        Fragment fragment;
+        Bundle bundle = new Bundle();
+
+        fragment = new AlertTagFragment();
+        bundle.putParcelable(AlertTagFragment.URI_KEY, uri);
+        fragment.setArguments(bundle);
+        startFragment(fragment, "AlertTagFragment");
     }
 }

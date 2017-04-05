@@ -79,6 +79,7 @@ public class ShowLocationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // attempt to write to tag
+                ((OnShowLocation) getActivity()).onAlertButtonClick(mUri);
             }
         });
 
@@ -224,6 +225,10 @@ public class ShowLocationFragment extends Fragment {
     private float dipToPix(float dips) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dips,
                 getResources().getDisplayMetrics());
+    }
+
+    public interface OnShowLocation {
+        void onAlertButtonClick(Uri uri);
     }
 
     private class TagLocationGraph extends Drawable {
