@@ -146,6 +146,7 @@ public class AddShipInventoryDialogFragment extends DialogFragment implements
         });
 
         // listen to qty input
+        qtyString = "";
         final EditText qtyText = (EditText) view.findViewById(R.id.add_ship_qty);
         qtyText.addTextChangedListener(new TextWatcher() {
             @Override
