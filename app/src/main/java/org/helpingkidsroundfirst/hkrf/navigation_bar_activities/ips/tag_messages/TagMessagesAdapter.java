@@ -22,6 +22,7 @@ public class TagMessagesAdapter extends CursorAdapter {
     private static final int VIEW_TYPE_TAG = 0;
     private static final int VIEW_TYPE_BEACON = 1;
     private static final int NUM_TAGS = 8;
+    private static final double BATTERY_RANGE = 3.0 - 2.4;
 
 
     public TagMessagesAdapter(Context context, Cursor c, int flags) {
@@ -67,7 +68,11 @@ public class TagMessagesAdapter extends CursorAdapter {
         String name = cursor.getString(TagMessagesListFragment.COL_TAG_NAME);
         String dateScanned = cursor.getString(TagMessagesListFragment.COL_DATE_SCANNED);
         double batteryLevel = cursor.getDouble(TagMessagesListFragment.COL_BATTERY);
-        String batteryString = String.format(Locale.US, "%4.3f", batteryLevel);
+        double batteryPercent = (batteryLevel - 2.4) / (BATTERY_RANGE) * 100.0;
+        if (batteryPercent <= 0) {
+            batteryPercent = 0;
+        }
+        String batteryString = String.format(Locale.US, "%3.0f", batteryPercent) + "%";
 
         switch (viewType) {
 

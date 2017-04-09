@@ -36,9 +36,9 @@ public class ShowLocationFragment extends Fragment {
     private static final int SIDE_1 = 1;
     private static final int SIDE_2 = 2;
     private static final int SIDE_3 = 3;
-    private static final double LENGTH = 35.0;
-    private static final double WIDTH = 45.0;
-    private static final double WALL_BUFFER = 5.0;
+    private static final double LENGTH = 25.0;
+    private static final double WIDTH = 35.0;
+    private static final double WALL_BUFFER = 10.0;
     private double[] distanceValues = new double[4];
     private double[] tagLocation = new double[2];
     private TextView coordinateView;
@@ -257,15 +257,15 @@ public class ShowLocationFragment extends Fragment {
             // draw grid
             paint.setStrokeWidth(0);
             paint.setColor(Color.GRAY);
-            float l = dipToPix(10 * SCALE) + BUFFER;
+            float l = dipToPix(5 * SCALE) + BUFFER;
             while (l < dipToPix(PLOT_L) + BUFFER) {
                 canvas.drawLine(l, BUFFER, l, dipToPix(PLOT_W) + BUFFER, paint);
-                l += dipToPix(10 * SCALE);
+                l += dipToPix(5 * SCALE);
             }
-            float w = BUFFER + dipToPix(PLOT_W) - dipToPix(10 * SCALE);
+            float w = BUFFER + dipToPix(PLOT_W) - dipToPix(5 * SCALE);
             while (w > BUFFER) {
                 canvas.drawLine(BUFFER, w, dipToPix(PLOT_L) + BUFFER, w, paint);
-                w -= dipToPix(10 * SCALE);
+                w -= dipToPix(5 * SCALE);
             }
 
             // draw location
@@ -276,6 +276,7 @@ public class ShowLocationFragment extends Fragment {
             x = PLOT_L - x * SCALE;
             x = dipToPix(x) + BUFFER;
             float rad = 10 * SCALE;
+            rad = dipToPix(rad);
             paint.setColor(Color.BLUE);
             canvas.drawCircle(x, y, rad, paint);
         }
