@@ -24,8 +24,8 @@
 
         <ImageView
             android:id="@+id/show_location_graph"
-            android:layout_width="347dp"
-            android:layout_height="417dp"
+            android:layout_width="500dp"
+            android:layout_height="600dp"
             android:background="@android:color/transparent" />
 
         <View style="@style/Divider" />

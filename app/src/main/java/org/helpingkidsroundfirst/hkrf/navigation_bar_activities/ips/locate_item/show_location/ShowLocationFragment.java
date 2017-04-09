@@ -87,8 +87,8 @@ public class ShowLocationFragment extends Fragment {
         getTagData();
 
         // draw tag location
-        ((ImageView) rootView.findViewById(R.id.show_location_graph))
-                .setImageDrawable(new TagLocationGraph());
+        final ImageView imageView = (ImageView) rootView.findViewById(R.id.show_location_graph);
+        imageView.setImageDrawable(new TagLocationGraph());
 
         return rootView;
     }
@@ -240,13 +240,26 @@ public class ShowLocationFragment extends Fragment {
             paint.setColor(Color.BLACK);
 
             // constants
-            final float SCALE = 7;
+            final float SCALE = 10;
             final float BUFFER = dipToPix(16);
             final float PLOT_W = (float) ((WIDTH + WALL_BUFFER * 2.0) * SCALE);
             final float PLOT_L = (float) ((LENGTH + WALL_BUFFER * 2.0) * SCALE);
 
+            // draw location
+            float y = (float) tagLocation[0];
+            y = PLOT_W - y * SCALE;
+            y = dipToPix(y) + BUFFER;
+            float x = (float) tagLocation[1];
+            x = PLOT_L - x * SCALE;
+            x = dipToPix(x) + BUFFER;
+            float rad = 10 * SCALE;
+            rad = dipToPix(rad);
+            paint.setColor(Color.BLUE);
+            canvas.drawCircle(x, y, rad, paint);
+
             // draw outline
             paint.setStrokeWidth(2);
+            paint.setColor(Color.BLACK);
             canvas.drawLine(BUFFER, BUFFER, dipToPix(PLOT_L) + BUFFER, BUFFER, paint);
             canvas.drawLine(BUFFER, BUFFER, BUFFER, dipToPix(PLOT_W) + BUFFER, paint);
             canvas.drawLine(dipToPix(PLOT_L) + BUFFER, BUFFER, dipToPix(PLOT_L) + BUFFER,
@@ -267,18 +280,6 @@ public class ShowLocationFragment extends Fragment {
                 canvas.drawLine(BUFFER, w, dipToPix(PLOT_L) + BUFFER, w, paint);
                 w -= dipToPix(5 * SCALE);
             }
-
-            // draw location
-            float y = (float) tagLocation[0];
-            y = PLOT_W - y * SCALE;
-            y = dipToPix(y) + BUFFER;
-            float x = (float) tagLocation[1];
-            x = PLOT_L - x * SCALE;
-            x = dipToPix(x) + BUFFER;
-            float rad = 10 * SCALE;
-            rad = dipToPix(rad);
-            paint.setColor(Color.BLUE);
-            canvas.drawCircle(x, y, rad, paint);
         }
 
         @Override

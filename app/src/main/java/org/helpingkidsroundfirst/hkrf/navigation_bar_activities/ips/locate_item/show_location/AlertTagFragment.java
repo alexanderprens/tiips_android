@@ -60,6 +60,11 @@ public class AlertTagFragment extends Fragment {
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
 
         @Override
+        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            ((AlertTagListener) getActivity()).writeComplete();
+        }
+
+        @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic) {
             // this will get called anytime you perform a read or write characteristic operation
             ((AlertTagListener) getActivity()).writeComplete();
@@ -70,7 +75,7 @@ public class AlertTagFragment extends Fragment {
             // this will get called when a device connects or disconnects
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 mBluetoothGatt.discoverServices();
-                textView.setText(getResources().getString(R.string.reading_data));
+                textView.setText(getResources().getString(R.string.writing_data));
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED || newState == BluetoothProfile.STATE_DISCONNECTING) {
                 ((AlertTagListener) getActivity()).disconnected();
             }
@@ -205,7 +210,7 @@ public class AlertTagFragment extends Fragment {
 
             if (name != null && name.equals(tagDeviceName)) {
                 // connect to gatt server
-                textView.setText(getResources().getString(R.string.connecting_to_master));
+                textView.setText(getResources().getString(R.string.connecting_to_tag));
                 mBluetoothGatt = mDevice.connectGatt(getContext(), true, mGattCallback);
                 scanLeDevice(false);
             }

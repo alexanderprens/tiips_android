@@ -238,8 +238,10 @@
     <string name="connecting_to_master">Connecting to beacon&#8230;</string>
     <string name="reading_data">Reading Data&#8230;</string>
     <string name="location_of">Location of tag:</string>
-    <string name="tag_alert">Attempt to alert tag</string>
+    <string name="tag_alert">Turn buzzer on/off</string>
     <string name="tag_write">Tag buzzer started</string>
+    <string name="writing_data">Writing Data&#8230;</string>
+    <string name="connecting_to_tag">Connecting to tag&#8230;</string>
 
     <!-- dialog_choose_tag_locate -->
     <string name="dialog_choose_tag_header">Choose Tag to Locate</string>
