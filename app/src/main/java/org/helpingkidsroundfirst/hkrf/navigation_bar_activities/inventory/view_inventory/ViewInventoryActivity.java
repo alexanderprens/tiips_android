@@ -44,7 +44,7 @@ public class ViewInventoryActivity extends AppCompatActivity
         Log.i(TAG, "ViewInventoryActivity created");
 
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getResources().getString(R.string.view_inventory_title));
 
         if (savedInstanceState == null) {

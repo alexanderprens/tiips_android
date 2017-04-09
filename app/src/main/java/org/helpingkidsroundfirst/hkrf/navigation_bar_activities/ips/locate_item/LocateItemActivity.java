@@ -29,7 +29,7 @@ public class LocateItemActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
 
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState == null) {
             Fragment fragment = new LocateItemActivityFragment();
