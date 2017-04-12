@@ -36,8 +36,8 @@ public class ShowLocationFragment extends Fragment {
     private static final int SIDE_1 = 1;
     private static final int SIDE_2 = 2;
     private static final int SIDE_3 = 3;
-    private static final double LENGTH = 25.0;
-    private static final double WIDTH = 35.0;
+    private static final double LENGTH = 15.0;
+    private static final double WIDTH = 30.0;
     private static final double WALL_BUFFER = 10.0;
     private double[] distanceValues = new double[4];
     private double[] tagLocation = new double[2];
@@ -174,7 +174,7 @@ public class ShowLocationFragment extends Fragment {
     }
 
     private double convertRssiToDistance(double rssi) {
-        return 4.0 * (Math.pow(10.0, -6.0)) * (Math.pow(rssi, 3.6718));
+        return 131.03 * Math.log(rssi) - 537.94;
     }
 
     private double[] nilex() {
@@ -183,7 +183,7 @@ public class ShowLocationFragment extends Fragment {
         double best[] = {0, 0};
         double bestError, currentError;
         double x = 0.0 - WALL_BUFFER;
-        double y = 0.0 - WALL_BUFFER;
+        double y;
         final double X_MAX = WIDTH + WALL_BUFFER;
         final double Y_MAX = LENGTH + WALL_BUFFER;
 
@@ -195,6 +195,7 @@ public class ShowLocationFragment extends Fragment {
         while (x <= X_MAX) {
 
             coordinates[0] = x;
+            y = 0.0 - WALL_BUFFER;
 
             while (y <= Y_MAX) {
 
