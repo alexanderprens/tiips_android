@@ -173,11 +173,6 @@ public class InventoryContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static Uri buildReceiveInventoryWithCategoryUri(Long category) {
-            return CONTENT_URI.buildUpon().appendPath("category_id")
-                    .appendPath(Long.toString(category)).build();
-        }
-
         public static long getReceiveIdFromUri(Uri uri) {
             return Long.parseLong(uri.getPathSegments().get(1));
         }
@@ -269,17 +264,8 @@ public class InventoryContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static Uri buildShipInventoryWithCategoryUri(Long category) {
-            return CONTENT_URI.buildUpon().appendPath("category_id")
-                    .appendPath(Long.toString(category)).build();
-        }
-
         public static long getShipIdFromUri(Uri uri) {
             return Long.parseLong(uri.getPathSegments().get(1));
-        }
-
-        public static Long getCategoryFromUri(Uri uri) {
-            return Long.parseLong(uri.getPathSegments().get(2));
         }
     }
 
@@ -298,10 +284,7 @@ public class InventoryContract {
         // Table columns
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_ID = "tag_id";
-        public static final String COLUMN_RSSI_M = "rssi_m";
-        public static final String COLUMN_RSSI_1 = "rssi_1";
-        public static final String COLUMN_RSSI_2 = "rssi_2";
-        public static final String COLUMN_RSSI_3 = "rssi_3";
+        public static final String COLUMN_MISSING = "missing";
         public static final String COLUMN_BATTERY = "battery";
         public static final String COLUMN_ACTIVE = "active";
         public static final String COLUMN_DATE = "date";

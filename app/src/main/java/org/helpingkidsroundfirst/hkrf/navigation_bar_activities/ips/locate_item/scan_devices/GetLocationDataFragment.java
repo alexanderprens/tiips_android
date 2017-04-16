@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
@@ -56,18 +57,7 @@ public class GetLocationDataFragment extends Fragment {
             "00003a0c-0000-1000-8000-00805f9b34fb"
     };
     public static final int TAG_SERVICE_UUID = 0;
-    public static final int TAG01_CHAR_UUID = 1;
-    public static final int TAG02_CHAR_UUID = 2;
-    public static final int TAG03_CHAR_UUID = 3;
-    public static final int TAG04_CHAR_UUID = 4;
-    public static final int TAG05_CHAR_UUID = 5;
-    public static final int TAG06_CHAR_UUID = 6;
-    public static final int TAG07_CHAR_UUID = 7;
-    public static final int TAG08_CHAR_UUID = 8;
-    public static final int BEACON_M_CHAR_UUID = 9;
-    public static final int BEACON_1_CHAR_UUID = 10;
-    public static final int BEACON_2_CHAR_UUID = 11;
-    public static final int BEACON_3_CHAR_UUID = 12;
+    public static final int BEACON_M_CHAR_UUID = 12;
     private static final int REQUEST_ENABLE_BT = 10;
     private static final long SCAN_PERIOD = 500;
     private static final String MASTER_NAME = "TIIPS";
@@ -300,38 +290,18 @@ public class GetLocationDataFragment extends Fragment {
             stringBuilder.append(String.format("%02X", byteChar));
         String charValue = stringBuilder.toString();
 
+        // parse battery level
+        String battHex = charValue.substring(0, 4);
+        Long battLong = Long.parseLong(battHex, 16);
+        double battDouble = (double) battLong / 1000.0;
+        contentValues.put(InventoryContract.TagEntry.COLUMN_BATTERY, battDouble);
+
         // check if tag or beacon characteristic
-        if (charValue.length() > 8) {
+        if (charValue.length() > 4) {
             // tag
-            // parse battery level
-            String battHex = charValue.substring(0, 4);
-            Long battLong = Long.parseLong(battHex, 16);
-            double battDouble = (double) battLong / 1000.0;
-            contentValues.put(InventoryContract.TagEntry.COLUMN_BATTERY, battDouble);
-
-            // parse master rssi
-            String rssiString = charValue.substring(4, 14);
-            contentValues.put(InventoryContract.TagEntry.COLUMN_RSSI_M, rssiString);
-
-            // parse side 1 rssi
-            rssiString = charValue.substring(14, 24);
-            contentValues.put(InventoryContract.TagEntry.COLUMN_RSSI_1, rssiString);
-
-            // parse side 2 rssi
-            rssiString = charValue.substring(24, 34);
-            contentValues.put(InventoryContract.TagEntry.COLUMN_RSSI_2, rssiString);
-
-            // parse side 3 rssi
-            rssiString = charValue.substring(34, 44);
-            contentValues.put(InventoryContract.TagEntry.COLUMN_RSSI_3, rssiString);
-
-        } else if (!charValue.isEmpty()) {
-            // beacon
-            // parse battery level
-            String battHex = charValue.substring(0, 4);
-            Long battLong = Long.parseLong(battHex, 16);
-            double battDouble = (double) battLong / 1000.0;
-            contentValues.put(InventoryContract.TagEntry.COLUMN_BATTERY, battDouble);
+            // parse missing
+            String rssiString = charValue.substring(4, 8);
+            contentValues.put(InventoryContract.TagEntry.COLUMN_MISSING, rssiString);
         }
 
         // put into table
@@ -340,15 +310,13 @@ public class GetLocationDataFragment extends Fragment {
 
     private void putDataIntoTable(ContentValues contentValues) {
 
-        int updated = 0;
-
         // update tag info
         Uri tagUri = InventoryContract.TagEntry.buildTagUri();
         String selection = InventoryContract.TagEntry.COLUMN_ID + " = ? ";
         String[] selectionArgs = {contentValues.getAsString(InventoryContract.TagEntry.COLUMN_ID)};
 
         try {
-            updated = getContext().getContentResolver().update(
+            getContext().getContentResolver().update(
                     tagUri,
                     contentValues,
                     selection,
@@ -356,17 +324,13 @@ public class GetLocationDataFragment extends Fragment {
             );
         } catch (Exception e) {
             String message = e.getMessage();
-        }
-
-        if (updated < 1) {
-            // shit
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         }
     }
 
     public interface ScanBLEListener {
         void BTNotEnabled();
         void scanComplete();
-
         void disconnected();
     }
 }

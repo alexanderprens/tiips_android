@@ -23,7 +23,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
     static final String DATABASE_NAME = "inventory.db";
     //change when database changes
-    private static final int DATABASE_VERSION = 19;
+    private static final int DATABASE_VERSION = 20;
 
     public InventoryDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -126,10 +126,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
                 TagEntry.COLUMN_ACTIVE + " BOOLEAN, " +
                 TagEntry.COLUMN_DATE + " TEXT, " +
                 TagEntry.COLUMN_BATTERY + " FLOAT, " +
-                TagEntry.COLUMN_RSSI_M + " TEXT, " +
-                TagEntry.COLUMN_RSSI_1 + " TEXT, " +
-                TagEntry.COLUMN_RSSI_2 + " TEXT, " +
-                TagEntry.COLUMN_RSSI_3 + ");";
+                TagEntry.COLUMN_MISSING + ");";
 
 
         // execute SQL commands
@@ -175,10 +172,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
                     TagEntry.COLUMN_ACTIVE + " BOOLEAN, " +
                     TagEntry.COLUMN_DATE + " TEXT, " +
                     TagEntry.COLUMN_BATTERY + " FLOAT, " +
-                    TagEntry.COLUMN_RSSI_M + " TEXT, " +
-                    TagEntry.COLUMN_RSSI_1 + " TEXT, " +
-                    TagEntry.COLUMN_RSSI_2 + " TEXT, " +
-                    TagEntry.COLUMN_RSSI_3 + ");";
+                    TagEntry.COLUMN_MISSING + ");";
 
             sqLiteDatabase.execSQL(SQL_CREATE_TAGS_TABLE);
 
@@ -198,10 +192,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
                     TagEntry.COLUMN_ACTIVE + " BOOLEAN, " +
                     TagEntry.COLUMN_DATE + " TEXT, " +
                     TagEntry.COLUMN_BATTERY + " FLOAT, " +
-                    TagEntry.COLUMN_RSSI_M + " TEXT, " +
-                    TagEntry.COLUMN_RSSI_1 + " TEXT, " +
-                    TagEntry.COLUMN_RSSI_2 + " TEXT, " +
-                    TagEntry.COLUMN_RSSI_3 + ");";
+                    TagEntry.COLUMN_MISSING + ");";
 
             sqLiteDatabase.execSQL(SQL_CREATE_TAGS_TABLE);
 
@@ -210,6 +201,25 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
         } else if (oldVersion == 17 || oldVersion == 18) {
             Utility.updateTagData(sqLiteDatabase);
+
+        } else if (oldVersion == 19) {
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TagEntry.TABLE_NAME);
+
+            // create tags table
+            final String SQL_CREATE_TAGS_TABLE = "CREATE TABLE " +
+                    TagEntry.TABLE_NAME + " (" +
+                    TagEntry._ID + " INTEGER PRIMARY KEY, " +
+                    TagEntry.COLUMN_ID + " TEXT NOT NULL, " +
+                    TagEntry.COLUMN_NAME + " TEXT, " +
+                    TagEntry.COLUMN_ACTIVE + " BOOLEAN, " +
+                    TagEntry.COLUMN_DATE + " TEXT, " +
+                    TagEntry.COLUMN_BATTERY + " FLOAT, " +
+                    TagEntry.COLUMN_MISSING + ");";
+
+            sqLiteDatabase.execSQL(SQL_CREATE_TAGS_TABLE);
+
+            // insert initial tag value into tag table
+            Utility.initialTagData(sqLiteDatabase);
         }
     }
 }

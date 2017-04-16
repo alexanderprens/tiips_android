@@ -15,21 +15,6 @@
             android:layout_height="wrap_content"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
-        <TextView
-            android:id="@+id/show_location_coord"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <View style="@style/Divider" />
-
-        <ImageView
-            android:id="@+id/show_location_graph"
-            android:layout_width="500dp"
-            android:layout_height="600dp"
-            android:background="@android:color/transparent" />
-
-        <View style="@style/Divider" />
-
         <Button
             android:id="@+id/show_location_alert"
             android:layout_width="match_parent"

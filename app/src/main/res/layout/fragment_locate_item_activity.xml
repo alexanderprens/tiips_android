@@ -15,5 +15,5 @@
         android:id="@+id/locate_button_coord"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Locate Item" />
+        android:text="@string/turn_buzzer_on" />
 </LinearLayout>

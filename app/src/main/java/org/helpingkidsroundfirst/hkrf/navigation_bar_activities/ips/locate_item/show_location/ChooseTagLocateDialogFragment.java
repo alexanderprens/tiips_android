@@ -58,15 +58,9 @@ public class ChooseTagLocateDialogFragment extends DialogFragment implements
         nameId = -1;
 
         final Spinner nameSpinner = (Spinner) rootView.findViewById(R.id.choose_tag_locate_spinner);
-        String selection = InventoryContract.TagEntry.COLUMN_ID + " != ? " +
-                " AND " + InventoryContract.TagEntry.COLUMN_ID + " != ? " +
-                " AND " + InventoryContract.TagEntry.COLUMN_ID + " != ? " +
-                " AND " + InventoryContract.TagEntry.COLUMN_ID + " != ? ";
+        String selection = InventoryContract.TagEntry.COLUMN_ID + " != ? ";
         String[] selectionArgs = {
-                GetLocationDataFragment.CONST_UUIDS[GetLocationDataFragment.BEACON_M_CHAR_UUID],
-                GetLocationDataFragment.CONST_UUIDS[GetLocationDataFragment.BEACON_1_CHAR_UUID],
-                GetLocationDataFragment.CONST_UUIDS[GetLocationDataFragment.BEACON_2_CHAR_UUID],
-                GetLocationDataFragment.CONST_UUIDS[GetLocationDataFragment.BEACON_3_CHAR_UUID]
+                GetLocationDataFragment.CONST_UUIDS[GetLocationDataFragment.BEACON_M_CHAR_UUID]
         };
 
         final Cursor cursor = getContext().getContentResolver().query(

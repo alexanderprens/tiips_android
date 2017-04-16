@@ -22,7 +22,7 @@ public class ManageTagsActivityFragment extends Fragment implements
         View.OnClickListener,
         UpdateTagNameDialogFragment.UpdateTagNameListener {
 
-    private static final int NUM_TAGS = 8;
+    private static final int NUM_TAGS = 11;
     private static final int TAG1 = 0;
     private static final int TAG2 = 1;
     private static final int TAG3 = 2;
@@ -31,6 +31,9 @@ public class ManageTagsActivityFragment extends Fragment implements
     private static final int TAG6 = 5;
     private static final int TAG7 = 6;
     private static final int TAG8 = 7;
+    private static final int TAG9 = 8;
+    private static final int TAG10 = 9;
+    private static final int TAG11 = 10;
     private String[] tagNames;
     private Switch[] switches;
     private TextView[] textViews;
@@ -90,6 +93,21 @@ public class ManageTagsActivityFragment extends Fragment implements
         switches[TAG8] = (Switch) rootView.findViewById(R.id.manage_tag08_active);
         rootView.findViewById(R.id.manage_tag08_name).setOnClickListener(this);
         textViews[TAG8] = (TextView) rootView.findViewById(R.id.manage_tag08_text);
+
+        // tag 9
+        switches[TAG9] = (Switch) rootView.findViewById(R.id.manage_tag09_active);
+        rootView.findViewById(R.id.manage_tag09_name).setOnClickListener(this);
+        textViews[TAG9] = (TextView) rootView.findViewById(R.id.manage_tag09_text);
+
+        // tag 10
+        switches[TAG10] = (Switch) rootView.findViewById(R.id.manage_tag10_active);
+        rootView.findViewById(R.id.manage_tag10_name).setOnClickListener(this);
+        textViews[TAG10] = (TextView) rootView.findViewById(R.id.manage_tag10_text);
+
+        // tag 8
+        switches[TAG11] = (Switch) rootView.findViewById(R.id.manage_tag11_active);
+        rootView.findViewById(R.id.manage_tag11_name).setOnClickListener(this);
+        textViews[TAG11] = (TextView) rootView.findViewById(R.id.manage_tag11_text);
 
         // setup stuff for all 8 tags
         for (int i = 0; i < NUM_TAGS; i++) {
@@ -178,6 +196,33 @@ public class ManageTagsActivityFragment extends Fragment implements
 
             case R.id.manage_tag08_name:
                 startDialog(TAG8);
+                break;
+
+            // tag 9
+            case R.id.manage_tag09_active:
+                setActive(TAG9);
+                break;
+
+            case R.id.manage_tag09_name:
+                startDialog(TAG9);
+                break;
+
+            // tag 10
+            case R.id.manage_tag10_active:
+                setActive(TAG10);
+                break;
+
+            case R.id.manage_tag10_name:
+                startDialog(TAG10);
+                break;
+
+            // tag 11
+            case R.id.manage_tag11_active:
+                setActive(TAG10);
+                break;
+
+            case R.id.manage_tag11_name:
+                startDialog(TAG10);
                 break;
         }
 

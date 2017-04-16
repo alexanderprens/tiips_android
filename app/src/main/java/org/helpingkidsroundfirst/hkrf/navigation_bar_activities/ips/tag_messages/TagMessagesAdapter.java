@@ -21,7 +21,7 @@ public class TagMessagesAdapter extends CursorAdapter {
     private static final int VIEW_TYPE_COUNT = 2;
     private static final int VIEW_TYPE_TAG = 0;
     private static final int VIEW_TYPE_BEACON = 1;
-    private static final int NUM_TAGS = 8;
+    private static final int NUM_TAGS = 11;
     private static final double BATTERY_RANGE = 3.0 - 2.4;
 
 

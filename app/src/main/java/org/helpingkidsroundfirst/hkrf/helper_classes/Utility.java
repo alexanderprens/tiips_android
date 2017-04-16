@@ -24,7 +24,7 @@ public class Utility {
 
         ContentValues contentValue = new ContentValues();
 
-        for (int i = 1; i <= 8; i++) {
+        for (int i = 1; i <= 11; i++) {
 
             // set uuid
             contentValue.put(InventoryContract.TagEntry.COLUMN_ID,
@@ -45,30 +45,24 @@ public class Utility {
             );
         }
 
-        for (int i = 9; i <= GetLocationDataFragment.NUM_BEACONS; i++) {
-            // set uuid
-            contentValue.put(InventoryContract.TagEntry.COLUMN_ID,
-                    GetLocationDataFragment.CONST_UUIDS[i]);
+        // set uuid
+        contentValue.put(InventoryContract.TagEntry.COLUMN_ID,
+                GetLocationDataFragment.CONST_UUIDS[GetLocationDataFragment.BEACON_M_CHAR_UUID]);
 
-            // set default name
-            String name;
-            if (i == 9) {
-                name = "MASTER BEACON";
-            } else {
-                name = String.format(Locale.US, "BEACON%2d", i - 9);
-            }
-            contentValue.put(InventoryContract.TagEntry.COLUMN_NAME, name);
+        // set default name
+        String name;
+        name = "MASTER BEACON";
+        contentValue.put(InventoryContract.TagEntry.COLUMN_NAME, name);
 
-            // set active
-            contentValue.put(InventoryContract.TagEntry.COLUMN_ACTIVE, false);
+        // set active
+        contentValue.put(InventoryContract.TagEntry.COLUMN_ACTIVE, false);
 
-            // insert into table
-            sqLiteDatabase.insert(
-                    InventoryContract.TagEntry.TABLE_NAME,
-                    null,
-                    contentValue
-            );
-        }
+        // insert into table
+        sqLiteDatabase.insert(
+                InventoryContract.TagEntry.TABLE_NAME,
+                null,
+                contentValue
+        );
     }
 
     // create initial data for tags on database startup
