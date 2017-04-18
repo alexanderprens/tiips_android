@@ -218,11 +218,11 @@ public class ManageTagsActivityFragment extends Fragment implements
 
             // tag 11
             case R.id.manage_tag11_active:
-                setActive(TAG10);
+                setActive(TAG11);
                 break;
 
             case R.id.manage_tag11_name:
-                startDialog(TAG10);
+                startDialog(TAG11);
                 break;
         }
 
@@ -231,8 +231,8 @@ public class ManageTagsActivityFragment extends Fragment implements
 
     private void updateViews() {
 
-        String[] names = new String[8];
-        boolean[] actives = new boolean[8];
+        String[] names = new String[NUM_TAGS];
+        boolean[] actives = new boolean[NUM_TAGS];
 
         Cursor cursor = getContext().getContentResolver().query(
                 InventoryContract.TagEntry.buildTagUri(),
