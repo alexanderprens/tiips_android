@@ -32,13 +32,13 @@ import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.AddSheetRequest;
 import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest;
-import com.google.api.services.sheets.v4.model.BatchUpdateValuesRequest;
-import com.google.api.services.sheets.v4.model.BatchUpdateValuesResponse;
 import com.google.api.services.sheets.v4.model.Border;
 import com.google.api.services.sheets.v4.model.Borders;
 import com.google.api.services.sheets.v4.model.CellData;
 import com.google.api.services.sheets.v4.model.CellFormat;
+import com.google.api.services.sheets.v4.model.DeleteDimensionRequest;
 import com.google.api.services.sheets.v4.model.DeleteSheetRequest;
+import com.google.api.services.sheets.v4.model.DimensionRange;
 import com.google.api.services.sheets.v4.model.GridProperties;
 import com.google.api.services.sheets.v4.model.GridRange;
 import com.google.api.services.sheets.v4.model.RepeatCellRequest;
@@ -58,6 +58,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -312,18 +313,18 @@ public class ExportToSheetsActivity extends Activity implements
 
     private class ExportToSheetsTask extends AsyncTask<Void, Void, Long> {
         private static final int CURRENT_ID = 1;
-        private static final int INVENTORY_ID = 3;
-        private static final int PAST_ID = 2;
+        private static final int INVENTORY_ID = 1;
+        private static final int PAST_ID = 1;
         private static final int CURRENT_COL_COUNT = 9;
         private static final int PAST_COL_COUNT = 8;
         private static final int ITEM_COL_COUNT = 5;
         private static final String MAJOR_DIMENSION = "ROWS";
+        private static final int DATA_CHUNK_SIZE = 25000;
         private com.google.api.services.sheets.v4.Sheets mService = null;
         private Exception mLastError;
-        private String spreadSheetId;
+        private String currentSpreadSheetId, pastSpreadSheetId, itemSpreadSheetId;
         private int currentRowCount;
         private int pastRowCount;
-        private int itemRowCount;
 
         ExportToSheetsTask(GoogleAccountCredential credential) {
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
@@ -356,17 +357,18 @@ public class ExportToSheetsActivity extends Activity implements
                 return null;
             }
 
-            // get data
-            List<ValueRange> valueRanges = new ArrayList<>();
-            valueRanges.add(getCurrentData());
-            valueRanges.add(getPastData());
-            valueRanges.add(getItemData());
-
             // attempt to upload data
-            try {
-                uploadData(valueRanges);
-            } catch (java.io.IOException e) {
-                mLastError = e;
+            if (!getItemData()) {
+                cancel(true);
+                return null;
+            }
+
+            if (!getCurrentData()) {
+                cancel(true);
+                return null;
+            }
+
+            if (!getPastData()) {
                 cancel(true);
                 return null;
             }
@@ -387,9 +389,31 @@ public class ExportToSheetsActivity extends Activity implements
             Spreadsheet spreadsheet = new Spreadsheet();
             SpreadsheetProperties properties = new SpreadsheetProperties();
 
-            // get file name string
+            // get current file name string
             final Calendar c = Calendar.getInstance();
-            String fileName = mContext.getResources().getString(R.string.sheets_file_name) + " ";
+            String fileName = mContext.getResources().getString(R.string.current_sheets_file_name) + " ";
+            fileName += Utility.getDatePickerString(c.get(Calendar.YEAR), c.get(Calendar.MONTH),
+                    c.get(Calendar.DATE));
+            properties.setTitle(fileName);
+            spreadsheet.setProperties(properties);
+
+            // attempt to create current spreadsheet
+            spreadsheet = mService.spreadsheets().create(spreadsheet).execute();
+            currentSpreadSheetId = spreadsheet.getSpreadsheetId();
+
+            // get past file name string
+            fileName = mContext.getResources().getString(R.string.past_sheets_file_name) + " ";
+            fileName += Utility.getDatePickerString(c.get(Calendar.YEAR), c.get(Calendar.MONTH),
+                    c.get(Calendar.DATE));
+            properties.setTitle(fileName);
+            spreadsheet.setProperties(properties);
+
+            // attempt to create past spreadsheet
+            spreadsheet = mService.spreadsheets().create(spreadsheet).execute();
+            pastSpreadSheetId = spreadsheet.getSpreadsheetId();
+
+            // get item file name string
+            fileName = mContext.getResources().getString(R.string.item_sheets_file_name) + " ";
             fileName += Utility.getDatePickerString(c.get(Calendar.YEAR), c.get(Calendar.MONTH),
                     c.get(Calendar.DATE));
             properties.setTitle(fileName);
@@ -397,18 +421,11 @@ public class ExportToSheetsActivity extends Activity implements
 
             // attempt to create spreadsheet
             spreadsheet = mService.spreadsheets().create(spreadsheet).execute();
-            spreadSheetId = spreadsheet.getSpreadsheetId();
+            itemSpreadSheetId = spreadsheet.getSpreadsheetId();
         }
 
         private void createSheets() throws java.io.IOException {
             List<Request> requests = new ArrayList<>();
-
-            // barcode items
-            requests.add(new Request()
-                    .setAddSheet(new AddSheetRequest().setProperties(
-                            new SheetProperties().setTitle(mContext.getResources().getString(R.string.tab_barcode))
-                                    .setSheetId(INVENTORY_ID)))
-            );
 
             // current inventory
             requests.add(new Request()
@@ -417,12 +434,14 @@ public class ExportToSheetsActivity extends Activity implements
                                     .setSheetId(CURRENT_ID)))
             );
 
-            // past inventory
+            // current
             requests.add(new Request()
-                    .setAddSheet(new AddSheetRequest().setProperties(
-                            new SheetProperties().setTitle(mContext.getResources().getString(R.string.tab_past))
-                                    .setSheetId(PAST_ID)))
-            );
+                    .setDeleteDimension(new DeleteDimensionRequest().setRange(
+                            new DimensionRange().setSheetId(CURRENT_ID)
+                                    .setDimension("COLUMNS")
+                                    .setStartIndex(CURRENT_COL_COUNT)
+                                    .setEndIndex(25))
+                    ));
 
             // delete default sheet
             requests.add(new Request()
@@ -431,10 +450,79 @@ public class ExportToSheetsActivity extends Activity implements
 
             BatchUpdateSpreadsheetRequest body =
                     new BatchUpdateSpreadsheetRequest().setRequests(requests);
-            mService.spreadsheets().batchUpdate(spreadSheetId, body).execute();
+            mService.spreadsheets().batchUpdate(currentSpreadSheetId, body).execute();
+
+            // barcode items
+            requests.clear();
+            requests.add(new Request()
+                    .setAddSheet(new AddSheetRequest().setProperties(
+                            new SheetProperties().setTitle(mContext.getResources().getString(R.string.tab_barcode))
+                                    .setSheetId(INVENTORY_ID)))
+            );
+
+            // items
+            requests.add(new Request()
+                    .setDeleteDimension(new DeleteDimensionRequest().setRange(
+                            new DimensionRange().setSheetId(INVENTORY_ID)
+                                    .setDimension("COLUMNS")
+                                    .setStartIndex(ITEM_COL_COUNT)
+                                    .setEndIndex(25))
+                    ));
+
+            // delete default sheet
+            requests.add(new Request()
+                    .setDeleteSheet(new DeleteSheetRequest().setSheetId(0))
+            );
+
+            body = new BatchUpdateSpreadsheetRequest().setRequests(requests);
+            mService.spreadsheets().batchUpdate(itemSpreadSheetId, body).execute();
+
+            // past inventory
+            requests.clear();
+            requests.add(new Request()
+                    .setAddSheet(new AddSheetRequest().setProperties(
+                            new SheetProperties().setTitle(mContext.getResources().getString(R.string.tab_past))
+                                    .setSheetId(PAST_ID)))
+            );
+
+            // past
+            requests.add(new Request()
+                    .setDeleteDimension(new DeleteDimensionRequest().setRange(
+                            new DimensionRange().setSheetId(PAST_ID)
+                                    .setDimension("COLUMNS")
+                                    .setStartIndex(PAST_COL_COUNT)
+                                    .setEndIndex(25))
+                    ));
+
+            // delete default sheet
+            requests.add(new Request()
+                    .setDeleteSheet(new DeleteSheetRequest().setSheetId(0))
+            );
+
+            body = new BatchUpdateSpreadsheetRequest().setRequests(requests);
+            mService.spreadsheets().batchUpdate(pastSpreadSheetId, body).execute();
         }
 
-        private ValueRange getCurrentData() {
+        private boolean uploadSmallData(ValueRange valueRange, String range, String spreadSheetId) {
+
+            try {
+                Sheets.Spreadsheets.Values.Update request = mService.spreadsheets().values().update(
+                        spreadSheetId,
+                        range,
+                        valueRange
+                );
+                request.setValueInputOption("RAW");
+                request.execute();
+
+            } catch (java.io.IOException e) {
+                mLastError = e;
+                return false;
+            }
+
+            return true;
+        }
+
+        private boolean getCurrentData() {
             // create header row
             final String[] header = mContext.getResources().getStringArray(R.array.current_inventory_sheet_header);
 
@@ -471,7 +559,16 @@ public class ExportToSheetsActivity extends Activity implements
             }
 
             // add row to list
+            int numValues = 1;
+            int rowNum = 1;
             values.add(headerValues);
+
+            // create api valueRange
+            String range = mContext.getResources().getString(R.string.tab_current) + "!A" +
+                    String.format(Locale.US, "%d", rowNum);
+            ValueRange valueRange = new ValueRange();
+            valueRange.setMajorDimension(MAJOR_DIMENSION);
+            valueRange.setRange(range);
 
             if (cursor != null && cursor.moveToFirst()) {
 
@@ -485,23 +582,40 @@ public class ExportToSheetsActivity extends Activity implements
                     }
 
                     // add row to list
+                    numValues++;
                     values.add(row);
+                    if (numValues > DATA_CHUNK_SIZE) {
+                        range = mContext.getResources().getString(R.string.tab_current) + "!A" +
+                                String.format(Locale.US, "%d", rowNum);
+                        valueRange.setRange(range);
+                        valueRange.setValues(values);
+                        if (!uploadSmallData(valueRange, range, currentSpreadSheetId)) {
+                            return false;
+                        }
+                        values.clear();
+                        numValues = 0;
+                        rowNum += DATA_CHUNK_SIZE;
+                    }
+
                 } while (cursor.moveToNext());
                 cursor.close();
             }
 
-            currentRowCount = values.size();
+            if (!values.isEmpty()) {
+                range = mContext.getResources().getString(R.string.tab_current) + "!A" +
+                        String.format(Locale.US, "%d", rowNum);
+                valueRange.setRange(range);
+                valueRange.setValues(values);
+                if (!uploadSmallData(valueRange, range, currentSpreadSheetId)) {
+                    return false;
+                }
+            }
 
-            // create api valueRange
-            String range = mContext.getResources().getString(R.string.tab_current) + "!A1";
-            ValueRange valueRange = new ValueRange();
-            valueRange.setMajorDimension(MAJOR_DIMENSION);
-            valueRange.setRange(range);
-            valueRange.setValues(values);
-            return valueRange;
+            currentRowCount = values.size();
+            return true;
         }
 
-        private ValueRange getPastData() {
+        private boolean getPastData() {
             // create header row
             final String[] header = mContext.getResources().getStringArray(R.array.past_inventory_sheet_header);
 
@@ -537,7 +651,15 @@ public class ExportToSheetsActivity extends Activity implements
             }
 
             // add row to list
+            int numValues = 1;
+            int rowNum = 1;
             values.add(headerValues);
+
+            // create api valueRange
+            String range = mContext.getResources().getString(R.string.tab_past) + "!A1";
+            ValueRange valueRange = new ValueRange();
+            valueRange.setMajorDimension(MAJOR_DIMENSION);
+            valueRange.setRange(range);
 
             if (cursor != null && cursor.moveToFirst()) {
 
@@ -551,23 +673,40 @@ public class ExportToSheetsActivity extends Activity implements
                     }
 
                     // add row to list
+                    numValues++;
                     values.add(row);
+                    if (numValues > DATA_CHUNK_SIZE) {
+                        range = mContext.getResources().getString(R.string.tab_past) + "!A" +
+                                String.format(Locale.US, "%d", rowNum);
+                        valueRange.setRange(range);
+                        valueRange.setValues(values);
+                        if (!uploadSmallData(valueRange, range, pastSpreadSheetId)) {
+                            return false;
+                        }
+                        values.clear();
+                        numValues = 0;
+                        rowNum += DATA_CHUNK_SIZE;
+                    }
+
                 } while (cursor.moveToNext());
                 cursor.close();
             }
 
-            pastRowCount = values.size();
+            if (!values.isEmpty()) {
+                range = mContext.getResources().getString(R.string.tab_past) + "!A" +
+                        String.format(Locale.US, "%d", rowNum);
+                valueRange.setRange(range);
+                valueRange.setValues(values);
+                if (!uploadSmallData(valueRange, range, pastSpreadSheetId)) {
+                    return false;
+                }
+            }
 
-            // create api valueRange
-            String range = mContext.getResources().getString(R.string.tab_past) + "!A1";
-            ValueRange valueRange = new ValueRange();
-            valueRange.setMajorDimension(MAJOR_DIMENSION);
-            valueRange.setRange(range);
-            valueRange.setValues(values);
-            return valueRange;
+            pastRowCount = values.size();
+            return true;
         }
 
-        private ValueRange getItemData() {
+        private boolean getItemData() {
             // create header row
             final String[] header = mContext.getResources().getStringArray(R.array.item_inventory_sheet_header);
 
@@ -619,28 +758,16 @@ public class ExportToSheetsActivity extends Activity implements
                 cursor.close();
             }
 
-            itemRowCount = values.size();
-
             // create api valueRange
             String range = mContext.getResources().getString(R.string.tab_barcode) + "!A1";
             ValueRange valueRange = new ValueRange();
             valueRange.setMajorDimension(MAJOR_DIMENSION);
             valueRange.setRange(range);
             valueRange.setValues(values);
-            return valueRange;
-        }
-
-        private void uploadData(List<ValueRange> inputRange) throws java.io.IOException {
-
-            // create request
-            BatchUpdateValuesRequest requestBody = new BatchUpdateValuesRequest();
-            requestBody.setValueInputOption("RAW");
-            requestBody.setData(inputRange);
-
-            Sheets.Spreadsheets.Values.BatchUpdate request = mService.spreadsheets().values()
-                    .batchUpdate(spreadSheetId, requestBody);
-
-            BatchUpdateValuesResponse response = request.execute();
+            if (!uploadSmallData(valueRange, range, itemSpreadSheetId)) {
+                return false;
+            }
+            return true;
         }
 
         private void formatSheets() throws java.io.IOException {
@@ -659,7 +786,6 @@ public class ExportToSheetsActivity extends Activity implements
                             .setHorizontalAlignment(ALIGNMENT)
                             .setTextFormat(new TextFormat()
                                     .setBold(true)));
-
             // current inv
             requests.add(new Request()
                     .setRepeatCell(new RepeatCellRequest()
@@ -677,41 +803,6 @@ public class ExportToSheetsActivity extends Activity implements
                                             .setFrozenRowCount(1)))
                             .setFields("gridProperties.frozenRowCount")));
 
-            // past inv
-            requests.add(new Request()
-                    .setRepeatCell(new RepeatCellRequest()
-                            .setRange(new GridRange()
-                                    .setSheetId(PAST_ID)
-                                    .setStartRowIndex(0)
-                                    .setEndRowIndex(1))
-                            .setCell(HEADER_CELL)
-                            .setFields("userEnteredFormat(textFormat,horizontalAlignment)")));
-
-            requests.add(new Request()
-                    .setUpdateSheetProperties(new UpdateSheetPropertiesRequest()
-                            .setProperties(new SheetProperties().setSheetId(PAST_ID)
-                                    .setGridProperties(new GridProperties()
-                                            .setFrozenRowCount(1)))
-                            .setFields("gridProperties.frozenRowCount")));
-
-            // item inv
-            requests.add(new Request()
-                    .setRepeatCell(new RepeatCellRequest()
-                            .setRange(new GridRange()
-                                    .setSheetId(INVENTORY_ID)
-                                    .setStartRowIndex(0)
-                                    .setEndRowIndex(1))
-                            .setCell(HEADER_CELL)
-                            .setFields("userEnteredFormat(textFormat,horizontalAlignment)")));
-
-            requests.add(new Request()
-                    .setUpdateSheetProperties(new UpdateSheetPropertiesRequest()
-                            .setProperties(new SheetProperties().setSheetId(INVENTORY_ID)
-                                    .setGridProperties(new GridProperties()
-                                            .setFrozenRowCount(1)))
-                            .setFields("gridProperties.frozenRowCount")));
-
-            // format all data ---------------------------------------------------------------------
             final String WRAP_STRATEGY = "WRAP";
             final CellData ALL_CELLS = new CellData()
                     .setUserEnteredFormat(new CellFormat()
@@ -735,6 +826,28 @@ public class ExportToSheetsActivity extends Activity implements
                             .setCell(ALL_CELLS)
                             .setFields("userEnteredFormat(wrapStrategy,borders)")));
 
+            BatchUpdateSpreadsheetRequest body =
+                    new BatchUpdateSpreadsheetRequest().setRequests(requests);
+            mService.spreadsheets().batchUpdate(currentSpreadSheetId, body).execute();
+
+            // past inv
+            requests.clear();
+            requests.add(new Request()
+                    .setRepeatCell(new RepeatCellRequest()
+                            .setRange(new GridRange()
+                                    .setSheetId(PAST_ID)
+                                    .setStartRowIndex(0)
+                                    .setEndRowIndex(1))
+                            .setCell(HEADER_CELL)
+                            .setFields("userEnteredFormat(textFormat,horizontalAlignment)")));
+
+            requests.add(new Request()
+                    .setUpdateSheetProperties(new UpdateSheetPropertiesRequest()
+                            .setProperties(new SheetProperties().setSheetId(PAST_ID)
+                                    .setGridProperties(new GridProperties()
+                                            .setFrozenRowCount(1)))
+                            .setFields("gridProperties.frozenRowCount")));
+
             // past inv
             requests.add(new Request()
                     .setRepeatCell(new RepeatCellRequest()
@@ -747,6 +860,27 @@ public class ExportToSheetsActivity extends Activity implements
                             )
                             .setCell(ALL_CELLS)
                             .setFields("userEnteredFormat(wrapStrategy,borders)")));
+
+            body = new BatchUpdateSpreadsheetRequest().setRequests(requests);
+            mService.spreadsheets().batchUpdate(pastSpreadSheetId, body).execute();
+
+            // item inv
+            requests.clear();
+            requests.add(new Request()
+                    .setRepeatCell(new RepeatCellRequest()
+                            .setRange(new GridRange()
+                                    .setSheetId(INVENTORY_ID)
+                                    .setStartRowIndex(0)
+                                    .setEndRowIndex(1))
+                            .setCell(HEADER_CELL)
+                            .setFields("userEnteredFormat(textFormat,horizontalAlignment)")));
+
+            requests.add(new Request()
+                    .setUpdateSheetProperties(new UpdateSheetPropertiesRequest()
+                            .setProperties(new SheetProperties().setSheetId(INVENTORY_ID)
+                                    .setGridProperties(new GridProperties()
+                                            .setFrozenRowCount(1)))
+                            .setFields("gridProperties.frozenRowCount")));
 
             // barcode inv
             requests.add(new Request()
@@ -761,9 +895,8 @@ public class ExportToSheetsActivity extends Activity implements
                             .setCell(ALL_CELLS)
                             .setFields("userEnteredFormat(wrapStrategy,borders)")));
 
-            BatchUpdateSpreadsheetRequest body =
-                    new BatchUpdateSpreadsheetRequest().setRequests(requests);
-            mService.spreadsheets().batchUpdate(spreadSheetId, body).execute();
+            body = new BatchUpdateSpreadsheetRequest().setRequests(requests);
+            mService.spreadsheets().batchUpdate(itemSpreadSheetId, body).execute();
         }
 
         protected void onPreExecute() {
