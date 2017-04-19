@@ -71,6 +71,8 @@ public class TagMessagesAdapter extends CursorAdapter {
         double batteryPercent = (batteryLevel - 2.4) / (BATTERY_RANGE) * 100.0;
         if (batteryPercent <= 0) {
             batteryPercent = 0;
+        } else if (batteryPercent > 100.0) {
+            batteryPercent = 100.0;
         }
         String batteryString = String.format(Locale.US, "%3.0f", batteryPercent) + "%";
 
