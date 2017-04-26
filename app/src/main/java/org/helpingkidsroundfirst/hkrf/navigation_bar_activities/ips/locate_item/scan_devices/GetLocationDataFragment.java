@@ -30,6 +30,7 @@ import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.data.InventoryContract;
 import org.helpingkidsroundfirst.hkrf.helper_classes.Utility;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -161,6 +162,11 @@ public class GetLocationDataFragment extends Fragment {
         } else {
             mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
         }
+
+        if (mBluetoothGatt != null) {
+            mBluetoothGatt.close();
+        }
+
         // Initializes list view adapter.
         scanLeDevice(true);
     }
@@ -170,6 +176,7 @@ public class GetLocationDataFragment extends Fragment {
         super.onPause();
         scanLeDevice(false);
         if (mBluetoothGatt != null) {
+            mBluetoothGatt.disconnect();
             mBluetoothGatt.close();
         }
     }
@@ -208,6 +215,7 @@ public class GetLocationDataFragment extends Fragment {
                 // connect to gatt server
                 textView.setText(getResources().getString(R.string.connecting_to_master));
                 mBluetoothGatt = mDevice.connectGatt(getContext(), true, mGattCallback);
+                refreshDeviceCache(mBluetoothGatt);
                 scanLeDevice(false);
             }
         }
@@ -326,6 +334,20 @@ public class GetLocationDataFragment extends Fragment {
             String message = e.getMessage();
             Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private boolean refreshDeviceCache(BluetoothGatt gatt) {
+        try {
+            BluetoothGatt localBluetoothGatt = gatt;
+            Method localMethod = localBluetoothGatt.getClass().getMethod("refresh", new Class[0]);
+            if (localMethod != null) {
+                boolean bool = ((Boolean) localMethod.invoke(localBluetoothGatt, new Object[0])).booleanValue();
+                return bool;
+            }
+        } catch (Exception localException) {
+            //Log.e(TAG, "An exception occured while refreshing device");
+        }
+        return false;
     }
 
     public interface ScanBLEListener {
