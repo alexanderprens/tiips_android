@@ -60,7 +60,7 @@ public class GetLocationDataFragment extends Fragment {
     public static final int BEACON_M_CHAR_UUID = 12;
     private static final int REQUEST_ENABLE_BT = 10;
     private static final long SCAN_PERIOD = 500;
-    private static final String MASTER_NAME = "TIIPS";
+    private static final String MASTER_NAME = "00:0B:57:35:FD:10";
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner mBluetoothLeScanner;
     private Handler mHandler;
@@ -202,7 +202,7 @@ public class GetLocationDataFragment extends Fragment {
         // check if selected is a master beacon
         mDevice = result.getDevice();
         if (mDevice != null) {
-            String name = mDevice.getName();
+            String name = mDevice.getAddress();
 
             if (name != null && name.equals(MASTER_NAME)) {
                 // connect to gatt server

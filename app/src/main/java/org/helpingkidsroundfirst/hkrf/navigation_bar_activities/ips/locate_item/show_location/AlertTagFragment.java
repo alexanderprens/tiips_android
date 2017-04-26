@@ -36,14 +36,17 @@ public class AlertTagFragment extends Fragment {
 
     public static final String URI_KEY = "uri_key";
     private static final String[] TAG_DEVICE_NAMES = {
-            "TAG01",
-            "TAG02",
-            "TAG03",
-            "TAG04",
-            "TAG05",
-            "TAG06",
-            "TAG07",
-            "TAG08",
+            "00:0B:57:36:03:3B",
+            "00:0B:57:36:03:33",
+            "00:0B:57:36:03:34",
+            "00:0B:57:35:FD:0B",
+            "00:0B:57:34:C8:FE",
+            "00:0B:57:35:FD:06",
+            "00:0B:57:36:03:2C",
+            "00:0B:57:35:E9:D3",
+            "00:0B:57:34:CA:A0",
+            "00:0B:57:35:FD:07",
+            "00:0B:57:35:EE:CF"
     };
     private static final String ALERT_SERVICE_UUID = "00004a00-0000-1000-8000-00805f9b34fb";
     private static final String ALERT_CHAR_UUID = "00004a01-0000-1000-8000-00805f9b34fb";
@@ -206,7 +209,7 @@ public class AlertTagFragment extends Fragment {
         // check if selected is a master beacon
         mDevice = result.getDevice();
         if (mDevice != null) {
-            String name = mDevice.getName();
+            String name = mDevice.getAddress();
 
             if (name != null && name.equals(tagDeviceName)) {
                 // connect to gatt server
