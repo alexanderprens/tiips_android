@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.helpingkidsroundfirst.hkrf.R;
+import org.helpingkidsroundfirst.hkrf.helper_classes.Utility;
 
+import java.util.Calendar;
 import java.util.Locale;
 
 /**
@@ -22,7 +24,8 @@ public class TagMessagesAdapter extends CursorAdapter {
     private static final int VIEW_TYPE_TAG = 0;
     private static final int VIEW_TYPE_BEACON = 1;
     private static final int NUM_TAGS = 11;
-    private static final double BATTERY_RANGE = 3.0 - 2.4;
+    private static final double BATTERY_LOW = 2.4;
+    private static final double BATTERY_RANGE = 3.0 - BATTERY_LOW;
 
 
     public TagMessagesAdapter(Context context, Cursor c, int flags) {
@@ -68,8 +71,8 @@ public class TagMessagesAdapter extends CursorAdapter {
         String name = cursor.getString(TagMessagesListFragment.COL_TAG_NAME);
         String dateScanned = cursor.getString(TagMessagesListFragment.COL_DATE_SCANNED);
         double batteryLevel = cursor.getDouble(TagMessagesListFragment.COL_BATTERY);
-        double batteryPercent = (batteryLevel - 2.4) / (BATTERY_RANGE) * 100.0;
-        if (batteryPercent <= 0) {
+        double batteryPercent = (batteryLevel - BATTERY_LOW) / (BATTERY_RANGE) * 100.0;
+        if (batteryPercent < 0) {
             batteryPercent = 0;
         } else if (batteryPercent > 100.0) {
             batteryPercent = 100.0;
@@ -102,9 +105,21 @@ public class TagMessagesAdapter extends CursorAdapter {
                 tagHolder.activeView.setText(activeString);
 
                 // missing
+                String missingStr = cursor.getString(TagMessagesListFragment.COL_MISSING);
+                int missingInt = 10;
+                if (!missingStr.isEmpty()) {
+                    missingInt = Integer.parseInt(missingStr, 16);
+                    missingInt = missingInt / 2;
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.add(Calendar.DAY_OF_MONTH, -1 * missingInt);
+                    missingStr = "Missing since: " + Utility.getDatePickerString(calendar.get(Calendar.YEAR),
+                            calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                } else {
+                    missingStr = "Missing: date not available.";
+                }
                 String missing;
-                if (batteryLevel == 0 && active) {
-                    missing = context.getString(R.string.missing);
+                if (missingInt > 0 && active) {
+                    missing = missingStr;
                 } else {
                     missing = context.getString(R.string.not_missing);
                 }

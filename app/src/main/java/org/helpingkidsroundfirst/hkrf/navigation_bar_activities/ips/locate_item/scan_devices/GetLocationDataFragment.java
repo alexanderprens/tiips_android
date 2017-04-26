@@ -300,7 +300,7 @@ public class GetLocationDataFragment extends Fragment {
         if (charValue.length() > 4) {
             // tag
             // parse missing
-            String rssiString = charValue.substring(4, 8);
+            String rssiString = charValue.substring(6, 8) + charValue.substring(4, 6);
             contentValues.put(InventoryContract.TagEntry.COLUMN_MISSING, rssiString);
         }
 

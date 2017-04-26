@@ -25,12 +25,14 @@ public class TagMessagesListFragment extends Fragment implements
     public static final int COL_TAG_ACTIVE = 2;
     public static final int COL_BATTERY = 3;
     public static final int COL_DATE_SCANNED = 4;
+    public static final int COL_MISSING = 5;
     private static final String[] TAG_COLUMNS = {
             InventoryContract.TagEntry._ID,
             InventoryContract.TagEntry.COLUMN_NAME,
             InventoryContract.TagEntry.COLUMN_ACTIVE,
             InventoryContract.TagEntry.COLUMN_BATTERY,
-            InventoryContract.TagEntry.COLUMN_DATE
+            InventoryContract.TagEntry.COLUMN_DATE,
+            InventoryContract.TagEntry.COLUMN_MISSING
     };
     private static final String SELECTED_KEY = "selected_position";
     private static final int TAG_LOADER = 20;
