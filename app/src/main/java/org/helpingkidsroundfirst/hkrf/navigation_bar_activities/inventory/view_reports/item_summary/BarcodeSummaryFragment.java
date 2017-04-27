@@ -26,15 +26,11 @@ public class BarcodeSummaryFragment extends Fragment implements
     public static final String ITEM_URI = "item_uri";
     public static final int ITEM_SUMMARY_LOADER = 15;
     // Inventory item column indices
-    private static final int COL_ITEM_ID = 0;
     private static final int COL_ITEM_BARCODE = 1;
     private static final int COL_ITEM_NAME = 2;
     private static final int COL_ITEM_DESC = 3;
-    private static final int COL_ITEM_CAT_KEY = 4;
     private static final int COL_ITEM_VALUE = 5;
-    private static final int COL_CATEGORY_ID = 6;
     private static final int COL_CATEGORY_NAME = 7;
-    private static final int COL_CATEGORY_BARCODE = 8;
     private static final String[] ITEM_DETAIL_COLUMNS = {
             InventoryContract.ItemEntry.TABLE_NAME + "." + InventoryContract.ItemEntry._ID,
             InventoryContract.ItemEntry.COLUMN_BARCODE_ID,

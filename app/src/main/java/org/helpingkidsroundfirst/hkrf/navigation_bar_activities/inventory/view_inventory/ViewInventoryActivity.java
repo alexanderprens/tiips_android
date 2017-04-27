@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 import org.helpingkidsroundfirst.hkrf.R;
 import org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_inventory.ViewInventoryFragment.onViewInventoryButtonListener;
@@ -41,7 +40,7 @@ public class ViewInventoryActivity extends AppCompatActivity
         setContentView(R.layout.activity_view_inventory);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Log.i(TAG, "ViewInventoryActivity created");
+        //Log.i(TAG, "ViewInventoryActivity created");
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

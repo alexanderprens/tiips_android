@@ -14,7 +14,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -118,43 +117,43 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_inventory:
                 intent = new Intent(MainActivity.this, ViewInventoryActivity.class);
                 startActivity(intent);
-                Log.i(TAG, "Start View Inventory Activity");
+                //Log.i(TAG, "Start View Inventory Activity");
                 break;
 
             case R.id.nav_ship:
                 intent = new Intent(MainActivity.this, ShipInventoryActivity.class);
                 startActivity(intent);
-                Log.i(TAG, "Start Ship Inventory Activity");
+                //Log.i(TAG, "Start Ship Inventory Activity");
                 break;
 
             case R.id.nav_receive:
                 intent = new Intent(MainActivity.this, ReceiveInventoryActivity.class);
                 startActivity(intent);
-                Log.i(TAG, "Start Receive Inventory Activity");
+                //Log.i(TAG, "Start Receive Inventory Activity");
                 break;
 
             case R.id.nav_reports:
                 intent = new Intent(MainActivity.this, ViewReportsActivity.class);
                 startActivity(intent);
-                Log.i(TAG, "Start View Reports Activity");
+                //Log.i(TAG, "Start View Reports Activity");
                 break;
 
             case R.id.nav_locate:
                 intent = new Intent(MainActivity.this, LocateItemActivity.class);
                 startActivity(intent);
-                Log.i(TAG, "Start Locate Item Activity");
+                //Log.i(TAG, "Start Locate Item Activity");
                 break;
 
             case R.id.nav_manage:
                 intent = new Intent(MainActivity.this, ManageTagsActivity.class);
                 startActivity(intent);
-                Log.i(TAG, "Start Manage tags activity");
+                //Log.i(TAG, "Start Manage tags activity");
                 break;
 
             case R.id.nav_messages:
                 intent = new Intent(MainActivity.this, TagMessagesActivity.class);
                 startActivity(intent);
-                Log.i(TAG, "Start Tag Messages Activity");
+                //Log.i(TAG, "Start Tag Messages Activity");
                 break;
         }
 

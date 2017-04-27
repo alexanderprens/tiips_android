@@ -54,12 +54,6 @@ public class AddShipInventoryDialogFragment extends DialogFragment implements
     };
     private static final int COL_CURRENT_ID = 0;
     private static final int COL_CURRENT_QTY = 1;
-    private static final int COL_CURRENT_DONOR = 2;
-    private static final int COL_BARCODE_ID = 3;
-    private static final int COL_DESCRIPTION = 4;
-    private static final int COL_NAME = 5;
-    private static final int COL_VALUE = 6;
-    private static final int COL_CATEGORY_KEY = 7;
     private static int[] BARCODE_TO_VIEW = {
             android.R.id.text1
     };

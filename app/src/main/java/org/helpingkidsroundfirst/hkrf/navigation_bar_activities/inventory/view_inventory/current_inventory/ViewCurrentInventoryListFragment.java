@@ -27,17 +27,9 @@ public class ViewCurrentInventoryListFragment extends Fragment implements
     // Current inventory column indices
     public static final int COL_CURRENT_ID = 0;
     public static final int COL_CURRENT_QTY = 1;
-    public static final int COL_CURRENT_DONOR = 2;
-    public static final int COL_CURRENT_DATE_RECEIVED = 3;
-    public static final int COL_CURRENT_WAREHOUSE = 4;
     public static final int COL_ITEM_NAME = 5;
     public static final int COL_ITEM_DESCRIPTION = 6;
-    public static final int COL_ITEM_CATEGORY_KEY = 7;
-    public static final int COL_ITEM_VALUE = 8;
-    public static final int COL_CATEGORY_ID = 9;
     public static final int COL_CATEGORY_NAME = 10;
-    public static final int COL_CATEGORY_BARCODE_PREFIX = 11;
-    public static final int COL_BARCODE_ID = 12;
     public static final String CURRENT_URI_KEY = "current_uri_key";
     public static final String CURRENT_SELECTION_KEY = "current_selection";
     public static final String CURRENT_ARGUMENTS_KEY = "current_arguments";

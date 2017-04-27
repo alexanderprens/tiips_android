@@ -29,15 +29,9 @@ public class ReceiveInventoryListFragment extends Fragment implements
     // column indices
     public static final int COL_RECEIVE_ID = 0;
     public static final int COL_RECEIVE_QTY = 1;
-    public static final int COL_RECEIVE_DONOR = 2;
-    public static final int COL_RECEIVE_DATE_RECEIVED = 3;
-    public static final int COL_RECEIVE_WAREHOUSE = 4;
     public static final int COL_ITEM_NAME = 5;
     public static final int COL_ITEM_DESCRIPTION = 6;
-    public static final int COL_ITEM_CATEGORY_KEY = 7;
-    public static final int COL_ITEM_VALUE = 8;
     public static final int COL_CATEGORY_NAME = 9;
-    public static final int COL_CATEGORY_BARCODE_PREFIX = 10;
     // Receive inventory columns
     private static final String[] RECEIVE_INVENTORY_COLUMNS = {
             InventoryContract.ReceiveInventoryEntry.TABLE_NAME + "." +

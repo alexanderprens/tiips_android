@@ -3,7 +3,6 @@ package org.helpingkidsroundfirst.hkrf.helper_classes;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -30,7 +29,7 @@ public abstract class ApiClientAsyncTask<Params, Progress, Result>
 
     @Override
     protected final Result doInBackground(Params... params) {
-        Log.d("TAG", "in background");
+        //Log.d("TAG", "in background");
         final CountDownLatch latch = new CountDownLatch(1);
         mClient.registerConnectionCallbacks(new ConnectionCallbacks() {
             @Override

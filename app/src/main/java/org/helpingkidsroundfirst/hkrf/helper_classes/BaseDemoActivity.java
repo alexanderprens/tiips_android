@@ -18,7 +18,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -111,7 +110,7 @@ public abstract class BaseDemoActivity extends Activity implements
      */
     @Override
     public void onConnected(Bundle connectionHint) {
-        Log.i(TAG, "GoogleApiClient connected");
+        //Log.i(TAG, "GoogleApiClient connected");
     }
 
     /**
@@ -119,7 +118,7 @@ public abstract class BaseDemoActivity extends Activity implements
      */
     @Override
     public void onConnectionSuspended(int cause) {
-        Log.i(TAG, "GoogleApiClient connection suspended");
+        //Log.i(TAG, "GoogleApiClient connection suspended");
     }
 
     /**
@@ -129,7 +128,7 @@ public abstract class BaseDemoActivity extends Activity implements
      */
     @Override
     public void onConnectionFailed(ConnectionResult result) {
-        Log.i(TAG, "GoogleApiClient connection failed: " + result.toString());
+        //Log.i(TAG, "GoogleApiClient connection failed: " + result.toString());
         if (!result.hasResolution()) {
             // show the localized error dialog.
             GoogleApiAvailability.getInstance().getErrorDialog(this, result.getErrorCode(), 0).show();
@@ -138,7 +137,7 @@ public abstract class BaseDemoActivity extends Activity implements
         try {
             result.startResolutionForResult(this, REQUEST_CODE_RESOLUTION);
         } catch (SendIntentException e) {
-            Log.e(TAG, "Exception while starting resolution activity", e);
+            //Log.e(TAG, "Exception while starting resolution activity", e);
         }
     }
 

@@ -28,15 +28,9 @@ public class ShipInventoryListFragment extends Fragment implements
 
     // column indices
     public static final int COL_SHIP_ID = 0;
-    public static final int COL_SHIP_BARCODE = 1;
-    public static final int COL_SHIP_DONOR = 2;
-    public static final int COL_SHIP_DATE_SHIPPED = 3;
     public static final int COL_SHIP_NAME = 4;
-    public static final int COL_SHIP_VALUE = 5;
     public static final int COL_SHIP_QTY = 6;
     public static final int COL_SHIP_DESCRIPTION = 7;
-    public static final int COL_SHIP_CATEGORY_KEY = 8;
-    public static final int COL_SHIP_CATEGORY_ID = 9;
     public static final int COL_SHIP_CATEGORY = 10;
     // Ship Inventory Columns
     private static final String[] SHIP_INVENTORY_COLUMNS = {

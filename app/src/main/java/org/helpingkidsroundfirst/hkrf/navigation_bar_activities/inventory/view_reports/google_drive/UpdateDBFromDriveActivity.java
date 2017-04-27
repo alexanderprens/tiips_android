@@ -51,7 +51,7 @@ public class UpdateDBFromDriveActivity extends BaseDemoActivity {
             startIntentSenderForResult(
                     intentSender, REQUEST_CODE_OPENER, null, 0, 0, 0);
         } catch (IntentSender.SendIntentException e) {
-            Log.w(TAG, "Unable to send intent", e);
+            //Log.w(TAG, "Unable to send intent", e);
         }
     }
 
@@ -146,7 +146,7 @@ public class UpdateDBFromDriveActivity extends BaseDemoActivity {
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
             if (!result) {
-                Log.e(TAG, "Error while reading from the file");
+                //Log.e(TAG, "Error while reading from the file");
                 showMessage(getResources().getString(R.string.import_database_error));
                 finish();
                 return;

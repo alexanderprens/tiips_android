@@ -3,7 +3,6 @@ package org.helpingkidsroundfirst.hkrf.navigation_bar_activities.inventory.view_
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
@@ -35,7 +34,7 @@ public class ExportDBToDriveActivity extends BaseDemoActivity {
         public void onResult(@NonNull DriveFolder.DriveFileResult driveFileResult) {
 
             if (!driveFileResult.getStatus().isSuccess()) {
-                Log.v(TAG, "Error while trying to create the file");
+                //Log.v(TAG, "Error while trying to create the file");
                 finish();
                 return;
             }
@@ -76,7 +75,7 @@ public class ExportDBToDriveActivity extends BaseDemoActivity {
                                 in.close();
                                 out.close();
                             } catch (java.io.IOException e) {
-                                Log.e(TAG, "Error writing db file");
+                                //Log.e(TAG, "Error writing db file");
                             }
 
                             // get file name string

@@ -15,7 +15,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -919,10 +918,10 @@ public class ExportToSheetsActivity extends Activity implements
                             ((UserRecoverableAuthIOException) mLastError).getIntent(),
                             ExportToSheetsActivity.REQUEST_AUTHORIZATION);
                 } else {
-                    Log.e(TAG, mLastError.getMessage());
+                    //Log.e(TAG, mLastError.getMessage());
                 }
             } else {
-                Log.e(TAG, "Cancelled with no error");
+                //Log.e(TAG, "Cancelled with no error");
             }
 
             finish();
