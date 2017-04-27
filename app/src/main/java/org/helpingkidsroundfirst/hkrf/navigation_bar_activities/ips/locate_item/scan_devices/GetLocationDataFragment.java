@@ -164,6 +164,7 @@ public class GetLocationDataFragment extends Fragment {
         }
 
         if (mBluetoothGatt != null) {
+            mBluetoothGatt.disconnect();
             mBluetoothGatt.close();
         }
 
@@ -274,6 +275,8 @@ public class GetLocationDataFragment extends Fragment {
         if (chars.size() > 0) {
             mBluetoothGatt.readCharacteristic(chars.get(chars.size() - 1));
         } else {
+            mBluetoothGatt.disconnect();
+            mBluetoothGatt.close();
             ((ScanBLEListener) getActivity()).scanComplete();
         }
     }
