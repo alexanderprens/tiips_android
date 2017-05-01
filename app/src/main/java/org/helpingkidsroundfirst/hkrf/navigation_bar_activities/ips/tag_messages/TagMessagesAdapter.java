@@ -107,7 +107,7 @@ public class TagMessagesAdapter extends CursorAdapter {
                 // missing
                 String missingStr = cursor.getString(TagMessagesListFragment.COL_MISSING);
                 int missingInt = 10;
-                if (!missingStr.isEmpty()) {
+                if (missingStr != null && !missingStr.isEmpty()) {
                     missingInt = Integer.parseInt(missingStr, 16);
                     missingInt = missingInt / 2;
                     Calendar calendar = Calendar.getInstance();
