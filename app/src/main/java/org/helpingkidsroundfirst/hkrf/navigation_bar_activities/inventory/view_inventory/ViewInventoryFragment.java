@@ -111,19 +111,6 @@ public class ViewInventoryFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.choose_inv_test).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        testDatabase(getContext());
-                        //Toast.makeText(getContext(), "Test Complete", Toast.LENGTH_SHORT).show();
-                    }
-                }).start();
-            }
-        });
-
         return view;
     }
 
